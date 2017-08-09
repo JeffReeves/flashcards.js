@@ -1,3 +1,46 @@
 /* main style for flashcards.js
 *  using the new CSS grid system
 */
+
+/* GENERAL ELEMENTS */
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+/* GRID */
+@supports (display: grid) {
+
+    body {
+        min-height: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 50px 1fr auto;
+        grid-template-areas: 
+            "header"
+            "main"
+            "footer";
+        background-color: yellow;
+    }
+
+    header {
+        grid-area: header;
+        background-color: red;
+    }
+
+    main {
+        grid-area: main;
+        background-color: blue;
+        align-content: stretch;
+    }
+
+    footer {
+        grid-area: footer;
+        background-color: green;
+    }
+
+}
