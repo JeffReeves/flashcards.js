@@ -507,7 +507,7 @@ decks[0].cards = [
 	{
 		id: 80,
 		front: 'What is the syntax of the sed command?',
-		back: '5 sed [options] \'<commands>\' [input_file] \n\n0R \n\n5 sed [options] -f <fiIe_containing_commands> [input_file]',
+		back: '$ sed [options] \'<commands>\' [input_file] \n\n0R \n\n$ sed [options] -f <fiIe_containing_commands> [input_file]',
 		correct: false
 	},
 	{
@@ -957,7 +957,7 @@ decks[0].cards = [
 	{
 		id: 155,
 		front: 'What command can be used to change characters from STDIN (1)? and what is its syntax?',
-		back: 'tr [options] SET1 [SETZ] \n\nEx. tr d D < file1.txt',
+		back: 'tr [options] SET1 [SET2] \n\nEx. tr d D < file1.txt',
 		correct: false
 	},
 	{
