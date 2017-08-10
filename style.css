@@ -29,9 +29,56 @@ html, body {
 
     header {
         grid-area: header;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr;
+        grid-template-areas: 
+            "brand controls controls";
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);        
         background-color: red;
     }
+
+        #brand {
+            grid-area: brand;
+            display: grid;
+            grid-template-columns: 50px 3fr;
+            grid-template-rows: 1fr;
+            grid-template-areas: 
+                "logo title";
+            background-color: goldenrod;
+        }
+
+            #logo {
+                grid-area: logo;
+                background-image: url('resources/images/note_48.png');
+                background-repeat: no-repeat;
+                background-color: white;
+            }
+
+            #title {
+                grid-area: title;
+                background-color: pink;
+            }
+
+        #controls {
+            grid-area: controls;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr;
+            grid-template-areas: 
+                "decks menu";
+            background-color: aquamarine;
+        }
+
+            #decks {
+                grid-area: decks;
+                background-color: rosybrown;
+            }
+
+            #menu {
+                grid-area: menu;
+                background-color: royalblue;
+            }
 
     main {
         /* padding: 3rem; */
@@ -140,3 +187,5 @@ html, body {
         text-align: center;
     }
 }
+
+darrell flowers
