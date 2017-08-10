@@ -147,7 +147,7 @@ decks[0].cards = [
 	{
 		id: 20,
 		front: 'What split option specifies the number of lines that split files can contain?',
-		back: '-l\n\n--|ines=<num> \n\nEx. split -l 1 myfile.txt',
+		back: '-l\n\n--lines=<num> \n\nEx. split -l 1 myfile.txt',
 		correct: false
 	},
 	{
@@ -345,7 +345,7 @@ decks[0].cards = [
 	{
 		id: 53,
 		front: 'What option type uses a single hyphen (-) followed by single characters which can be grouped together?',
-		back: 'Unix98 Options \n\nEx. ls -a|',
+		back: 'Unix98 Options \n\nEx. ls -al',
 		correct: false
 	},
 	{
@@ -501,7 +501,7 @@ decks[0].cards = [
 	{
 		id: 79,
 		front: 'What is the proper syntax for a value held by the PATH environment variable?',
-		back: 'A list of colon-separated directories. \n\nEx. /usr/local/bin:/usr/binz/usr/Ioca|/sbin:/usr/sbin',
+		back: 'A list of colon-separated directories. \n\nEx. /usr/local/bin:/usr/binz/usr/local/sbin:/usr/sbin',
 		correct: false
 	},
 	{
