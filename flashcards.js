@@ -1199,999 +1199,999 @@ decks[0].cards = [
 decks[1].cards = [
     {
         id: 0,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Before upgrading a package with dpkg, what may need to be done first? and what is the command?',
+        back: 'The old package may need to be removed first.\n\n# dpkg -r <package-name>',
+        correct: false 
     },
     {
         id: 1,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Binary packages typically contain what type of content?',
+        back: 'Subdirectories that mimic the layout of the Linux root directory (i.e. /, /etc, /usr, etc.).',
+        correct: false 
     },
     {
         id: 2,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Debian package tools combine and compile source packages to create what?',
+        back: 'Debian binary packages',
+        correct: false 
     },
     {
         id: 3,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Debian source packages support how many patch files?',
+        back: 'Only a single patch file',
+        correct: false 
     },
     {
         id: 4,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Debian-based distributions use what meta-packager?',
+        back: 'Advanced Package Tools (APT)',
+        correct: false 
     },
     {
         id: 5,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'How are options grouped together within a apt.conf file?',
+        back: 'Using open and closed curly braces ( { } )\n\nEx.\nAPT\n{\n    Get\n    {\n        Download-Only "true";\n    }\n}',
+        correct: false 
     },
     {
         id: 6,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'How can a buildarchtranslate line in an rpmrc file be edited so that it optimizes for that specific CPU code, and does not translate it to another CPU code\'s optimization?',
+        back: 'buildarchtranslate: athlon: athlon',
+        correct: false 
     },
     {
         id: 7,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'How can new Yum repositories be added?',
+        back: 'They can be downloaded as RPMs and installed via the rpm command',
+        correct: false 
     },
     {
         id: 8,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'How does apt-get work?',
+        back: 'It obtains information about available packages from the sources listed in /etc/apt/sources.list, and uses that information to upgrade or install packages.',
+        correct: false 
     },
     {
         id: 9,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'If yum update is run without any packages specified, what happens?',
+        back: 'Yum updates every installed package',
+        correct: false 
     },
     {
         id: 10,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Most rpmrc files include a series of buildarchtranslate lines. What do they do?',
+        back: 'They tell RPM to translate CPU codes to a particular CPU code that RPMs will be optimized for.\n\nEx. buildarchtranslate: athlon: i386 will optimize builds for athlon CPUs to that of i386 optimizations.',
+        correct: false 
     },
     {
         id: 11,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'On most RPM-based systems, rpmbuild can be used to rebuild RPM packages if the source RPM package is available. What is the syntax for doing so?',
+        back: '# rpmbuild --rebuild <packagename-version>.src.rpm',
+        correct: false 
     },
     {
         id: 12,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Package systems maintain checksums for files. What can they be used for?',
+        back: 'Validating against disk errors, accidental overwriting of files, and other non-sinister problems.',
+        correct: false 
     },
     {
         id: 13,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Package systems rely on what to maintain a list of installed files?',
+        back: 'A database',
+        correct: false 
     },
     {
         id: 14,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Pressing Ctrl+T in aptitude does what?',
+        back: 'Opens menus if in interactive mode',
+        correct: false 
     },
     {
         id: 15,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'RPM files are archives of what type?',
+        back: 'cpio',
+        correct: false 
     },
     {
         id: 16,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Source packages typically contain what kind of content?',
+        back: 'A source code tarball and a .spec file (which holds information that RPM uses to build the package), and possibly some patch files.',
+        correct: false 
     },
     {
         id: 17,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'The RPM and Debian package systems both provide tools to help create what from source code?',
+        back: 'binary packages',
+        correct: false 
     },
     {
         id: 18,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'The yum program does what exactly?',
+        back: 'It is a meta-packager, which allows the installation of packages and its dependencies easily using a single command line.',
+        correct: false 
     },
     {
         id: 19,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'To compile source packages, what development tools might need to be installed?',
+        back: 'GNU Compiler Collection (GCC) and other assorted development libraries ("dev" or "devel" are typically included in their names).',
+        correct: false 
     },
     {
         id: 20,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What alien option converts to Debian packages?',
+        back: '--to-deb\n\nNote: this is the default if no other option is explicitly provided.',
+        correct: false 
     },
     {
         id: 21,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What alien option converts to RPM package?',
+        back: '--to-rpm',
+        correct: false 
     },
     {
         id: 22,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What alien option converts to Stampede package?',
+        back: '--to-slp',
+        correct: false 
     },
     {
         id: 23,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What alien option converts to tarball format?',
+        back: '--to-tgz',
+        correct: false 
     },
     {
         id: 24,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-cache subcommand displays dependencies?',
+        back: 'depends',
+        correct: false 
     },
     {
         id: 25,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-cache subcommand displays package information?',
+        back: 'showpkg',
+        correct: false 
     },
     {
         id: 26,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-cache subcommand displays package statistics?',
+        back: 'stats',
+        correct: false 
     },
     {
         id: 27,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-cache subcommand displays the names of all the packages installed on the system that match <pattern>?',
+        back: 'pkgnames <pattern>',
+        correct: false 
     },
     {
         id: 28,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-cache subcommand finds reverse dependencies (packages that depend on the package specified)?',
+        back: 'rdepends',
+        correct: false 
     },
     {
         id: 29,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-cache subcommand finds unmet dependencies?',
+        back: 'unmet',
+        correct: false 
     },
     {
         id: 30,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get command checks the package database for consistency and broken package installations?',
+        back: 'check',
+        correct: false 
     },
     {
         id: 31,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get command installs a package by package name (not filename)?',
+        back: 'install',
+        correct: false 
     },
     {
         id: 32,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get command is similar to apt-get clean but removes information only about packages that can no longer be downloaded?',
+        back: 'autoclean',
+        correct: false 
     },
     {
         id: 33,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get command is similar to apt-get upgrade but performs "smart" conflict resolution to avoid upgrading a package if doing so would break a dependency?',
+        back: 'dist-upgrade',
+        correct: false 
     },
     {
         id: 34,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get command obtains update information about packages available from the installation sources listed in /etc/apt/sources.list?',
+        back: 'update',
+        correct: false 
     },
     {
         id: 35,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get command performs any changes in package status (installation, removal, etc.) left undone after running dselect?',
+        back: 'dselect-upgrade',
+        correct: false 
     },
     {
         id: 36,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get command performs housekeeping to clear out information about retrieved files from the Debian package database?',
+        back: 'clean',
+        correct: false 
     },
     {
         id: 37,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get command removes a specified package by package name?',
+        back: 'remove',
+        correct: false 
     },
     {
         id: 38,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get command retrieves the newest available source package file by package filename?',
+        back: 'source',
+        correct: false 
     },
     {
         id: 39,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get command upgrades all installed packages to the newest versions available?',
+        back: 'upgrade',
+        correct: false 
     },
     {
         id: 40,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get option attempts to fix a system where dependencies are unsatisfied?',
+        back: '-f\n--fix-broken',
+        correct: false 
     },
     {
         id: 41,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get option compiles a source package after retrieving it?',
+        back: '-b\n--compile\n--build',
+        correct: false 
     },
     {
         id: 42,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get option downloads package files but doesn\'t install them?',
+        back: '-d\n--download-only',
+        correct: false 
     },
     {
         id: 43,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get option ignores all package files that can\'t be retrieved?',
+        back: '-m\n--ignore-missing\n--fix-missing',
+        correct: false 
     },
     {
         id: 44,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get option omits some progress indicator information? and how can even more progress indicator information be omitted?',
+        back: '-q\n--quiet\n\n-qq',
+        correct: false 
     },
     {
         id: 45,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get option performs a simulation of the action without actually modifying, installing, or removing files?',
+        back: '-s\n--simulate\n--just-print\n--dry-run\n--recon\n--no-act',
+        correct: false 
     },
     {
         id: 46,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get option prevents upgrades of a package if an older version is already installed?',
+        back: '--no-upgrade',
+        correct: false 
     },
     {
         id: 47,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What apt-get option produces a "yes" response to any yes/no prompt during the installation script?',
+        back: '-y\n--yes\n--assume-yes',
+        correct: false 
     },
     {
         id: 48,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What aptitude subcommand can be used to search for packages by name?',
+        back: 'search',
+        correct: false 
     },
     {
         id: 49,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What aptitude subcommand displays a list of all options for aptitude?',
+        back: 'help',
+        correct: false 
     },
     {
         id: 50,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What aptitude subcommand installs packages matching <package>? and how would you tell aptitude to remove a package instead?',
+        back: 'install <package>\n\nTo remove, append a hyphen (-) to the end of the <package>',
+        correct: false 
     },
     {
         id: 51,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What aptitude subcommand removes all downloaded packages?',
+        back: 'clean',
+        correct: false 
     },
     {
         id: 52,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What aptitude subcommand removes already-downloaded packages that are no longer available?',
+        back: 'autoclean',
+        correct: false 
     },
     {
         id: 53,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What aptitude subcommand updates package lists from the APT respositories?',
+        back: 'update',
+        correct: false 
     },
     {
         id: 54,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What aptitude subcommand upgrades all installed packages but is conservative about removing packages or installing new ones?',
+        back: 'safe-upgrade',
+        correct: false 
     },
     {
         id: 55,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What aptitude subcommand upgrades all installed packages?',
+        back: 'full-upgrade',
+        correct: false 
     },
     {
         id: 56,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What are examples of GUI frontends for Yum?',
+        back: 'yumex (Yum Extender)\nKYum',
+        correct: false 
     },
     {
         id: 57,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What are packages?',
+        back: 'Collections of files that can be intsalled on a computer, which contains additional information about itself that is useful for package management systems.',
+        correct: false 
     },
     {
         id: 58,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What are some common workarounds for package dependency problems?',
+        back: '- Force the installation.\n- Modify the system to meet the dependency.\n- Rebuild the problem package from source code.\n- Find another version of the problem package.',
+        correct: false 
     },
     {
         id: 59,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What are the two major package management tools for Linux?',
+        back: 'RPM Package Manager (RPM)\nDebian package manager',
+        correct: false 
     },
     {
         id: 60,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What are the various package types that the alien program can convert between?',
+        back: 'Debian packages\nRPM packages\nStampede packages\nTarballs',
+        correct: false 
     },
     {
         id: 61,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What are two RPM-based distributions that do not use Yum?',
+        back: 'SUSE and Mandriva',
+        correct: false 
     },
     {
         id: 62,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What can Linux package management tools help with?',
+        back: 'Keeping track of installed software, and helping to install, upgrade, or remove software.',
+        correct: false 
     },
     {
         id: 63,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command can be used to install Debian packages?',
+        back: 'dpkg',
+        correct: false 
     },
     {
         id: 64,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command can be used to revert a package to its initial standard configuration?',
+        back: 'dpkg-reconfigure\n\nEx. # dpkg-reconfigure samba',
+        correct: false 
     },
     {
         id: 65,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What commands can be combined to extract a .rpm package without creating an intermediary file?',
+        back: 'rpm2cpio <.rpm_package> | cpio -i --make-directories',
+        correct: false 
     },
     {
         id: 66,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What directory does Debian package tools store files that maintain lists of available packages, installed packages, etc.?',
+        back: '/var/lib/dpkg/',
+        correct: false 
     },
     {
         id: 67,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What does a typical Debian source package consist of?',
+        back: 'The original source tarball, a patch file (used to modify the source code), and an optional .dsc file that contains a digital "signature" to help verify the authenticity of the collection.',
+        correct: false 
     },
     {
         id: 68,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What does the dpkg.cfg file contain?',
+        back: 'dpkg options without their leading dashes\n\nEx. no-act',
+        correct: false 
     },
     {
         id: 69,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What does yum rely on in order to search for RPMs?',
+        back: 'repositories',
+        correct: false 
     },
     {
         id: 70,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg action displays currently installed packages?',
+        back: '--get-selections',
+        correct: false 
     },
     {
         id: 71,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg action displays information about an installed package?',
+        back: '-p\n--print-avail',
+        correct: false 
     },
     {
         id: 72,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg action displays information about uninstalled package files?',
+        back: '-I\n--info',
+        correct: false 
     },
     {
         id: 73,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg action installs a package?',
+        back: '-i\n--install',
+        correct: false 
     },
     {
         id: 74,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg action lists all installed packages whose names match <pattern>?',
+        back: '-l <pattern>\n--list <pattern>',
+        correct: false 
     },
     {
         id: 75,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg action lists the files associated with a package?',
+        back: '-L\n--listfiles',
+        correct: false 
     },
     {
         id: 76,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg action locates packages that own the files specified by <pattern>?',
+        back: '-S <pattern>\n--search <pattern>',
+        correct: false 
     },
     {
         id: 77,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg action reconfigures an installed package (i.e. runs the post-install script)?',
+        back: '--configure',
+        correct: false 
     },
     {
         id: 78,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg action removes a package (including configuration files)?',
+        back: '-P\n--purge',
+        correct: false 
     },
     {
         id: 79,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg action removes a package but leaves its configuration files intact?',
+        back: '-r\n--remove',
+        correct: false 
     },
     {
         id: 80,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg action searches for partially installed packages and suggests what to do with them?',
+        back: '-C\n--audit',
+        correct: false 
     },
     {
         id: 81,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg commands require a package filename instead of a package name?',
+        back: '--install / -i\n--info / -I',
+        correct: false 
     },
     {
         id: 82,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg option checks for dependencies, conflicts, and other problems without actually installing/upgrading/removing packages?',
+        back: '--no-act',
+        correct: false 
     },
     {
         id: 83,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg option disables packages that rely on one that is being removed?',
+        back: '-B\n--auto-deconfigure',
+        correct: false 
     },
     {
         id: 84,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg option doesn\'t install the package if a newer version of the same package is already installed?',
+        back: '-G',
+        correct: false 
     },
     {
         id: 85,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg option doesn\'t install the package if the same version of the package is already installed?',
+        back: '-E\n--skip-same-version',
+        correct: false 
     },
     {
         id: 86,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg option ignores dependency information for the specified package?',
+        back: '--ignore-depends=<package>',
+        correct: false 
     },
     {
         id: 87,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg option installs all packages that match the package-name wildcard in the specified directory and all subdirectories?',
+        back: '--recursive',
+        correct: false 
     },
     {
         id: 88,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg option modifies the Linux system at a specific root directory?',
+        back: '--root=<dir>',
+        correct: false 
     },
     {
         id: 89,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What dpkg option overrides defaults that would ordinarily cause dpkg to abort?',
+        back: '--force-things',
+        correct: false 
     },
     {
         id: 90,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What file on a Debian-based system contains a list of locations where important packages can be obtained?',
+        back: '/etc/apt/sources.list',
+        correct: false 
     },
     {
         id: 91,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What files should be edited to make RPM configuration changes globally and on a per-user basis?',
+        back: '/etc/rpmrc (global)\n~/.rpmrc (per-user)',
+        correct: false 
     },
     {
         id: 92,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What happens if apt-get update or apt-get dist-upgrade is ran without any additional arguments?',
+        back: 'All packages already installed on the system are upgraded to the lastest versions',
+        correct: false 
     },
     {
         id: 93,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What information is displayed if yum check-update has results?',
+        back: 'The packages\' names, versions, and repository area (ex. updates, extras, etc.).',
+        correct: false 
     },
     {
         id: 94,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is aptitude?',
+        back: 'A text-based Debian package manager. It combines the features of dselect with the command-line options of apt-get.',
+        correct: false 
     },
     {
         id: 95,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is Debian\'s equivalent meta-packager to RPM-based systems\' Yum? and what is its command?',
+        back: 'APT (Advanced Package Tools)\n\napt-get',
+        correct: false 
     },
     {
         id: 96,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is dependency information?',
+        back: 'A list of requirements that packages have for each other.',
+        correct: false 
     },
     {
         id: 97,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is dselect?',
+        back: 'A high-level text-mode package browser for APT',
+        correct: false 
     },
     {
         id: 98,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is one of the most common RPM meta-packagers?',
+        back: 'YUM (Yellow Dog Updater, Modified)',
+        correct: false 
     },
     {
         id: 99,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is Synaptic?',
+        back: 'A GUI x-based program that is similar to dselect and aptitude.',
+        correct: false 
     },
     {
         id: 100,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the Debian package filename convention?',
+        back: '<package>_<version>_<architecture>.<package-type>',
+        correct: false 
     },
     {
         id: 101,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the foundation that all programs rely on?',
+        back: 'The Linux kernel',
+        correct: false 
     },
     {
         id: 102,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the naming convention of an RPM package?',
+        back: 'packagename-version-release.arch.rpm\n\nversion is generally major.minor.patch\nrelease is the build / release number\narch is the architecture (ex. x86_64, i386, noarch)',
+        correct: false 
     },
     {
         id: 103,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the syntax for the alien program?',
+        back: 'alien [options] file[...]',
+        correct: false 
     },
     {
         id: 104,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the syntax for the apt-get command?',
+        back: 'apt-get [options] [command] [package-names]',
+        correct: false 
     },
     {
         id: 105,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the syntax of the dpkg command?',
+        back: 'dpkg [options] [action] [package-files | package-name]',
+        correct: false 
     },
     {
         id: 106,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the syntax of the rpm command?',
+        back: 'rpm [operation] [options] [package-files|package-names]',
+        correct: false 
     },
     {
         id: 107,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What Linux distributions use the Debian package manager?',
+        back: 'Debian, Ubuntu, Linux Mint, Xandros, etc.',
+        correct: false 
     },
     {
         id: 108,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What Linux OSs use RPM?',
+        back: 'Red Hat Enterprise Linux (RHEL), CentOS (Community Enterprise OS), Fedora, SUSE, and Mandriva',
+        correct: false 
     },
     {
         id: 109,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What must be installed on a system before the alien program can be used?',
+        back: 'All package management software for each package type must be installed to allow conversion between them (i.e. RPM and Debian package managers must be installed in order to convert between .rpm and .deb)',
+        correct: false 
     },
     {
         id: 110,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What program can be used to convert .rpm files into .cpio files?',
+        back: 'rpm2cpio\n\nEx. rpm2cpio samba-4.1.9-4.noarch.src.rpm > samba-4.1.9-4.norach.src.cpio',
+        correct: false 
     },
     {
         id: 111,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What program can be used to convert packages between Debian, RPM, etc.?',
+        back: 'alien',
+        correct: false 
     },
     {
         id: 112,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What program can be used to extract .cpio archived files?',
+        back: 'cpio\n\nEx. cpio -i --make-directories < samba-4.1.9-4.fc20.src.cpio',
+        correct: false 
     },
     {
         id: 113,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What program provides information about the Debian package database (aka package cache)?',
+        back: 'apt-cache',
+        correct: false 
     },
     {
         id: 114,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm operation builds a binary package, given a source RPM file?',
+        back: '--rebuild\n\nNote: replaced by rpmbuild command as of RPM version 4.2.',
+        correct: false 
     },
     {
         id: 115,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm operation builds a binary package, given source code and configuration files?',
+        back: '-b \n\nNote: replaced by rpmbuild command as of RPM 4.2.',
+        correct: false 
     },
     {
         id: 116,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm operation installs a package?',
+        back: '-i',
+        correct: false 
     },
     {
         id: 117,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm operation queries a package to find out what it contains, if it has been installed, etc.?',
+        back: '-q',
+        correct: false 
     },
     {
         id: 118,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm operation rebuilds the RPM database to fix errors?',
+        back: '--rebuilddb',
+        correct: false 
     },
     {
         id: 119,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm operation uninstalls a package?',
+        back: '-e',
+        correct: false 
     },
     {
         id: 120,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm operation upgrades a package only if an earlier version exists?',
+        back: '-F\n--freshen',
+        correct: false 
     },
     {
         id: 121,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm operation upgrades an existing package or installs a new package?',
+        back: '-U',
+        correct: false 
     },
     {
         id: 122,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm operation verifies if a package has its files present and unmodified since installation?',
+        back: '-V\n--verify',
+        correct: false 
     },
     {
         id: 123,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm option checks for dependencies, conflicts, and other problems without installing/upgrading a package?',
+        back: '--test',
+        correct: false 
     },
     {
         id: 124,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm option displays hash marks (#) to indicate progress of the operation?',
+        back: '-h\n--hash',
+        correct: false 
     },
     {
         id: 125,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm option displays the packages and files on which a package depends?',
+        back: '-R\n--requires',
+        correct: false 
     },
     {
         id: 126,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm option forces installation even if it means overwriting existing files or packages?',
+        back: '--force',
+        correct: false 
     },
     {
         id: 127,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm option is used in conjunction with -h to produce uniform numbers of hash marks for each package?',
+        back: '-v',
+        correct: false 
     },
     {
         id: 128,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm option lists the files contained within a package?',
+        back: '-l\n--list',
+        correct: false 
     },
     {
         id: 129,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm option modifies a Linux system at a specified root directory?',
+        back: '--root <dir>',
+        correct: false 
     },
     {
         id: 130,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm option prevents dependency checks?',
+        back: '--nodeps',
+        correct: false 
     },
     {
         id: 131,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm option queries an uninstalled RPM package file?',
+        back: '-p <package-file>',
+        correct: false 
     },
     {
         id: 132,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm option queries or verifies a package that owns a specific file?',
+        back: '-f <file>\n--file <file>',
+        correct: false 
     },
     {
         id: 133,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm option queries or verifies all packages?',
+        back: '-a\n--all',
+        correct: false 
     },
     {
         id: 134,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What rpm option sets the installation directory to a specific path?',
+        back: '--prefix <path>',
+        correct: false 
     },
     {
         id: 135,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What startup scripts came before systemd?',
+        back: 'SysV startup scripts',
+        correct: false 
     },
     {
         id: 136,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What yum command acts the same as yum update --obsoletes?',
+        back: 'upgrade',
+        correct: false 
     },
     {
         id: 137,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What yum command checks to see if any updates are available?',
+        back: 'check-update',
+        correct: false 
     },
     {
         id: 138,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What yum command cleans up the Yum cache directory?',
+        back: 'clean',
+        correct: false 
     },
     {
         id: 139,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What yum command displays dependencies of a specified package?',
+        back: 'deplist',
+        correct: false 
     },
     {
         id: 140,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What yum command displays information about a package (similar to rpm -qi)?',
+        back: 'info',
+        correct: false 
     },
     {
         id: 141,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What yum command displays information about a package that provides a specific program or feature?',
+        back: 'provides\nwhatprovides',
+        correct: false 
     },
     {
         id: 142,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What yum command displays information about a package, such as the installed version and whether an update is available?',
+        back: 'list',
+        correct: false 
     },
     {
         id: 143,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What yum command displays packages that match a specific dependency?',
+        back: 'resolvedep',
+        correct: false 
     },
     {
         id: 144,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What yum command enters the Yum shell mode?',
+        back: 'shell',
+        correct: false 
     },
     {
         id: 145,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What yum command installs one or more packages by package name, and also installs dependencies for the specified packages?',
+        back: 'install',
+        correct: false 
     },
     {
         id: 146,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What yum command installs specified local RPM files, while using Yum repositories to resolve dependencies?',
+        back: 'localinstall',
+        correct: false 
     },
     {
         id: 147,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What yum command searches package names, summaries, packagers, and descriptions for a specified keyword?',
+        back: 'search',
+        correct: false 
     },
     {
         id: 148,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What yum command updates the specified packages to the latest version?',
+        back: 'update',
+        correct: false 
     },
     {
         id: 149,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What yum command updates the system using specified local RPM files, while using Yum repositories to resolve dependencies?',
+        back: 'localupdate',
+        correct: false 
     },
     {
         id: 150,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What yum commands delete a package from the system and any depended-on packages?',
+        back: 'remove\nerase',
+        correct: false 
     },
     {
         id: 151,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What Yum repository contains improved KDE RPMs for those that favor KDE over GNOME?',
+        back: 'KDE Red Hat (http://kde-redhat.sourceforge.net/)',
+        correct: false 
     },
     {
         id: 152,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What Yum repository hosts multimedia tools, such as additional codecs and video drivers?',
+        back: 'Livna (http://rpm.livna.org/)',
+        correct: false 
     },
     {
         id: 153,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What Yum repository provides additional RPMs focused on multimedia applications and drivers?',
+        back: 'Fresh RPMs (http://freshrpms.net/)',
+        correct: false 
     },
     {
         id: 154,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What yum-like command can be used to download a package without installing it?',
+        back: 'yumdownloader',
+        correct: false 
     },
     {
         id: 155,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'When building or rebuilding RPM packages using rpmbuild / rpm, where are the files stored?',
+        back: '/usr/src/<distname>/RPMS/<arch>/',
+        correct: false 
     },
     {
         id: 156,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Where is a sample apt.conf file located?',
+        back: '/usr/share/doc/apt/examples/apt.conf',
+        correct: false 
     },
     {
         id: 157,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Where is the main configuration file for dpkg located?',
+        back: '/etc/dpkg/dpkg.cfg \n\nOR \n\n~/.dpkg.cfg',
+        correct: false 
     },
     {
         id: 158,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Where is the main RPM configuration file located?',
+        back: '/usr/lib/rpm/rpmrc',
+        correct: false 
     },
     {
         id: 159,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Where is the secondary APT configuration file that controls APT and dselect options?',
+        back: '/etc/apt/apt.conf',
+        correct: false 
     },
     {
         id: 160,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Where is Yum\'s main configuration file? and where are additional Yum configuration files stored?',
+        back: '/etc/yum.conf\n\n/etc/yum.repos.d/',
+        correct: false 
     },
     {
         id: 161,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Which rpm operations require a filename rather than a package name?',
+        back: '-i\n-U\n-F \nrebuild',
+        correct: false 
     },
     {
         id: 162,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Which rpm operations require a package name rather than a filename?',
+        back: '-q\n-V\n-e\n\nNote: -q can use a filename if -p is also used',
+        correct: false 
     },
     {
         id: 163,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Which website can be useful for finding RPMs online?',
+        back: 'RPMFind (https://rpmfind.net/)',
+        correct: false 
     },
     {
         id: 164,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Why is it important to run yum clean from time to time?',
+        back: 'Downloaded packages can consume too much disk space over time',
+        correct: false 
     },
     {
         id: 165,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Why should you hold off of adding a site to the /etc/apt/sources.list file unless it can be trusted?',
+        back: 'Because apt-get performs automatic and semi-automatic upgrades. If unreliable or vulnerable programs exist in a network source added to this list, the system will become vulnerable after upgrading via apt-get.',
+        correct: false 
     }
 ];
 
@@ -2200,213 +2200,213 @@ decks[1].cards = [
 decks[2].cards = [
     {
         id: 0,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'How can binary program files locate libraries? ',
+        back: 'Either by name alone (ex. libc.so.6) or by providing a complete path (ex. /lib/libc.so.6).\n\nNote: a library path (containing directories to search through) must be configured to use names alone.',
+        correct: false 
     },
     {
         id: 1,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'How can the LD_LIBRARY_PATH environment variable be set? ',
+        back: 'export LD_LIBRARY_PATH=<path1>:<pathN>',
+        correct: false 
     },
     {
         id: 2,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'If all dependencies are met for a program but it still fails to load due to missing dependencies, what can be done?',
+        back: 'Use the ldd command on the libraries shown when running ldd on the program. Sometimes these libraries have dependencies that may be missing.',
+        correct: false 
     },
     {
         id: 3,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'If an error is displayed that a shared library cannot be found, what can be done about it?',
+        back: 'See if the library is installed with the find command. Install the library if it doesn\'t exist. Update the LD_LIBRARY_PATH or /etc/ld.so.conf file to add the library\'s directory to the library path. If it still doesn\'t work, use the ldd command to check if a hard-coded library path exists in the program\'s binary file. If that is the case, make a symbolic link in a directory on the library path.',
+        correct: false 
     },
     {
         id: 4,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'ldconfig',
+        back: 'Editing the LD_LIBRARY_PATH does not require what command to be run in order to take effect?',
+        correct: false 
     },
     {
         id: 5,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Libraries associated with GUIs are known as?',
+        back: 'Widget sets — because they provide onscreen widgets used by programs (buttons, scroll bars, menu bars, etc.)',
+        correct: false 
     },
     {
         id: 6,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Linux uses what verision of the C library? and where is its main file located?',
+        back: 'GNU C library (glibc)\n\nAs of glibc 2.15, /lib/libc.so.6 or /lib64/libc.so.6\n\nNote: Occassionally this file is sometimes a symbolic link to another file such as /lib/libc-2.15.so.',
+        correct: false 
     },
     {
         id: 7,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Most Linux software relies heavily on what?',
+        back: 'Shared libraries',
+        correct: false 
     },
     {
         id: 8,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What are shared libraries?',
+        back: 'Shared libraries are software components that can be used by many different programs',
+        correct: false 
     },
     {
         id: 9,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What are the most popular Linux widget sets?',
+        back: 'GIMP Tool Kit (GTK+) and Qt',
+        correct: false 
     },
     {
         id: 10,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What binary file does a Linux system rely on for gathering a cached list of library directories and their contained files?',
+        back: '/etc/ld.so.cache',
+        correct: false 
     },
     {
         id: 11,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What directory does the env-update utility read files from? and what is it looking for within these files?',
+        back: '/etc/env.d\n\nThe LDPATH variables — which make up the lines in the ld.so.conf file.',
+        correct: false 
     },
     {
         id: 12,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What do both RPM and Debian package managers typically run automatically after installing or removing packages?',
+        back: 'ldconfig',
+        correct: false 
     },
     {
         id: 13,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What does the \'so\' in .so stand for?',
+        back: 'shared object',
+        correct: false 
     },
     {
         id: 14,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What environment variable can be set to hold a number of directories containing shared libraries?',
+        back: 'LD_LIBRARY_PATH',
+        correct: false 
     },
     {
         id: 15,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What extension does a shared library in Linux typically have?',
+        back: '.so or .so.<version>',
+        correct: false 
     },
     {
         id: 16,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What extension does static libraries in Linux have?',
+        back: '.a',
+        correct: false 
     },
     {
         id: 17,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What file is used to set the library path?',
+        back: '/etc/ld.so.conf',
+        correct: false 
     },
     {
         id: 18,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What file is used to update the /etc/ld.so.cache file?',
+        back: 'ldconfig',
+        correct: false 
     },
     {
         id: 19,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the syntax for the output of the ldd command?',
+        back: 'Each line of output begins with a library name. If the library name doesn\'t contain a complete path, ldd attempts to find the true library and displays the complete path following the => symbol.\n\nEx. ldd /bin/sh\n        linux-vdso.so.1 =>  (0x00007ffcf85fc000)\n        libtinfo.so.5 => /lib64/libtinfo.so.5 \n',
+        correct: false 
     },
     {
         id: 20,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is typically contained in an /etc/ld.so.conf file?',
+        back: 'Lines beginning with an include directive — which lists files that are to be included as if they were part of the main file.\n\nEx. include /etc/ld.so.conf.d/*.conf',
+        correct: false 
     },
     {
         id: 21,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What ldconfig option changes the cache file from /etc/ld.so.cache to whatever file is specified?',
+        back: '-c <cache-file>',
+        correct: false 
     },
     {
         id: 22,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What ldconfig option changes the configuration file from /etc/ld.so.conf to whatever file is specified?',
+        back: '-f <conf-file>',
+        correct: false 
     },
     {
         id: 23,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What ldconfig option displays a summary of directories and files being registered?',
+        back: '-v',
+        correct: false 
     },
     {
         id: 24,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What ldconfig option ignores the directories specified in /etc/ld.so.conf and trusted directories (/lib and /usr/lib) but updates specified directories?',
+        back: '-n <dirs>',
+        correct: false 
     },
     {
         id: 25,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What ldconfig option prevents a rebuild of the library cache, but updates symbolic links to libraries?',
+        back: '-N',
+        correct: false 
     },
     {
         id: 26,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What ldconfig option treats a specific directory as if it were the root (/) directory of the system?',
+        back: '-r <dir>',
+        correct: false 
     },
     {
         id: 27,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What ldconfig option updates the library cache but does not update symbolic links to libraries?',
+        back: '-x',
+        correct: false 
     },
     {
         id: 28,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What library provides many of the higher-level features associated with the C programming language?',
+        back: 'C Library (libc)',
+        correct: false 
     },
     {
         id: 29,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What program displays a program\'s shared library dependencies?',
+        back: 'ldd',
+        correct: false 
     },
     {
         id: 30,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What program updates caches and links used by the system for locating libraries?',
+        back: 'ldconfig',
+        correct: false 
     },
     {
         id: 31,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Which directories are always on the library path, even if they are not listed in the /etc/ld.so.conf file?',
+        back: '/lib \n/usr/lib',
+        correct: false 
     },
     {
         id: 32,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Which programs manage the loading of libraries?',
+        back: 'ld.so \nld-linux.so',
+        correct: false 
     },
     {
         id: 33,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'After alterering the library path, which command must be run in order for programs to have access to the new paths specified?',
+        back: 'ldconfig',
+        correct: false 
     },
     {
         id: 34,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Gentoo and some other distributions use which utility to create the /etc/ld.so.conf file?',
+        back: 'env-update',
+        correct: false 
     }
 ];
 
@@ -2415,752 +2415,752 @@ decks[2].cards = [
 decks[3].cards = [
     {
         id: 0,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Because many shells include their own internal version of the kill command, what must be done to ensure the external kill command is being used?',
+        back: 'Call it with a full path\n\ni.e. /bin/kill',
+        correct: false 
     },
     {
         id: 1,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'By default, ps displays which processes? and how wide is the output?',
+        back: 'ps displays only processes that were run from its own terminal (options -A, -e, and x can overwrite this).\n\nThe output is limited to being 80 characters wide and is truncated beyond that length (options -w and w can ovewrite this).',
+        correct: false 
     },
     {
         id: 2,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'By default, top sorts entries by what? and how often does it update?',
+        back: 'CPU use\n\nEvery five (5) seconds',
+        correct: false 
     },
     {
         id: 3,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'How are job ID numbers given?',
+        back: 'Jobs are numbered starting from 1 for each session.',
+        correct: false 
     },
     {
         id: 4,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'How can a process be pushed to the background of a terminal?',
+        back: 'Press ^z to pause the process, then enter the bg command to unfreeze it in the background',
+        correct: false 
     },
     {
         id: 5,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'How can a running process be made to continue running even after logging out of a session?',
+        back: '1. ^z to pause the process.\n2. bg to move it to the background.\n3. disown (to prevent SIGHUP / 1 signals from being sent to the process).',
+        correct: false 
     },
     {
         id: 6,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'How can the nohup command be used to start a process that will remain running after logging out of a session?',
+        back: 'nohup <command> &',
+        correct: false 
     },
     {
         id: 7,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'If multiple processes have been paused/suspended, how can a specific process be brought to the foreground of the terminal?',
+        back: 'Specify a job number associate with the process.\n\nEx. fg 2',
+        correct: false 
     },
     {
         id: 8,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'If no explicit options are provided to the renice command, what is being used for matches?',
+        back: 'PIDs',
+        correct: false 
     },
     {
         id: 9,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'If no signal value is provided to the kill command, what signal is sent by default?',
+        back: '15 / SIGTERM — which exits a process but allows it to close open files',
+        correct: false 
     },
     {
         id: 10,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Processes that aren\'t linked to others had their parent processes killed and adopted by, or were started directly by, what?',
+        back: 'init',
+        correct: false 
     },
     {
         id: 11,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Sometimes an alternative version of killall is provided, what does this version do?',
+        back: 'It kills all processes started by the user running the command. Check man killall first to see which version is active.',
+        correct: false 
     },
     {
         id: 12,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'The kill command can only kill processes owned by whom?',
+        back: 'kill can only kill processes owned by the user running the kill command.\n\nNote The root user can kill anyone\'s processes via kill.',
+        correct: false 
     },
     {
         id: 13,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What are job ID numbers?',
+        back: 'Numbers that represent processes associated with the current session.',
+        correct: false 
     },
     {
         id: 14,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What are the possible values for priority? and which values represent higher priority or lower priority?',
+        back: '-20 to 19\n\nThe more negative, the higher the priority.\nThe more positive, the lower the priority.',
+        correct: false 
     },
     {
         id: 15,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command brings jobs to the background to keep it running while freeing up the terminal for other work?',
+        back: 'bg',
+        correct: false 
     },
     {
         id: 16,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command can be run to reveal details about the kernel being run?',
+        back: 'uname',
+        correct: false 
     },
     {
         id: 17,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command can be used to alter the priority of a running program?',
+        back: 'renice',
+        correct: false 
     },
     {
         id: 18,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command can be used to display information about processes\' and their statuses?',
+        back: 'ps',
+        correct: false 
     },
     {
         id: 19,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command can be used to get back to a program paused via ^z?',
+        back: 'fg',
+        correct: false 
     },
     {
         id: 20,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command can be used to kill a process by name rather than PID number?',
+        back: 'killall',
+        correct: false 
     },
     {
         id: 21,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command can be used to launch a program with a specific priority?',
+        back: 'nice',
+        correct: false 
     },
     {
         id: 22,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command can be used to look at just memory usage?',
+        back: 'free',
+        correct: false 
     },
     {
         id: 23,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command can be used to run a command that is immune to hangup (SIGHUP / 1) signals?',
+        back: 'nohup',
+        correct: false 
     },
     {
         id: 24,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command can be used to terminate a program?',
+        back: 'kill',
+        correct: false 
     },
     {
         id: 25,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command displays a task manager of sorts?',
+        back: 'top',
+        correct: false 
     },
     {
         id: 26,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command displays CPU load averages, along with information about how long the machine has been running for?',
+        back: 'uptime',
+        correct: false 
     },
     {
         id: 27,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command displays minimal information about the processes associated with the current session?',
+        back: 'jobs',
+        correct: false 
     },
     {
         id: 28,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command is similar to kill but can match usernames, user IDs, group IDs, etc. in addition to PIDs?',
+        back: 'pkill',
+        correct: false 
     },
     {
         id: 29,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What command performs a search within the process list (similar to using ps | grep)?',
+        back: 'pgrep',
+        correct: false 
     },
     {
         id: 30,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What disown option applies to all jobs on the job list?',
+        back: '-a',
+        correct: false 
     },
     {
         id: 31,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What disown option prevents SIGHUP / 1 signals from reaching a job, but does not remove it from the active jobs list?',
+        back: '-h <jobID>',
+        correct: false 
     },
     {
         id: 32,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What does the disown command do? and what alternative use does this command have?',
+        back: 'It removes jobs from the table of active jobs (i.e. jobs -l).\n\nAn alternative use is to prevent SIGHUP / 1 signals from being able to be sent to the process disown acted upon.\n\nNote: To prevent SIGHUP / 1 signals without removing a job from the table of active jobs, use the -h option.',
+        correct: false 
     },
     {
         id: 33,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What does the fg command do?',
+        back: 'Brings paused processes to the foreground of the terminal',
+        correct: false 
     },
     {
         id: 34,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What does the kill command send to a specific process?',
+        back: 'a signal',
+        correct: false 
     },
     {
         id: 35,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What environment variable can be edited to change the option types supported by the ps command? and what are some example values?',
+        back: 'PS_PERSONALITY\n\nValues:\nposix\nold\nlinux\nbsd\nsun\ndigital',
+        correct: false 
     },
     {
         id: 36,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What GUI variants of top exist?',
+        back: 'kpm\n\ngnome-system-monitor',
+        correct: false 
     },
     {
         id: 37,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What hotkey can be pressed to pause a program and give control of the terminal back?',
+        back: '^z',
+        correct: false 
     },
     {
         id: 38,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What information is displayed in the output of the ps command?',
+        back: 'The first line is typically a header, which displays the value of each column:\n\nUsername\nProcess ID (PID)\nParent Process ID (PPID)\nTTY\nCPU Time\nCPU Priority\nMemory Use\nCommand',
+        correct: false 
     },
     {
         id: 39,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What information is displayed when using uname -v or uname --kernel-version?',
+        back: 'Usually a kernel build date and time, not an actual version number.',
+        correct: false 
     },
     {
         id: 40,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What information might get displayed when uname -p or uname --processor is used?',
+        back: 'CPU manufacturer, model, and clock speed; but in most cases it returns \'unknown\'.',
+        correct: false 
     },
     {
         id: 41,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is an alternative to using ^z and bg to start a process and bring it to the background?',
+        back: 'Append an ampersand (&) to the command used to launch a program.\n\nEx. $ nedit myfile.txt &',
+        correct: false 
     },
     {
         id: 42,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the "load average" output by the top command? and what values can it have?',
+        back: 'A measure of the demand for CPU time by applications. \n\n0.0 represents no load, 1.0 represents full load on a CPU core.',
+        correct: false 
     },
     {
         id: 43,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the default priority value of processes?',
+        back: '0',
+        correct: false 
     },
     {
         id: 44,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the default signal sent via killall if no signal value is specified?',
+        back: 'SIGTERM / 15',
+        correct: false 
     },
     {
         id: 45,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the default sort order for top?',
+        back: 'by CPU usage',
+        correct: false 
     },
     {
         id: 46,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the signal number and name for the signal that exits a process but allows it to close open files?',
+        back: '15 / SIGTERM',
+        correct: false 
     },
     {
         id: 47,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the signal number and name for the signal that exits a process without performing routine shutdown tasks?',
+        back: '9 / SIGKILL',
+        correct: false 
     },
     {
         id: 48,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the signal number and name for the signal that terminates interactive programs and causes most daemons to reread their configuration files?',
+        back: '1 / SIGHUP',
+        correct: false 
     },
     {
         id: 49,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the syntax for pkill?',
+        back: 'pkill [-signal <value-sans-SIG>] <options> <pattern>',
+        correct: false 
     },
     {
         id: 50,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the syntax of the kill command?',
+        back: 'kill -s <signal> <pid>',
+        correct: false 
     },
     {
         id: 51,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the syntax of the killall command?',
+        back: 'killall [options] <name>',
+        correct: false 
     },
     {
         id: 52,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the syntax of the nice command?',
+        back: 'nice [argument] [command [command-arguments]]',
+        correct: false 
     },
     {
         id: 53,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the syntax of the nohup command?',
+        back: 'nohup <command>',
+        correct: false 
     },
     {
         id: 54,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the syntax of the pgrep command?',
+        back: 'pgrep <options> <pattern>',
+        correct: false 
     },
     {
         id: 55,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What is the syntax of the renice command?',
+        back: 'renice <priority> <options>',
+        correct: false 
     },
     {
         id: 56,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What job option only applies to running jobs?',
+        back: '-r',
+        correct: false 
     },
     {
         id: 57,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What kill option can be used as an alternative to the -s <signal> option? and what values does it accept?',
+        back: '-signal <name-sans-SIG>\n\nEx. \nkill -signal TERM 5219\nkill -signal KILL 2346',
+        correct: false 
     },
     {
         id: 58,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What kill option lists all available signals?',
+        back: 'kill -l',
+        correct: false 
     },
     {
         id: 59,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What kill option specifies the signal to be sent?',
+        back: '-s <signal>',
+        correct: false 
     },
     {
         id: 60,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What killall option can be used to prompt for confirmation before sending a signal to each process it matched?',
+        back: '-i\n--interactive',
+        correct: false 
     },
     {
         id: 61,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What operating system introduced the pgrep and pkill commands?',
+        back: 'Solaris',
+        correct: false 
     },
     {
         id: 62,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What option types does the ps command support?',
+        back: 'Unix98 options (Ex. ls -al)\nBSD options (Ex. ps axu <username>)\nGNU Long options (Ex. firewall-cmd --zone=public --add-port=22652/tcp --permanent)',
+        correct: false 
     },
     {
         id: 63,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What pgrep option allows only exact matches of a process name with the search pattern?',
+        back: '-x\n--exact',
+        correct: false 
     },
     {
         id: 64,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What pgrep option lists the process name as well as the process ID?',
+        back: '-l\n--list-name',
+        correct: false 
     },
     {
         id: 65,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What pgrep option matches the search pattern against the full command line instead of just the process name?',
+        back: '-f\n--full',
+        correct: false 
     },
     {
         id: 66,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What pgrep option negates matching?',
+        back: '-v\n--inverse',
+        correct: false 
     },
     {
         id: 67,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What pgrep option only matches processes in the process group IDs (PGRP) listed?',
+        back: '-g <pgrplist>\n--pgroup <pgrplist>',
+        correct: false 
     },
     {
         id: 68,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What pgrep option only matches processes whose controlling terminal is listed?',
+        back: '-t <term>\n--terminal <term>\n\nNote: The terminal name should be specified without the "/dev/" prefix.',
+        correct: false 
     },
     {
         id: 69,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What pgrep option only matches processes whose effective user ID (EUID) is listed?',
+        back: '-u <euidlist>\n--euid <euidlist>',
+        correct: false 
     },
     {
         id: 70,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What pgrep option only matches processes whose parent process ID (PPID) is listed?',
+        back: '-P <ppidlist>',
+        correct: false 
     },
     {
         id: 71,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What pgrep option only matches processes whose process session ID (SID) is listed?',
+        back: '-s <sidlist>\n--session <sidlist>',
+        correct: false 
     },
     {
         id: 72,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What pgrep option only matches processes whose real group ID (GID) is listed?',
+        back: '-G <gidlist>\n--group <gidlist>',
+        correct: false 
     },
     {
         id: 73,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What pgrep option only matches whose real user ID (UID) is listed?',
+        back: '-U <uidlist>\n--uid <uidlist>',
+        correct: false 
     },
     {
         id: 74,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What pgrep option selects only the newest (most recently started) of the matching processes?',
+        back: '-n\n--newest',
+        correct: false 
     },
     {
         id: 75,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What pgrep option selects only the oldest (least recently started) of the matching processes?',
+        back: '-o\n--oldest',
+        correct: false 
     },
     {
         id: 76,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What pgrep option sets the string used to delimit each process ID in the output? and what is the default delimiter?',
+        back: '-d <delim>\n--delimiter <delim>\n\nDefault: newline (\n)',
+        correct: false 
     },
     {
         id: 77,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What pgrep option supresses normal output, and instead prints a count of matching processes?',
+        back: '-c\n--count',
+        correct: false 
     },
     {
         id: 78,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What priority value is set by the nice command if no priority value is supplied? What priority value is the default when nice is not used at all?',
+        back: '10\n\n0',
+        correct: false 
     },
     {
         id: 79,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What ps option displays all of the processes on the system?',
+        back: '-A\n-e',
+        correct: false 
     },
     {
         id: 80,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What ps option displays processes owned by a particular user?',
+        back: '-u <user>\nU <user>\n--user <user>\n\nNote: <user> may be a username or user ID',
+        correct: false 
     },
     {
         id: 81,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What ps option displays the processes owned by the user running ps?',
+        back: 'x',
+        correct: false 
     },
     {
         id: 82,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What ps option expands the information provided in the ps output?',
+        back: '-f, -l\nj, l, u, v',
+        correct: false 
     },
     {
         id: 83,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What ps option groups processes and uses indentation to show the hierarchical relationships between processes?',
+        back: '-H\n-f\n--forest',
+        correct: false 
     },
     {
         id: 84,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What ps option prevents truncating of output beyond 80 characters in width?',
+        back: '-w\nw',
+        correct: false 
     },
     {
         id: 85,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What ps option summarizes common ps options?',
+        back: '--help',
+        correct: false 
     },
     {
         id: 86,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What renice option can be used to explicity set the priority value paramater?',
+        back: '-n <priority>\n--priority <priority>\n\nNote: This option, if used, must be used as the first argument.',
+        correct: false 
     },
     {
         id: 87,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What renice option enables matches by process group ID (pgrp / pgid)?',
+        back: '-g <pgid>\n--pgrp <pgid>',
+        correct: false 
     },
     {
         id: 88,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What renice option enables matches by process IDs (PIDs)?',
+        back: '-p <pid>\n--pid <pid>',
+        correct: false 
     },
     {
         id: 89,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What renice option enables matches by username or user ID (UID)?',
+        back: '-u <name|UID>\n--user <name|UID>',
+        correct: false 
     },
     {
         id: 90,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What search pattern value is supported by pgrep?',
+        back: 'An extendend REGEXP',
+        correct: false 
     },
     {
         id: 91,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What three ways are there to specify a priority value in the nice command?',
+        back: 'nice -<value>\nnice -n <value>\nnice --adjustment=<value>',
+        correct: false 
     },
     {
         id: 92,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What top command changes a process\'s priority (i.e. renice) after prompting for its PID and a new priority value? What values are supported? What is the default value?',
+        back: 'r\n\n-20 to 19\n\n0',
+        correct: false 
     },
     {
         id: 93,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What top command displays help information?',
+        back: 'h\n?',
+        correct: false 
     },
     {
         id: 94,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What top command kills a process after prompting for its PID?',
+        back: 'k',
+        correct: false 
     },
     {
         id: 95,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What top command prompts for a new update rate in seconds?',
+        back: 's',
+        correct: false 
     },
     {
         id: 96,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What top command quits top?',
+        back: 'q',
+        correct: false 
     },
     {
         id: 97,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What top command sorts by CPU usage?',
+        back: 'P',
+        correct: false 
     },
     {
         id: 98,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What top command sorts by memory usage?',
+        back: 'M',
+        correct: false 
     },
     {
         id: 99,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What top option changes the update interval in seconds? and what is the default value?',
+        back: '-d <seconds>\n\nDefault: 5 seconds',
+        correct: false 
     },
     {
         id: 100,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What top option displays a specific number of updates before quitting?',
+        back: '-n <num>',
+        correct: false 
     },
     {
         id: 101,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What top option enables batch mode? and what does this mode do?',
+        back: '-b\n\nPrevents normal screen-update commands. Useful for logging CPU use to a file.',
+        correct: false 
     },
     {
         id: 102,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What top option monitors a specific proccess by PID? and how many processes can be monitored simultaneously?',
+        back: '-p <pid>\n\nUp to 20 PIDs can be monitored by applying the same option with a unique PID per -p flag.',
+        correct: false 
     },
     {
         id: 103,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What uname option displays all available information?',
+        back: '-a\n--all',
+        correct: false 
     },
     {
         id: 104,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What uname option displays information about the machine?',
+        back: '-m\n--machine\n\nNote: the output is generally a CPU code, such as x86_64 or i386, etc.',
+        correct: false 
     },
     {
         id: 105,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What uname option displays the actual kernel version number?',
+        back: '-r\n--kernel-release',
+        correct: false 
     },
     {
         id: 106,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What uname option displays the kernel name?',
+        back: '-s\n--kernel-name\n\nNote: The value returned is typically \'Linux\' on a Linux system.',
+        correct: false 
     },
     {
         id: 107,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What uname option displays the kernel version?',
+        back: '-v\n--kernel-version',
+        correct: false 
     },
     {
         id: 108,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What uname option displays the system\'s node name / network hostname?',
+        back: '-n\n--nodename',
+        correct: false 
     },
     {
         id: 109,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What uname option is supposed to display hardware information?',
+        back: '-i\n--hardware-platform\n\nNote: Most of the time this just returns \'unknown\'',
+        correct: false 
     },
     {
         id: 110,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What uname option might display information about the CPU?',
+        back: '-p\n--processor',
+        correct: false 
     },
     {
         id: 111,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What uname option returns the OS name?',
+        back: '-o\n--operating-system\n\nNote: This often returns just \'GNU/Linux\' on a Linux system.',
+        correct: false 
     },
     {
         id: 112,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What value is held by the Command column in the ps output?',
+        back: 'The command that was used to launch the process.',
+        correct: false 
     },
     {
         id: 113,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What value is held by the CPU Priority column in the ps output?',
+        back: 'The NI column, if present, lists the priority codes. Positive values represent reduced priority, and negative values represent increased priority.\n\nNote: The default value is 0.',
+        correct: false 
     },
     {
         id: 114,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What value is held by the CPU Time column in the ps output?',
+        back: 'The TIME and %CPU headings are two measures of CPU time used. The first indicates the total amount of CPU time consumed; the second represents the percentage of CPU time the process is using when ps executes.',
+        correct: false 
     },
     {
         id: 115,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What value is held by the Parent Process ID (PPID) column in the ps output?',
+        back: 'The PID for the parent process spawning this process',
+        correct: false 
     },
     {
         id: 116,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What value is held by the Process ID (PID) column in the ps output?',
+        back: 'A number that\'s associated with the process',
+        correct: false 
     },
     {
         id: 117,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What value is held by the TTY (teletype) column in the ps output?',
+        back: 'A code used to identify a terminal\n\nNote: not all process have a TTY number; only text-mode programs do.',
+        correct: false 
     },
     {
         id: 118,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What value is held by the username column in the ps output?',
+        back: 'The name of the user running the program/process',
+        correct: false 
     },
     {
         id: 119,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What values are held by the Memory Use columns in the ps output?',
+        back: '%MEM is the percentage of memory the program is using.\n\nVSZ is the virtual memory size.\n\nRSS is the Resident Set Size (the memory used by the program and its data).\n\nSHARE is the memory that\'s shared with other processes (such as shared libraries).',
+        correct: false 
     },
     {
         id: 120,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'What values can be used to specify the signal in the kill command?',
+        back: 'Either a number or its corresponding name',
+        correct: false 
     },
     {
         id: 121,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'When a program is run after entering a command name, what happens?',
+        back: 'A process is created for it',
+        correct: false 
     },
     {
         id: 122,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'When logging out of a session, the kernel passes which signal to the processes started from it? and why does it do this?',
+        back: '1 / SIGHUP\n\nTo terminate any programs that may have been left open',
+        correct: false 
     },
     {
         id: 123,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'When using the -signal option on the kill command, what part of the signal name should be left out?',
+        back: 'SIG\n\ni.e. \nSIGTERM = TERM\nSIGKILL = KILL\nSIGHUP = HUP',
+        correct: false 
     },
     {
         id: 124,
-        front: 'text',
-        back: 'text',
-        correct: false
+        front: 'Why might it be useful to run the jobs command before logging out?',
+        back: 'To ensure all programs have terminated',
+        correct: false 
     }
 ];
