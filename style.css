@@ -42,25 +42,37 @@ html, body {
         grid-row-gap: 1rem;
         grid-template-areas:
             ". . ."
-            ". flashcard ."
+            ". flashcard-container ."
             ". buttons ."
             ". . .";
         background-color: blue;
     }
 
         #flashcard-container {
-            grid-area: flashcard;
+            height: 100%;
+            width: 100%;
+            grid-area: flashcard-container;
             display: grid;
             grid-template-columns: 1fr;
-            grid-template-rows: 1fr auto;
+            grid-template-rows: 1fr;
+            grid-template-areas: 
+                "flashcard";
         }
+
             #flashcard {
-                text-align: center;
+                grid-area: flashcard;
                 box-shadow: 
                     0 4px 8px 0 rgba(0, 0, 0, 0.2), 
                     0 6px 20px 0 rgba(0, 0, 0, 0.19);
                 transition: 0.5s;
                 transform-style: preserve-3d;
+                cursor: default;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
             }
             
             #flashcard.flipped {
@@ -73,6 +85,18 @@ html, body {
                     width: 100%;
                     overflow: hidden;
                     backface-visibility: hidden;
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    grid-template-rows: 1fr;
+                    grid-template-areas: 
+                        "cardtext";
+                }
+
+                #front p,
+                #back p {
+                    grid-area: cardtext;
+                    align-self: center;
+                    justify-self: center;
                 }
 
                 #front {

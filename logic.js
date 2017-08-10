@@ -4,6 +4,10 @@
 var front = document.getElementById('front');
 var back = document.getElementById('back');
 
+// text containers
+var frontText = front.getElementsByTagName('p')[0];
+var backText = back.getElementsByTagName('p')[0];
+
 // specify the deck selected
 var deckSelected = 0;
 
@@ -11,14 +15,12 @@ var deckSelected = 0;
 var numCards = decks[deckSelected].cards.length;
 // generate a random number between 0 and the total number in the deck
 var randomCard = Math.floor(Math.random() * (numCards - 1));
-// debugging
-randomCard = 63;
 
 console.log('random card: ', randomCard);
 
 // place the contents of the random card within the front and back elements
-front.innerText = decks[deckSelected].cards[randomCard].front;
-back.innerText = decks[deckSelected].cards[randomCard].back;
+frontText.innerText = decks[deckSelected].cards[randomCard].front;
+backText.innerText = decks[deckSelected].cards[randomCard].back;
 
 
 // add class to flip the flashcard over when hovered over
