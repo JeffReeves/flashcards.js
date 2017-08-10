@@ -24,7 +24,7 @@ html, body {
             "header"
             "main"
             "footer";
-        background-color: yellow;
+        background-color: #EFEACF;
     }
 
     header {
@@ -34,8 +34,10 @@ html, body {
         grid-template-rows: 1fr;
         grid-template-areas: 
             "brand controls controls";
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);        
-        background-color: red;
+        background-color: #7E7260;
+        box-shadow: 
+            0 7px 14px 0 rgba(0, 0, 0, 0.5);        
+
     }
 
         #brand {
@@ -45,19 +47,20 @@ html, body {
             grid-template-rows: 1fr;
             grid-template-areas: 
                 "logo title";
-            background-color: goldenrod;
+            /* background-color: goldenrod; */
         }
 
             #logo {
                 grid-area: logo;
-                background-image: url('resources/images/note_48.png');
+                background-image: url('resources/images/note_48_recolored.png');
                 background-repeat: no-repeat;
-                background-color: white;
+                /* background-color: white; */
             }
 
             #title {
                 grid-area: title;
-                background-color: pink;
+                align-self: center;
+                /* background-color: pink; */
             }
 
         #controls {
@@ -67,17 +70,19 @@ html, body {
             grid-template-rows: 1fr;
             grid-template-areas: 
                 "decks menu";
-            background-color: aquamarine;
+            /* background-color: aquamarine; */
         }
 
             #decks {
                 grid-area: decks;
-                background-color: rosybrown;
+                align-self: center;
+                /* background-color: rosybrown; */
             }
 
             #menu {
                 grid-area: menu;
-                background-color: royalblue;
+                align-self: center;
+                /* background-color: royalblue; */
             }
 
     main {
@@ -92,7 +97,6 @@ html, body {
             ". flashcard-container ."
             ". buttons ."
             ". . .";
-        background-color: blue;
     }
 
         #flashcard-container {
@@ -148,7 +152,7 @@ html, body {
 
                 #front {
                     transform: rotateY(0deg);
-                    background-color: #FFFFFF;
+                    background-color: #F2F2F2;
                 }
 
                 #back {
@@ -156,7 +160,7 @@ html, body {
                     position: fixed;
                     top: 0;
                     left: 0;
-                    background-color: #E6E6E6;
+                    background-color: #DFCFB9;
                 }
         
         #buttons {
@@ -166,7 +170,6 @@ html, body {
             grid-template-rows: 1fr;
             grid-template-areas: 
                 ". . correct incorrect . skip";
-            background-color: orange;
         }
 
             #correct {
@@ -183,8 +186,11 @@ html, body {
 
     footer {
         grid-area: footer;
-        background-color: green;
+        /* border-top: 1px solid #7E7260; */
+        background-color: #DBC9AF;
         text-align: center;
+        box-shadow: 
+            0 -7px 14px -7px rgba(0, 0, 0, 0.5); 
     }
 }
 
