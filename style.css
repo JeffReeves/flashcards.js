@@ -114,12 +114,29 @@ html, body {
         
         #buttons {
             grid-area: buttons;
-            text-align: center;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+            grid-template-rows: 1fr;
+            grid-template-areas: 
+                ". . correct incorrect . skip";
             background-color: orange;
         }
+
+            #correct {
+                grid-area: correct;
+            }
+
+            #incorrect {
+                grid-area: incorrect;
+            }
+
+            #skip {
+                grid-area: skip;
+            }
 
     footer {
         grid-area: footer;
         background-color: green;
+        text-align: center;
     }
 }
