@@ -19,7 +19,7 @@ html, body {
         min-height: 100%;
         display: grid;
         grid-template-columns: 1fr;
-        grid-template-rows: 50px 1fr auto;
+        grid-template-rows: 3rem 1fr auto;
         grid-template-areas: 
             "header"
             "main"
@@ -29,18 +29,73 @@ html, body {
 
     header {
         grid-area: header;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);        
         background-color: red;
     }
 
     main {
+        /* padding: 3rem; */
         grid-area: main;
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+        grid-template-rows: 1fr 3fr auto 1fr;
+        grid-row-gap: 1rem;
+        grid-template-areas:
+            ". . ."
+            ". flashcard ."
+            ". buttons ."
+            ". . .";
         background-color: blue;
-        align-content: stretch;
     }
+
+        #flashcard-container {
+            grid-area: flashcard;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr auto;
+        }
+            #flashcard {
+                text-align: center;
+                box-shadow: 
+                    0 4px 8px 0 rgba(0, 0, 0, 0.2), 
+                    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                transition: 0.5s;
+                transform-style: preserve-3d;
+            }
+            
+            #flashcard.flipped {
+                transform: rotateY(180deg);
+            }
+
+                #front,
+                #back {
+                    height: 100%;
+                    width: 100%;
+                    overflow: hidden;
+                    backface-visibility: hidden;
+                }
+
+                #front {
+                    transform: rotateY(0deg);
+                    background-color: #FFFFFF;
+                }
+
+                #back {
+                    transform: rotateY(180deg);
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    background-color: #E6E6E6;
+                }
+        
+        #buttons {
+            grid-area: buttons;
+            text-align: center;
+            background-color: orange;
+        }
 
     footer {
         grid-area: footer;
         background-color: green;
     }
-
 }
