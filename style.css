@@ -35,9 +35,9 @@ html, body {
         grid-template-areas: 
             "brand controls controls";
         background-color: #7E7260;
+        /* background-color: #887C74; */
         box-shadow: 
             0 7px 14px 0 rgba(0, 0, 0, 0.5);        
-
     }
 
         #brand {
@@ -192,6 +192,8 @@ html, body {
         box-shadow: 
             0 -7px 14px -7px rgba(0, 0, 0, 0.5); 
     }
-}
 
-darrell flowers
+        footer p {
+            color: rgba(189, 159, 129, 0.8);
+        }
+}
