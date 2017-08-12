@@ -24,32 +24,21 @@ var shuffle = function(array) {
 // progress bar
 var moveProgressBar = function(state){
 
-    console.log('state ', state);
-    console.log('total cards: ', totalCards);
-    console.log('current cards: ', currentCards.length);
-    console.log('current Correct: ', currentCorrect);
-    console.log('current Incorrect: ', currentIncorrect);
-    console.log('current Skipped: ', currentSkipped);
-
-    switch(state){
-        case 'reset':
+    if(currentCorrect + currentIncorrect + currentSkipped <= totalCards){
+        if(state === 'reset'){
             correctProgress.style.width = '0%';
             incorrectProgress.style.width = '0%';
             skippedProgress.style.width = '0%';
             currentCorrect = 0;
             currentIncorrect = 0;
             currentSkipped = 0;
-            break;
-        case 'correct':
+        }
+        else {
             correctProgress.style.width = (currentCorrect / totalCards) * 100 + '%';
-            break;
-        case 'incorrect':
             incorrectProgress.style.width = (currentIncorrect / totalCards) * 100 + '%';
-            break;
-        case 'skipped':
             skippedProgress.style.width = (currentSkipped / totalCards) * 100 + '%';
-            break;                        
-    };
+        }
+    }
 };
 
 
@@ -176,6 +165,14 @@ flashcardContainer.addEventListener("mouseout", function(){
 // add events for button presses
 correctButton.addEventListener("click", function(){
 
+    // check if card was previous marked incorrect or skipped
+    if(currentCard.status === 'incorrect') {
+        currentIncorrect--;
+    }
+    else if(currentCard.status === 'skipped') {
+        currentSkipped--;
+    }
+
     // update current correct count
     currentCorrect++;
 
@@ -187,6 +184,14 @@ correctButton.addEventListener("click", function(){
 });
 
 incorrectButton.addEventListener("click", function(){
+
+    // check if card was previous marked skipped
+    if(currentCard.status === 'skipped') {
+        currentSkipped--;
+    }
+
+    // update current card to being marked incorrect
+    currentCard.status = 'incorrect';
 
     // add card back to the end of the array so we can try again later
     currentCards.push(currentCard);
@@ -202,6 +207,14 @@ incorrectButton.addEventListener("click", function(){
 });
 
 skipButton.addEventListener("click", function(){
+
+    // check if card was previous marked incorrect
+    if(currentCard.status === 'incorrect') {
+        currentIncorrect--;
+    }
+
+    // update current card to being marked skipped
+    currentCard.status = 'skipped';
 
     // add card back to the end of the array so we can try again later
     currentCards.push(currentCard);
