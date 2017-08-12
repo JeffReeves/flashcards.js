@@ -44,7 +44,10 @@ var Flashcards = function(){
         deckID: null,
         cards: null,
         card: null,
-        totalCards: null
+        totalCards: null,
+        correct: 0,
+        incorrect: 0,
+        skipped: 0
     };
 
     // Fisher-Yates (aka Knuth) Shuffle
@@ -143,7 +146,7 @@ var Flashcards = function(){
             self.loadCard();
 
             // set the progress back to 0
-            //moveProgressBar('reset');
+            self.updateProgress();
         });
     };
 
@@ -162,6 +165,8 @@ var Flashcards = function(){
             self.elements.backText.innerText = self.current.card.back;
         }
         else {
+            self.current.card = {};
+            self.current.cards = [];
             self.elements.frontText.innerText = 'Congratulations! You\'ve finished the deck!';
             self.elements.backText.innerText = 'You didn\'t believe me did you? =P';            
         }
@@ -184,13 +189,119 @@ var Flashcards = function(){
         });
     };
 
-    // updates the progress bar
-    this.updateProgress = function(){
+    // enables the correct, incorrect, and skip buttons
+    this.enableButtons = function(){
 
+        // add events for button presses
+        self.elements.correctButton.addEventListener("click", function(){
+
+            // send button to get id
+            var button = this.id;
+            
+            // update progress
+            self.updateProgress(button);
+            
+            // load the next card
+            self.loadCard();            
+        });
+
+        self.elements.incorrectButton.addEventListener("click", function(){
+
+            // send button to get id
+            var button = this.id;
+            
+            // update progress
+            self.updateProgress(button);
+            
+            // load the next card
+            self.loadCard();            
+        });
+
+        self.elements.skipButton.addEventListener("click", function(){
+
+            // send button to get id
+            var button = this.id;
+            
+            // update progress
+            self.updateProgress(button);
+
+            console.log('self.current.cards.length: ', self.current.cards.length);
+                
+            // load the next card
+            self.loadCard();            
+        });
     };
 
+    // updates the progress bar
+    this.updateProgress = function(button){
 
+        if(button){
 
+            // get curront card's status
+            var status = self.current.card.status;
+
+            console.log('button selected: ', button);
+            console.log('current card status: ', status);
+
+            // make changes based on button
+            switch(button){
+                case 'correct':
+                    if(status === 'incorrect'){
+                        self.current.incorrect--;
+                    }
+                    else if(status === 'skipped'){
+                        self.current.skipped--;
+                    }
+                    self.current.correct++;
+
+                    // update card status
+                    self.current.card.status = 'correct';
+
+                    break;
+                case 'incorrect':
+                    if(status === 'skipped'){
+                        self.current.skipped--;
+                    }
+                    self.current.incorrect++;
+
+                    // update card status
+                    self.current.card.status = 'incorrect';
+                    
+                    // move card to back of deck
+                    self.current.cards.push(self.current.card);
+                    break;
+                case 'skip':
+                    if(status === 'incorrect'){
+                        self.current.incorrect--;
+                    }
+                    self.current.skipped++;
+
+                    // update card status
+                    self.current.card.status = 'skipped';
+
+                    // move card to back of deck
+                    self.current.cards.push(self.current.card);
+                    break;
+                default:
+                    break;
+            }
+
+            // prevent overflow of correct + incorrect + skipped > totalcards
+            if(self.current.correct + self.current.incorrect + self.current.skipped <= self.current.totalCards){
+                self.elements.correctProgress.style.width = (self.current.correct / self.current.totalCards) * 100 + '%';
+                self.elements.incorrectProgress.style.width = (self.current.incorrect / self.current.totalCards) * 100 + '%';
+                self.elements.skippedProgress.style.width = (self.current.skipped / self.current.totalCards) * 100 + '%';
+            }
+        }
+        else {
+                self.elements.correctProgress.style.width = '0%';
+                self.elements.incorrectProgress.style.width = '0%';
+                self.elements.skippedProgress.style.width = '0%';
+                self.current.correct = 0;
+                self.current.incorrect = 0;
+                self.current.skipped = 0;
+        }
+    };
 };
 
 // MAIN 
@@ -223,3 +334,4 @@ flashcards.enableDeckSelection();
 flashcards.loadDeck();
 flashcards.loadCard();
 flashcards.enableFlipping();
+flashcards.enableButtons();
