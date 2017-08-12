@@ -3,22 +3,26 @@ var decks = [
     { 
         id: 0,
         title: 'CH1 - Command Line',
-        numberCorrect: 0
+        numberCorrect: 0,
+        numberIncorrect: 0
     },
     { 
         id: 1, 
         title: 'CH2 - Package Managers',
-        numberCorrect: 0
+        numberCorrect: 0,
+        numberIncorrect: 0
     },
     { 
         id: 2, 
         title: 'CH2 - Libraries',
-        numberCorrect: 0
+        numberCorrect: 0,
+        numberIncorrect: 0
     },
     { 
         id: 3, 
         title: 'CH2 - Processes',
-        numberCorrect: 0
+        numberCorrect: 0,
+        numberIncorrect: 0
     }
 ];
 

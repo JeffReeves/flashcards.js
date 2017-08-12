@@ -209,6 +209,8 @@ select[size="1"] {
                     grid-area: cardtext;
                     align-self: center;
                     justify-self: center;
+                    font-family: 'Roboto', sans-serif;
+                    padding: 20px 10px;
                 }
 
                 #front {

@@ -1,3 +1,32 @@
+// GLOBAL FUNCTIONS 
+
+// Fisher-Yates (aka Knuth) Shuffle
+// Courtesy of https://bost.ocks.org/mike/shuffle/
+var shuffle = function(array) {
+  var m = array.length, t, i;
+
+  // While there remain elements to shuffle...
+  while (m) {
+
+    // Pick a remaining element...
+    i = Math.floor(Math.random() * m--);
+
+    // And swap it with the current element.
+    t = array[m];
+    array[m] = array[i];
+    array[i] = t;
+  }
+
+  return array;
+}
+
+
+// GLOBAL VARIABLES 
+var currentDeck = 0;
+var currentCards = [];
+var currentCard = {};
+
+
 // GET ALL PAGE ELEMENTS
 
 // flashcards
@@ -10,6 +39,11 @@ var backText = back.getElementsByTagName('p')[0];
 
 // dropdown to select decks
 var deckSelect = document.getElementById('deck-select');
+
+// buttons
+var correctButton = document.getElementById('correct');
+var incorrectButton = document.getElementById('incorrect');
+var skipButton = document.getElementById('skip');
 
 
 // LOAD DECKS DROPDOWN
@@ -32,35 +66,42 @@ var loadDecks = function(){
 // create an onchange event to switch selected deck
 deckSelect.addEventListener('change', function(){
 
-    var deckSelected = this.value;
+    var deckID = this.value;
     
     // DEBUG
     console.log('selected deck: ', this.value);
     
-    loadFlashcard(deckSelected);
+    shuffleDeck(deckID);
 });
 
 
-// LOAD FLASHCARDS
-var loadFlashcard = function(deck){
+// shuffles flashcard deck
+var shuffleDeck = function(deck){
 
     // specify the deck selected
-    var deckSelected = deck;
+    var deckID = deck;
 
     // DEBUG
-    console.log('deck selected: ', deckSelected);
+    console.log('deck selected: ', deckID);
 
-    // get the total number of cards in the deck
-    var numCards = decks[deckSelected].cards.length;
-    // generate a random number between 0 and the total number in the deck
-    var randomCard = Math.floor(Math.random() * (numCards - 1));
+    // randomize the order of the cards to prevent cheap memorization
+    var cards = shuffle(decks[deckID].cards);
+
+    currentCards = cards;
+};
+
+var loadFlashcards = function(){
+
+    // remove the first element from the array of current cards and 
+    // load it into the current card
+    currentCard = currentCards.shift();
 
     // DEBUG
-    console.log('random card: ', randomCard);
+    console.log('card selected: ', currentCard.id);
 
     // place the contents of the random card within the front and back elements
-    frontText.innerText = decks[deckSelected].cards[randomCard].front;
-    backText.innerText = decks[deckSelected].cards[randomCard].back;
+    frontText.innerText = currentCard.front;
+    backText.innerText = currentCard.back;
 };
 
 
@@ -80,7 +121,57 @@ flashcardContainer.addEventListener("mouseout", function(){
 });
 
 
+// add events for button presses
+correctButton.addEventListener("click", function(){
+
+    // mark the current card as correct
+    decks[currentDeck].cards[currentCard.id].correct = true;
+
+    // increment the number of cards correct in the deck 
+    decks[currentDeck].numberCorrect++;
+
+    // load a new card
+    loadFlashcards();
+});
+
+incorrectButton.addEventListener("click", function(){
+
+    // mark the current card as incorrect
+    decks[currentDeck].cards[currentCard.id].incorrect = true;
+
+    // increment the number of cards incorrect in the deck 
+    decks[currentDeck].numberIncorrect++;
+
+    // DEBUG 
+    console.log('current cards before: ', currentCards);
+
+    // add card back to the end of the array so we can try again later
+    currentCards.push(currentCard);
+
+    // DEBUG 
+    console.log('current cards after: ', currentCards);
+
+    // load a new card
+    loadFlashcards();
+});
+
+skipButton.addEventListener("click", function(){
+
+    // mark the current card as skipped
+    decks[currentDeck].cards[currentCard.id].skipped = true;
+
+    // add card back to the end of the array so we can try again later
+    currentCards.push(currentCard);
+
+    // load a new card
+    loadFlashcards();
+
+});
+
+
+
 // MAIN 
 
 loadDecks();
-loadFlashcard(0);
+shuffleDeck(0);
+loadFlashcards();
