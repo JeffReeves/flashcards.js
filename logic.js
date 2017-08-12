@@ -108,9 +108,6 @@ var loadDecks = function(){
 // create an onchange event to switch selected deck
 deckSelect.addEventListener('change', function(){
 
-    // back up currently selected deck
-    decks[currentDeck].cards = currentCards;
-
     var deckID = this.value;
     
     // shuffle the new deck and load the first card from it
@@ -143,13 +140,20 @@ var shuffleDeck = function(deck){
 
 var loadFlashcards = function(){
 
-    // remove the first element from the array of current cards and 
-    // load it into the current card
-    currentCard = currentCards.shift();
+    if(currentCards.length > 0){
 
-    // place the contents of the random card within the front and back elements
-    frontText.innerText = currentCard.front;
-    backText.innerText = currentCard.back;
+        // remove the first element from the array of current cards and 
+        // load it into the current card
+        currentCard = currentCards.shift();
+
+        // place the contents of the random card within the front and back elements
+        frontText.innerText = currentCard.front;
+        backText.innerText = currentCard.back;
+    }
+    else {
+        frontText.innerText = 'Congratulations! You\'ve finished the deck!';
+        backText.innerText = 'You didn\'t believe me did you? =P';
+    }
 };
 
 
@@ -172,12 +176,6 @@ flashcardContainer.addEventListener("mouseout", function(){
 // add events for button presses
 correctButton.addEventListener("click", function(){
 
-    // mark the current card as correct
-    decks[currentDeck].cards[currentCard.id].correct = true;
-
-    // increment the number of cards correct in the deck 
-    decks[currentDeck].numberCorrect++;
-
     // update current correct count
     currentCorrect++;
 
@@ -189,12 +187,6 @@ correctButton.addEventListener("click", function(){
 });
 
 incorrectButton.addEventListener("click", function(){
-
-    // mark the current card as incorrect
-    decks[currentDeck].cards[currentCard.id].incorrect = true;
-
-    // increment the number of cards incorrect in the deck 
-    decks[currentDeck].numberIncorrect++;
 
     // add card back to the end of the array so we can try again later
     currentCards.push(currentCard);
@@ -210,9 +202,6 @@ incorrectButton.addEventListener("click", function(){
 });
 
 skipButton.addEventListener("click", function(){
-
-    // mark the current card as skipped
-    decks[currentDeck].cards[currentCard.id].skipped = true;
 
     // add card back to the end of the array so we can try again later
     currentCards.push(currentCard);
