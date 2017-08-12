@@ -66,12 +66,14 @@ var loadDecks = function(){
 // create an onchange event to switch selected deck
 deckSelect.addEventListener('change', function(){
 
+    // back up currently selected deck
+    decks[currentDeck].cards = currentCards;
+
     var deckID = this.value;
     
-    // DEBUG
-    console.log('selected deck: ', this.value);
-    
+    // shuffle the new deck and load the first card from it
     shuffleDeck(deckID);
+    loadFlashcards();
 });
 
 
@@ -80,9 +82,6 @@ var shuffleDeck = function(deck){
 
     // specify the deck selected
     var deckID = deck;
-
-    // DEBUG
-    console.log('deck selected: ', deckID);
 
     // randomize the order of the cards to prevent cheap memorization
     var cards = shuffle(decks[deckID].cards);
@@ -95,9 +94,6 @@ var loadFlashcards = function(){
     // remove the first element from the array of current cards and 
     // load it into the current card
     currentCard = currentCards.shift();
-
-    // DEBUG
-    console.log('card selected: ', currentCard.id);
 
     // place the contents of the random card within the front and back elements
     frontText.innerText = currentCard.front;
@@ -142,14 +138,8 @@ incorrectButton.addEventListener("click", function(){
     // increment the number of cards incorrect in the deck 
     decks[currentDeck].numberIncorrect++;
 
-    // DEBUG 
-    console.log('current cards before: ', currentCards);
-
     // add card back to the end of the array so we can try again later
     currentCards.push(currentCard);
-
-    // DEBUG 
-    console.log('current cards after: ', currentCards);
 
     // load a new card
     loadFlashcards();
