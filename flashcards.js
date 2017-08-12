@@ -2211,13 +2211,13 @@ decks[1].cards = [
 decks[2].cards = [
     {
         id: 0,
-        front: 'How can binary program files locate libraries? ',
+        front: 'How can binary program files locate libraries?',
         back: 'Either by name alone (ex. libc.so.6) or by providing a complete path (ex. /lib/libc.so.6).\n\nNote: a library path (containing directories to search through) must be configured to use names alone.',
         status: null 
     },
     {
         id: 1,
-        front: 'How can the LD_LIBRARY_PATH environment variable be set? ',
+        front: 'How can the LD_LIBRARY_PATH environment variable be set?',
         back: 'export LD_LIBRARY_PATH=<path1>:<pathN>',
         status: null 
     },
