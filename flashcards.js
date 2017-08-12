@@ -404,8 +404,8 @@ decks[0].cards = [
 	},
 	{
 		id: 63,
-		front: 'What nl options can adjust the header, body, and footer styling? and what are the style codes?',
-		back: '-h <style_code> \n\n-b <style_code> \n\n-f <style_code> \n\n--header-numbering=<style_code> \n\n--body-numbering=<style_code> \n\n--footer-numbering=<style_code> \n\nStyle codes: \n\nt - non-empty lines (default value) \n\na - all lines \n\nn - no lines \n\npREGEXP - only lines matching REGEXP',
+		front: 'What nl options can adjust the header, body, and footer styling?',
+		back: '-h <style_code> \n\n-b <style_code> \n\n-f <style_code> \n\n--header-numbering=<style_code> \n\n--body-numbering=<style_code> \n\n--footer-numbering=<style_code>',
 		correct: false
 	},
 	{
@@ -1192,6 +1192,13 @@ decks[0].cards = [
 		id: 194,
 		front: 'What are commands built into the shell called?',
         back: 'Internal commands',
+        correct: false
+    },
+    {
+        id: 195,
+        front: 'What are the style codes used with the nl command?',
+        back: 't - non-empty lines (default value) \n\na - all lines \n\nn - no lines \n\npREGEXP - only lines matching REGEXP',
+        correct: false
     }
 ];
 
