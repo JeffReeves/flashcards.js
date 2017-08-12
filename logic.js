@@ -21,10 +21,46 @@ var shuffle = function(array) {
 }
 
 
+// progress bar
+var moveProgressBar = function(state){
+
+    console.log('state ', state);
+    console.log('total cards: ', totalCards);
+    console.log('current cards: ', currentCards.length);
+    console.log('current Correct: ', currentCorrect);
+    console.log('current Incorrect: ', currentIncorrect);
+    console.log('current Skipped: ', currentSkipped);
+
+    switch(state){
+        case 'reset':
+            correctProgress.style.width = '0%';
+            incorrectProgress.style.width = '0%';
+            skippedProgress.style.width = '0%';
+            currentCorrect = 0;
+            currentIncorrect = 0;
+            currentSkipped = 0;
+            break;
+        case 'correct':
+            correctProgress.style.width = (currentCorrect / totalCards) * 100 + '%';
+            break;
+        case 'incorrect':
+            incorrectProgress.style.width = (currentIncorrect / totalCards) * 100 + '%';
+            break;
+        case 'skipped':
+            skippedProgress.style.width = (currentSkipped / totalCards) * 100 + '%';
+            break;                        
+    };
+};
+
+
 // GLOBAL VARIABLES 
 var currentDeck = 0;
 var currentCards = [];
 var currentCard = {};
+var totalCards = 0;
+var currentCorrect = 0;
+var currentIncorrect = 0;
+var currentSkipped = 0;
 
 
 // GET ALL PAGE ELEMENTS
@@ -36,6 +72,12 @@ var front = document.getElementById('front');
 var back = document.getElementById('back');
 var frontText = front.getElementsByTagName('p')[0];
 var backText = back.getElementsByTagName('p')[0];
+
+// progress bar
+var progressBar = document.getElementById('progress-bar');
+var correctProgress = document.getElementById('correct-progress');
+var incorrectProgress = document.getElementById('incorrect-progress');
+var skippedProgress = document.getElementById('skipped-progress');
 
 // dropdown to select decks
 var deckSelect = document.getElementById('deck-select');
@@ -74,6 +116,9 @@ deckSelect.addEventListener('change', function(){
     // shuffle the new deck and load the first card from it
     shuffleDeck(deckID);
     loadFlashcards();
+
+    // set the progress back to 0
+    moveProgressBar('reset');
 });
 
 
@@ -85,6 +130,13 @@ var shuffleDeck = function(deck){
 
     // randomize the order of the cards to prevent cheap memorization
     var cards = shuffle(decks[deckID].cards);
+
+    console.log('cards: ', cards);
+
+    totalCards = cards.length;
+    currentCorrect = 0;
+    currentIncorrect = 0;
+    currentSkipped = 0;
 
     currentCards = cards;
 };
@@ -126,6 +178,12 @@ correctButton.addEventListener("click", function(){
     // increment the number of cards correct in the deck 
     decks[currentDeck].numberCorrect++;
 
+    // update current correct count
+    currentCorrect++;
+
+    // update progress bar
+    moveProgressBar('correct');
+
     // load a new card
     loadFlashcards();
 });
@@ -141,6 +199,12 @@ incorrectButton.addEventListener("click", function(){
     // add card back to the end of the array so we can try again later
     currentCards.push(currentCard);
 
+    // update current incorrect count
+    currentIncorrect++;
+
+    // update progress bar
+    moveProgressBar('incorrect');
+
     // load a new card
     loadFlashcards();
 });
@@ -152,6 +216,12 @@ skipButton.addEventListener("click", function(){
 
     // add card back to the end of the array so we can try again later
     currentCards.push(currentCard);
+    
+    // update current skipped count
+    currentSkipped++;
+
+    // update progress bar
+    moveProgressBar('skipped');
 
     // load a new card
     loadFlashcards();
