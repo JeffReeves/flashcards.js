@@ -146,7 +146,7 @@ var Flashcards = function(){
             self.loadCard();
 
             // set the progress back to 0
-            self.updateProgress();
+            self.resetProgress();
         });
     };
 
@@ -165,6 +165,7 @@ var Flashcards = function(){
             self.elements.backText.innerText = self.current.card.back;
         }
         else {
+            console.log('out of cards');
             self.current.card = {};
             self.current.cards = [];
             self.elements.frontText.innerText = 'Congratulations! You\'ve finished the deck!';
@@ -197,110 +198,137 @@ var Flashcards = function(){
 
             // send button to get id
             var button = this.id;
-            
-            // update progress
-            self.updateProgress(button);
-            
-            // load the next card
-            self.loadCard();            
+
+            if(self.current.card.status !== undefined){
+
+                // update progress
+                self.updateProgress(button);
+                
+                // load the next card
+                self.loadCard();           
+            } 
         });
 
         self.elements.incorrectButton.addEventListener("click", function(){
 
             // send button to get id
             var button = this.id;
-            
-            // update progress
-            self.updateProgress(button);
-            
-            // load the next card
-            self.loadCard();            
+
+            if(self.current.card.status !== undefined){
+
+                // update progress
+                self.updateProgress(button);
+
+                // move card to back of deck
+                self.current.cards.push(self.current.card);
+                
+                // load the next card
+                self.loadCard();  
+            }
         });
 
         self.elements.skipButton.addEventListener("click", function(){
 
             // send button to get id
             var button = this.id;
-            
-            // update progress
-            self.updateProgress(button);
 
-            console.log('self.current.cards.length: ', self.current.cards.length);
-                
-            // load the next card
-            self.loadCard();            
+            if(self.current.card.status !== undefined){
+            
+                // update progress
+                self.updateProgress(button);
+                    
+                // move card to back of deck
+                self.current.cards.push(self.current.card);
+                    
+                // load the next card
+                self.loadCard();       
+            }     
         });
+    };
+
+    // resets the progress bar
+    this.resetProgress = function(){
+        self.elements.correctProgress.style.width = '0%';
+        self.elements.incorrectProgress.style.width = '0%';
+        self.elements.skippedProgress.style.width = '0%';
+        self.current.correct = 0;
+        self.current.incorrect = 0;
+        self.current.skipped = 0;
     };
 
     // updates the progress bar
     this.updateProgress = function(button){
 
-        if(button){
+        // get current card's status
+        var status = self.current.card.status;
 
-            // get curront card's status
-            var status = self.current.card.status;
+        console.log('current status: ', status);
 
-            console.log('button selected: ', button);
-            console.log('current card status: ', status);
+        // make changes based on button
+        switch(button){
 
-            // make changes based on button
-            switch(button){
-                case 'correct':
-                    if(status === 'incorrect'){
-                        self.current.incorrect--;
-                    }
-                    else if(status === 'skipped'){
-                        self.current.skipped--;
-                    }
+            case 'correct':
+                if(status === 'incorrect'){
+                    self.current.incorrect--;
                     self.current.correct++;
-
-                    // update card status
                     self.current.card.status = 'correct';
+                }
+                else if(status === 'skipped'){
+                    self.current.skipped--;
+                    self.current.correct++;
+                    self.current.card.status = 'correct';
+                }
+                else if(status === null){
+                    self.current.correct++;
+                    self.current.card.status = 'correct';
+                }
+                break;
 
-                    break;
-                case 'incorrect':
-                    if(status === 'skipped'){
-                        self.current.skipped--;
-                    }
+            case 'incorrect':
+                if(status === 'skipped'){
+                    self.current.skipped--;
                     self.current.incorrect++;
-
-                    // update card status
                     self.current.card.status = 'incorrect';
-                    
-                    // move card to back of deck
-                    self.current.cards.push(self.current.card);
-                    break;
-                case 'skip':
-                    if(status === 'incorrect'){
-                        self.current.incorrect--;
-                    }
+                }
+                else if(status === 'correct'){
+                    self.current.correct--;
+                    self.current.incorrect++;
+                    self.current.card.status = 'incorrect';
+                }
+                else if(status === null){
+                    self.current.incorrect++;
+                    self.current.card.status = 'incorrect';
+                }
+                break;
+
+            case 'skip':
+                if(status === 'incorrect'){
+                    self.current.incorrect--;
                     self.current.skipped++;
-
-                    // update card status
                     self.current.card.status = 'skipped';
-
-                    // move card to back of deck
-                    self.current.cards.push(self.current.card);
-                    break;
-                default:
-                    break;
-            }
-
-            // prevent overflow of correct + incorrect + skipped > totalcards
-            if(self.current.correct + self.current.incorrect + self.current.skipped <= self.current.totalCards){
-                self.elements.correctProgress.style.width = (self.current.correct / self.current.totalCards) * 100 + '%';
-                self.elements.incorrectProgress.style.width = (self.current.incorrect / self.current.totalCards) * 100 + '%';
-                self.elements.skippedProgress.style.width = (self.current.skipped / self.current.totalCards) * 100 + '%';
-            }
+                }
+                else if(status === 'correct'){
+                    self.current.correct--;
+                    self.current.skipped++;
+                    self.current.card.status = 'skipped';
+                }
+                else if(status === null){
+                    self.current.skipped++;
+                    self.current.card.status = 'skipped';
+                }
+                break;
         }
-        else {
-                self.elements.correctProgress.style.width = '0%';
-                self.elements.incorrectProgress.style.width = '0%';
-                self.elements.skippedProgress.style.width = '0%';
-                self.current.correct = 0;
-                self.current.incorrect = 0;
-                self.current.skipped = 0;
-        }
+
+        // prevent overflow of correct + incorrect + skipped > totalcards
+        console.log('self.current.totalCards: ', self.current.totalCards);
+        console.log('self.current.correct: ', self.current.correct);
+        console.log('self.current.incorrect: ', self.current.incorrect);
+        console.log('self.current.skipped: ', self.current.skipped);
+
+
+        self.elements.correctProgress.style.width = (self.current.correct / self.current.totalCards) * 100 + '%';
+        self.elements.incorrectProgress.style.width = (self.current.incorrect / self.current.totalCards) * 100 + '%';
+        self.elements.skippedProgress.style.width = (self.current.skipped / self.current.totalCards) * 100 + '%';
     };
 };
 
