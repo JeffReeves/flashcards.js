@@ -61,14 +61,12 @@ var Flashcards = function(){
         return array;
     }
 
-    // add new decks
-    this.addDeck = function(title){
-
-        console.log('self.decks.length: ', self.decks.length);
+    // add new deck
+    this.addDeck = function(title, id){
 
         self.decks.push({
             title: title,
-            id: self.decks.length,
+            id: id || self.decks.length,
             cards: [],
             statuses: {
                 correct: 0,
@@ -78,10 +76,8 @@ var Flashcards = function(){
         });
     };
 
-    // add new cards to a deck 
+    // add new card to a deck 
     this.addCard = function(deckID, front, back){
-
-        console.log('self.decks[' + deckID + '].cards.length: ', self.decks[deckID].cards.length);
 
         var cards = self.decks[deckID].cards;
         var id = cards.length;
@@ -94,6 +90,22 @@ var Flashcards = function(){
         });
     };
 
+    // add an array of decks
+    this.addDecks = function(decks){
+
+        // iterate through all decks and add necessary properties
+        for(var i = 0; i < decks.length; i++){
+            self.addDeck(decks[i].title, decks[i].id, decks[i].cards);
+
+            // iterate through all cards and add necessary properties
+            for(var j = 0; j < decks[i].cards.length; j++){
+                self.addCard(i, decks[i].cards[j].front, decks[i].cards[j].back);
+            }
+        }
+
+        
+    }
+
     // add new decks with cards via JSON
     this.loadJSON = function(){
 
@@ -101,16 +113,18 @@ var Flashcards = function(){
 
     // shuffle cards in a deck
     this.shuffleDeck = function(deckID){
+
         var cards = self.decks[deckID].cards;
         cards = shuffle(cards);
         return cards;
+
     };
 
     // load a new deck into the current deck
     this.loadDeck = function(){
         // load first deck into current deck
         self.current.deckID = 0;
-        self.current.cards = self.decks[0].cards;
+        self.current.cards = self.shuffleDeck(0);
         self.current.totalCards = self.decks[0].cards.length;
     };
 
@@ -139,6 +153,7 @@ var Flashcards = function(){
             
             // shuffle the new deck and load the first card from it
             self.current.cards = self.shuffleDeck(deckID);
+            self.current.totalCards = self.decks[deckID].cards.length;
             self.loadCard();
 
             // set the progress back to 0
@@ -194,6 +209,9 @@ var Flashcards = function(){
 
             // send button to get id
             var button = this.id;
+
+            console.log('button selected:', button);
+            console.log('self.current.card.status: ', self.current.card.status);
 
             if(self.current.card.status !== undefined){
 
@@ -333,8 +351,6 @@ var Flashcards = function(){
 var flashcards = new Flashcards;
 // flashcards.addDeck('CH1 - Command Line');
 // flashcards.addDeck('CH2 - Package Managers');
-// flashcards.addDeck('CH2 - Libraries');
-// flashcards.addDeck('CH2 - Processes');
 
 // flashcards.addCard(0, 'Where is the file that stores bash history?', '~/.bash_history');
 // flashcards.addCard(0, 'Which command can concatenate files together and send the resulting combination to STDOUT (1)?', 'cat \n\nEx. cat first.txt second.txt > combined.txt');
@@ -344,21 +360,9 @@ var flashcards = new Flashcards;
 // flashcards.addCard(1, 'Binary packages typically contain what type of content?', 'Subdirectories that mimic the layout of the Linux root directory (i.e. /, /etc, /usr, etc.).');
 // flashcards.addCard(1, 'Debian package tools combine and compile source packages to create what?', 'Debian binary packages');
 
-// flashcards.addCard(2, 'How can binary program files locate libraries?', 'Either by name alone (ex. libc.so.6) or by providing a complete path (ex. /lib/libc.so.6).\n\nNote: a library path (containing directories to search through) must be configured to use names alone.');
-// flashcards.addCard(2, 'How can the LD_LIBRARY_PATH environment variable be set?', 'export LD_LIBRARY_PATH=<path1>:<pathN>');
-// flashcards.addCard(2, 'If all dependencies are met for a program but it still fails to load due to missing dependencies, what can be done?', 'Use the ldd command on the libraries shown when running ldd on the program. Sometimes these libraries have dependencies that may be missing.');
-
-// flashcards.addCard(3, 'Because many shells include their own internal version of the kill command, what must be done to ensure the external kill command is being used?', 'Call it with a full path\n\ni.e. /bin/kill');
-// flashcards.addCard(3, 'By default, ps displays which processes? and how wide is the output?', 'ps displays only processes that were run from its own terminal (options -A, -e, and x can overwrite this).\n\nThe output is limited to being 80 characters wide and is truncated beyond that length (options -w and w can ovewrite this).');
-// flashcards.addCard(3, 'By default, top sorts entries by what? and how often does it update?', 'CPU use\n\nEvery five (5) seconds');
-
-
-//flashcards.shuffleDeck(0);
-
-if(flashcards.decks.length > 0){
-    flashcards.enableDeckSelection();
-    flashcards.loadDeck();
-    flashcards.loadCard();
-    flashcards.enableFlipping();
-    flashcards.enableButtons();
-}
+flashcards.addDecks(window.decks);
+flashcards.enableDeckSelection();
+flashcards.loadDeck();
+flashcards.loadCard();
+flashcards.enableFlipping();
+flashcards.enableButtons();
