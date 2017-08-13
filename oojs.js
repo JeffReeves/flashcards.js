@@ -1,12 +1,3 @@
-/*
-* This will be a rewrite using OOJS ideas
-* Flashcards are made up of decks. 
-* Decks contain a stack of cards.
-* Each card has a front and a back.
-* Each card can be correct, incorrect, or skipped.
-* 
-*/
-
 var Flashcards = function(){
 
     var self = this;
@@ -101,6 +92,11 @@ var Flashcards = function(){
                 back: back,
                 status: null
         });
+    };
+
+    // add new decks with cards via JSON
+    this.loadJSON = function(){
+
     };
 
     // shuffle cards in a deck
@@ -335,31 +331,34 @@ var Flashcards = function(){
 // MAIN 
 
 var flashcards = new Flashcards;
-flashcards.addDeck('CH1 - Command Line');
-flashcards.addDeck('CH2 - Package Managers');
-flashcards.addDeck('CH2 - Libraries');
-flashcards.addDeck('CH2 - Processes');
+// flashcards.addDeck('CH1 - Command Line');
+// flashcards.addDeck('CH2 - Package Managers');
+// flashcards.addDeck('CH2 - Libraries');
+// flashcards.addDeck('CH2 - Processes');
 
-flashcards.addCard(0, 'Where is the file that stores bash history?', '~/.bash_history');
-flashcards.addCard(0, 'Which command can concatenate files together and send the resulting combination to STDOUT (1)?', 'cat \n\nEx. cat first.txt second.txt > combined.txt');
-flashcards.addCard(0, 'Which command directly modifies a file\'s content and sends the changes to STDOUT (0)?', 'sed');
+// flashcards.addCard(0, 'Where is the file that stores bash history?', '~/.bash_history');
+// flashcards.addCard(0, 'Which command can concatenate files together and send the resulting combination to STDOUT (1)?', 'cat \n\nEx. cat first.txt second.txt > combined.txt');
+// flashcards.addCard(0, 'Which command directly modifies a file\'s content and sends the changes to STDOUT (0)?', 'sed');
 
-flashcards.addCard(1, 'Before upgrading a package with dpkg, what may need to be done first? and what is the command?', 'The old package may need to be removed first.\n\n# dpkg -r <package-name>');
-flashcards.addCard(1, 'Binary packages typically contain what type of content?', 'Subdirectories that mimic the layout of the Linux root directory (i.e. /, /etc, /usr, etc.).');
-flashcards.addCard(1, 'Debian package tools combine and compile source packages to create what?', 'Debian binary packages');
+// flashcards.addCard(1, 'Before upgrading a package with dpkg, what may need to be done first? and what is the command?', 'The old package may need to be removed first.\n\n# dpkg -r <package-name>');
+// flashcards.addCard(1, 'Binary packages typically contain what type of content?', 'Subdirectories that mimic the layout of the Linux root directory (i.e. /, /etc, /usr, etc.).');
+// flashcards.addCard(1, 'Debian package tools combine and compile source packages to create what?', 'Debian binary packages');
 
-flashcards.addCard(2, 'How can binary program files locate libraries?', 'Either by name alone (ex. libc.so.6) or by providing a complete path (ex. /lib/libc.so.6).\n\nNote: a library path (containing directories to search through) must be configured to use names alone.');
-flashcards.addCard(2, 'How can the LD_LIBRARY_PATH environment variable be set?', 'export LD_LIBRARY_PATH=<path1>:<pathN>');
-flashcards.addCard(2, 'If all dependencies are met for a program but it still fails to load due to missing dependencies, what can be done?', 'Use the ldd command on the libraries shown when running ldd on the program. Sometimes these libraries have dependencies that may be missing.');
+// flashcards.addCard(2, 'How can binary program files locate libraries?', 'Either by name alone (ex. libc.so.6) or by providing a complete path (ex. /lib/libc.so.6).\n\nNote: a library path (containing directories to search through) must be configured to use names alone.');
+// flashcards.addCard(2, 'How can the LD_LIBRARY_PATH environment variable be set?', 'export LD_LIBRARY_PATH=<path1>:<pathN>');
+// flashcards.addCard(2, 'If all dependencies are met for a program but it still fails to load due to missing dependencies, what can be done?', 'Use the ldd command on the libraries shown when running ldd on the program. Sometimes these libraries have dependencies that may be missing.');
 
-flashcards.addCard(3, 'Because many shells include their own internal version of the kill command, what must be done to ensure the external kill command is being used?', 'Call it with a full path\n\ni.e. /bin/kill');
-flashcards.addCard(3, 'By default, ps displays which processes? and how wide is the output?', 'ps displays only processes that were run from its own terminal (options -A, -e, and x can overwrite this).\n\nThe output is limited to being 80 characters wide and is truncated beyond that length (options -w and w can ovewrite this).');
-flashcards.addCard(3, 'By default, top sorts entries by what? and how often does it update?', 'CPU use\n\nEvery five (5) seconds');
+// flashcards.addCard(3, 'Because many shells include their own internal version of the kill command, what must be done to ensure the external kill command is being used?', 'Call it with a full path\n\ni.e. /bin/kill');
+// flashcards.addCard(3, 'By default, ps displays which processes? and how wide is the output?', 'ps displays only processes that were run from its own terminal (options -A, -e, and x can overwrite this).\n\nThe output is limited to being 80 characters wide and is truncated beyond that length (options -w and w can ovewrite this).');
+// flashcards.addCard(3, 'By default, top sorts entries by what? and how often does it update?', 'CPU use\n\nEvery five (5) seconds');
 
 
 //flashcards.shuffleDeck(0);
-flashcards.enableDeckSelection();
-flashcards.loadDeck();
-flashcards.loadCard();
-flashcards.enableFlipping();
-flashcards.enableButtons();
+
+if(flashcards.decks.length > 0){
+    flashcards.enableDeckSelection();
+    flashcards.loadDeck();
+    flashcards.loadCard();
+    flashcards.enableFlipping();
+    flashcards.enableButtons();
+}
