@@ -28,12 +28,14 @@ A minimalistic browser-based flashcard system built on JavaScript
         proxy_pass http://127.0.0.1:9001/;
     }
     ```
-3. Install PM2:
+3. Create a MySQL database and a user to access it (see `setup/mysql-setup.txt`).
+4. Update the connection strings to link the app to the database.
+5. Install PM2:
     ``` 
     npm install pm2 -g
     ```
-4. Start the app with pm2:
+6. Start the app with pm2:
     ```
     pm2 start pm2.json
     ```
-5. Go to http://yourdomain.tld/flashcards/
+7. Go to http://yourdomain.tld/flashcards/
