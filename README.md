@@ -18,7 +18,7 @@ A minimalistic browser-based flashcard system built on JavaScript
 - MySQL (MariaDB)
 
 1. Upload this repository onto your server.
-2. Add the following to your Nginx conf file's server block and restart Nginx:
+2. Add the following to your Nginx conf file's server block (see `setup/nginx-example.conf`) and restart Nginx:
     ```
     location /flashcards/  {
         proxy_pass http://127.0.0.1:9001/;
