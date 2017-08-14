@@ -3,23 +3,32 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 
+var db = require('./database.js');
 
 //== INIT =====================================================================
 
 var app = express();
 var routes = require('./routes/routes.js');
-
+var api = require('./api/api.js');
 
 //== MAIN =====================================================================
 
 // server configuration
-//app.set('ipaddr', '198.199.119.38');
 app.set('ipaddr', '127.0.0.1');
 app.set('port', process.env.PORT || 9001);
 
 // favicon
 app.use(favicon(path.join(__dirname, 'favicon.ico')));
+
+// body parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// cookie parser
+app.use(cookieParser());
 
 // define base directory of app
 app.use(express.static(__dirname));
@@ -33,10 +42,9 @@ app.use('/styles', express.static(path.join(__dirname + 'static/styles')));
 app.use('/scripts', express.static(path.join(__dirname + 'static/scripts')));
 app.use('/images', express.static(path.join(__dirname + 'static/images')));
 
-
 //-- ROUTES -------------------------------------------------------------------
 
-//app.use('/api', api);
+app.use('/api', api);
 app.use('/', routes);
 
 // 404 errors

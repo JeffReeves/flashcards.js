@@ -1,7 +1,7 @@
 {
   "apps" : [{
     "name"             : "flashcards.js",
-    "cwd"              : "/home/jeff/flashcards.js",
+    "cwd"              : "/home/jeff/flashcards.js/",
     "args"             : [],
     "script"           : "app.js",
     "watch"            : true,
