@@ -1,6 +1,10 @@
 # flashcards.js
 A minimalistic browser-based flashcard system built on JavaScript
 
+[Alt text](/screenshot.png?raw=true "Front of Card")
+
+[Alt text](/screenshot_back.png?raw=true "Back of Card")
+
 ## How to Use
 
 ### Local (offline) Version
