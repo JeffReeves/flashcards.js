@@ -1,9 +1,9 @@
 # flashcards.js
 A minimalistic browser-based flashcard system built on JavaScript
 
-[Alt text](/screenshot.png?raw=true "Front of Card")
+![Screenshot](https://raw.githubusercontent.com/JeffReeves/flashcards.js/master/screenshot.png)
 
-[Alt text](/screenshot_back.png?raw=true "Back of Card")
+![Screenshot_2](https://raw.githubusercontent.com/JeffReeves/flashcards.js/master/screenshot_back.png)
 
 ## How to Use
 
