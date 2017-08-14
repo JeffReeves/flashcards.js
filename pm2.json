@@ -1,0 +1,17 @@
+{
+  "apps" : [{
+    "name"             : "flashcards.js",
+    "cwd"              : "/home/jeff/flashcards.js",
+    "args"             : [],
+    "script"           : "app.js",
+    "watch"            : true,
+    "ignore_watch"     : ["*.log"],
+    "log_date_format"  : "YYYY-MM-DD HH:mm Z",
+    "exec_interpreter" : "node",
+    "exec_mode"        : "fork",
+    "autorestart"      : true,
+    "env"              : {
+      "PORT": "9001"
+    }
+  }]
+}

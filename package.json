@@ -1,0 +1,26 @@
+{
+  "name": "flashcards.js",
+  "version": "2.0.0",
+  "description": "Minimal browser-based flashcard system built on JavaScript",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JeffReeves/flashcards.js.git"
+  },
+  "keywords": [
+    "flashcards"
+  ],
+  "author": "Jeffrey Reeves",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JeffReeves/flashcards.js/issues"
+  },
+  "homepage": "https://github.com/JeffReeves/flashcards.js#readme",
+  "dependencies": {
+    "express": "^4.15.4",
+    "serve-favicon": "^2.4.3"
+  }
+}
