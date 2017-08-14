@@ -11,7 +11,6 @@ var db = require('./database.js');
 //== INIT =====================================================================
 
 var app = express();
-var routes = require('./routes/routes.js');
 var api = require('./api/api.js');
 
 //== MAIN =====================================================================
@@ -19,6 +18,11 @@ var api = require('./api/api.js');
 // server configuration
 app.set('ipaddr', '127.0.0.1');
 app.set('port', process.env.PORT || 9001);
+
+// view engine
+app.engine('.html', require('ejs').__express);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'html');
 
 // favicon
 app.use(favicon(path.join(__dirname, 'favicon.ico')));
@@ -45,13 +49,28 @@ app.use('/images', express.static(path.join(__dirname + 'static/images')));
 //-- ROUTES -------------------------------------------------------------------
 
 app.use('/api', api);
-app.use('/', routes);
+
+// home
+app.get('/', function(req, res) {
+
+    res.render('index', {
+        title: ''
+    });
+});
+
+// user/admin menu
+app.get('/admin', function(req, res) {
+
+    res.render('index', {
+        title: ''
+    });
+});
 
 // 404 errors
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // set the port to run on

@@ -5,26 +5,6 @@ var db = require('../database.js');
 
 //== ROUTES ===================================================================
 
-router.get('/test', function(req, res){
-
-    db.getConnection(function(err, connection){
-
-        // Use the connection
-        connection.query('SELECT * FROM cards', function (error, results, fields) {
-
-            if(results){
-                console.log('[DEBUG] api test results: ', results);
-            }
-                
-            // And done with the connection.
-            connection.release();
-
-            // Handle error after the release.
-            if (error) throw error;
-        });
-    });
-});
-
 router.get('/cards/all', function(req, res) {
 
     // select all cards
@@ -32,15 +12,15 @@ router.get('/cards/all', function(req, res) {
 
     db.getConnection(function(err, connection){
 
-        connection.query(query, function (error, results, fields) {
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
 
             if(results){
                 res.send(results);
             }
                 
-            connection.release();
-
-            if (error){
+            if(error){
                 res.send(error);
             }
         });
