@@ -1,3 +1,18 @@
+var newdecks = [];
+var getAllDecksByUser = function(user) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "api/decks/user/jeff", true);
+    xhr.onload = function (e) {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                newdecks = JSON.parse(xhr.responseText);
+            }
+        }
+    };
+    xhr.send(null);
+}
+getAllDecksByUser('jeff');
+
 var Flashcards = function(){
 
     var self = this;

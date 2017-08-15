@@ -117,10 +117,37 @@ VALUES (@deckid,
 );
 
 /* EXAMPLE SELECT ALL CARDS FROM A PARTICULAR DECK */
-SELECT cards.id, cards.deckid 
+SELECT cards.id, cards.front, cards.back, cards.deckid 
 FROM cards INNER JOIN decks ON cards.deckid=decks.id 
-WHERE decks.id = 2;
+WHERE decks.id = 2
+ORDER BY decks.id;
 
 SELECT cards.id, cards.deckid 
 FROM cards INNER JOIN decks ON cards.deckid=decks.id 
 WHERE decks.title = 'CH1 - Command Line';
+
+/* SELECT ALL DECKS FROM A PARTICULAR USER */
+SELECT decks.id, decks.title
+FROM decks INNER JOIN users ON decks.userid=users.id
+WHERE users.username = 'jeff';
+
+/* SELECT ALL CARDS FOR A PARTICULAR USER AND SORT BY DECK AND CARD ID */
+SELECT
+    decks.title, 
+    cards.front, 
+    cards.back, 
+    cards.id, 
+    cards.deckid, 
+    users.username
+FROM users
+INNER JOIN decks
+ON decks.userid = users.id
+INNER JOIN cards
+ON cards.deckid = decks.id
+WHERE users.username = "jeff"
+ORDER BY decks.id, cards.id;
+
+/* PASS VARIABLES TO EJS */
+-- <script>
+--     var cards = JSON.parse(<%-JSON.stringify(cards) %>);
+-- </script>    
