@@ -55,31 +55,17 @@ app.use('/api', api);
 
 var cards;
 
-// might be used later for user authentication
-// var getDecks = {  
-//     url: 'http://localhost:9001/api/decks/user/jeff',
-//     method: 'GET',
-//     headers: {
-//         'Accept': 'application/json',
-//         'Accept-Charset': 'utf-8'
-//     }
-// };
-
-// // call API to get all cards for a user
-// request(options, function (error, response, body) {
-//     cards = body;
-//     request(options, function (error, response, body) {
-    
-//     });
-// });
-
-
 // home
 app.get('/', function(req, res) {
+    
+    // get a user if one was passed via domain.com/?user=jeff
+    var user = '';
+    if(req.query.user){
+        user = req.query.user;
+    }
 
     res.render('index', {
-        title: 'flashcards.js - Jeff',
-        //cards: cards
+        user: user
     });
 });
 

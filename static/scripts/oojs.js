@@ -32,6 +32,7 @@ var Flashcards = function(){
 
     // copy of currently selected deck/cards
     this.current = {
+        user: '',
         deckID: null,
         cards: [],
         card: null,
@@ -361,19 +362,13 @@ var Flashcards = function(){
 // MAIN 
 
 var flashcards = new Flashcards;
-// flashcards.addDeck('CH1 - Command Line');
-// flashcards.addDeck('CH2 - Package Managers');
 
-// flashcards.addCard(0, 'Where is the file that stores bash history?', '~/.bash_history');
-// flashcards.addCard(0, 'Which command can concatenate files together and send the resulting combination to STDOUT (1)?', 'cat \n\nEx. cat first.txt second.txt > combined.txt');
-// flashcards.addCard(0, 'Which command directly modifies a file\'s content and sends the changes to STDOUT (0)?', 'sed');
+// load user from URL passed variable, if exists
+if(window.user){
+    flashcards.current.user = window.user;
+}
 
-// flashcards.addCard(1, 'Before upgrading a package with dpkg, what may need to be done first? and what is the command?', 'The old package may need to be removed first.\n\n# dpkg -r <package-name>');
-// flashcards.addCard(1, 'Binary packages typically contain what type of content?', 'Subdirectories that mimic the layout of the Linux root directory (i.e. /, /etc, /usr, etc.).');
-// flashcards.addCard(1, 'Debian package tools combine and compile source packages to create what?', 'Debian binary packages');
-
-//flashcards.addDecks(window.decks);
-flashcards.loadJSON('jeff', function(){
+flashcards.loadJSON(flashcards.current.user, function(){
     flashcards.enableFlipping();
     flashcards.enableButtons();
     flashcards.enableDeckSelection();
