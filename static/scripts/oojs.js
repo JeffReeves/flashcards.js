@@ -1,18 +1,3 @@
-var newdecks = [];
-var getAllDecksByUser = function(user) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "api/decks/user/jeff", true);
-    xhr.onload = function (e) {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                newdecks = JSON.parse(xhr.responseText);
-            }
-        }
-    };
-    xhr.send(null);
-}
-getAllDecksByUser('jeff');
-
 var Flashcards = function(){
 
     var self = this;
@@ -48,7 +33,7 @@ var Flashcards = function(){
     // copy of currently selected deck/cards
     this.current = {
         deckID: null,
-        cards: null,
+        cards: [],
         card: null,
         totalCards: null,
         correct: 0,
@@ -59,6 +44,7 @@ var Flashcards = function(){
     // Fisher-Yates (aka Knuth) Shuffle
     // Courtesy of https://bost.ocks.org/mike/shuffle/
     var shuffle = function(array){
+
         var m = array.length, t, i;
 
         // While there remain elements to shuffle...
@@ -74,7 +60,7 @@ var Flashcards = function(){
         }
 
         return array;
-    }
+    };
 
     // add new deck
     this.addDeck = function(title, id){
@@ -116,14 +102,36 @@ var Flashcards = function(){
             for(var j = 0; j < decks[i].cards.length; j++){
                 self.addCard(i, decks[i].cards[j].front, decks[i].cards[j].back);
             }
-        }
-
-        
+        }        
     }
 
     // add new decks with cards via JSON
-    this.loadJSON = function(){
+    this.loadJSON = function(username, callback){
 
+        // running into too many issues trying to be cool and asynchronous 
+        // disabling async for now to ensure data is available before attempting to use it
+        jQuery.ajaxSetup({async:false});
+
+        $.get('api/decks/user/' + username, function(data, status){
+            
+            self.decks = data;
+
+            for(var i = 0; i < self.decks.length; i++) {
+                getCards(i, self.decks.length);
+            }
+
+            callback();
+        });
+
+        // iterate through decks found to get their cards
+        function getCards(i, len) {
+
+            var deckid = self.decks[i].id;
+
+            $.get("api/cards/deckid/" + deckid, function(data, status){
+                self.decks[i].cards = data;
+            });
+        }
     };
 
     // shuffle cards in a deck
@@ -136,11 +144,13 @@ var Flashcards = function(){
     };
 
     // load a new deck into the current deck
-    this.loadDeck = function(){
-        // load first deck into current deck
-        self.current.deckID = 0;
-        self.current.cards = self.shuffleDeck(0);
-        self.current.totalCards = self.decks[0].cards.length;
+    this.loadDeck = function(decks){
+
+        if(decks[0].cards){
+            // load first deck into current deck
+            self.current.cards = self.shuffleDeck(0);
+            self.current.totalCards = decks[0].cards.length;
+        }
     };
 
     // enable deck selection dropdown
@@ -163,8 +173,8 @@ var Flashcards = function(){
         // create an onchange event to switch selected deck
         self.elements.deckSelect.addEventListener('change', function(){
 
-            var deckID = this.value;
-            console.log('deckID selected: ', deckID);
+            // subtract 1 because decks start at ID 1 and arrays start at 0
+            var deckID = this.value - 1;
             
             // shuffle the new deck and load the first card from it
             self.current.cards = self.shuffleDeck(deckID);
@@ -191,7 +201,6 @@ var Flashcards = function(){
             self.elements.backText.innerText = self.current.card.back;
         }
         else {
-            console.log('out of cards');
             self.current.card = {};
             self.current.cards = [];
             self.elements.frontText.innerText = 'Congratulations! You\'ve finished the deck!';
@@ -224,9 +233,6 @@ var Flashcards = function(){
 
             // send button to get id
             var button = this.id;
-
-            console.log('button selected:', button);
-            console.log('self.current.card.status: ', self.current.card.status);
 
             if(self.current.card.status !== undefined){
 
@@ -291,8 +297,6 @@ var Flashcards = function(){
         // get current card's status
         var status = self.current.card.status;
 
-        console.log('current status: ', status);
-
         // make changes based on button
         switch(button){
 
@@ -348,13 +352,6 @@ var Flashcards = function(){
                 break;
         }
 
-        // prevent overflow of correct + incorrect + skipped > totalcards
-        console.log('self.current.totalCards: ', self.current.totalCards);
-        console.log('self.current.correct: ', self.current.correct);
-        console.log('self.current.incorrect: ', self.current.incorrect);
-        console.log('self.current.skipped: ', self.current.skipped);
-
-
         self.elements.correctProgress.style.width = (self.current.correct / self.current.totalCards) * 100 + '%';
         self.elements.incorrectProgress.style.width = (self.current.incorrect / self.current.totalCards) * 100 + '%';
         self.elements.skippedProgress.style.width = (self.current.skipped / self.current.totalCards) * 100 + '%';
@@ -375,9 +372,11 @@ var flashcards = new Flashcards;
 // flashcards.addCard(1, 'Binary packages typically contain what type of content?', 'Subdirectories that mimic the layout of the Linux root directory (i.e. /, /etc, /usr, etc.).');
 // flashcards.addCard(1, 'Debian package tools combine and compile source packages to create what?', 'Debian binary packages');
 
-flashcards.addDecks(window.decks);
-flashcards.enableDeckSelection();
-flashcards.loadDeck();
-flashcards.loadCard();
-flashcards.enableFlipping();
-flashcards.enableButtons();
+//flashcards.addDecks(window.decks);
+flashcards.loadJSON('jeff', function(){
+    flashcards.enableFlipping();
+    flashcards.enableButtons();
+    flashcards.enableDeckSelection();
+    flashcards.loadDeck(flashcards.decks);
+    flashcards.loadCard();
+});

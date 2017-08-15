@@ -40,7 +40,7 @@ router.get('/cards/user/:username', function(req, res) {
 
     // select all cards for a user
     var query = 'SELECT ' +
-            'cards.deckid, decks.title, cards.id, cards.front, cards.back ' +
+            'cards.deckid, decks.title, cards.id, cards.front, cards.back, cards.status ' +
             'FROM users ' +
             'INNER JOIN decks ' +
             'ON decks.userid = users.id ' +
@@ -72,7 +72,7 @@ router.get('/cards/deckid/:deckid', function(req, res) {
     var deckid = req.params.deckid;
 
     // select all cards for a deck by id
-    var query = 'SELECT cards.id, cards.front, cards.back ' +
+    var query = 'SELECT cards.id, cards.front, cards.back, cards.status ' +
                 'FROM cards INNER JOIN decks ON cards.deckid=decks.id ' +
                 'WHERE decks.id = ' + deckid + ' ' +
                 'ORDER BY cards.id';
