@@ -6,12 +6,12 @@
 
 @font-face {
     font-family: "Roboto Condensed";
-    src: url('resources/fonts/RobotoCondensed-Regular.ttf') format("truetype");
+    src: url('fonts/RobotoCondensed-Regular.ttf') format("truetype");
 }
 
 @font-face {
     font-family: "Roboto";
-    src: url('resources/fonts/Roboto-Regular.ttf') format("truetype");
+    src: url('fonts/Roboto-Regular.ttf') format("truetype");
 }
 
 /* GENERAL ELEMENTS */
@@ -104,7 +104,7 @@ select[size="1"] {
 
             #logo {
                 grid-area: logo;
-                background-image: url('resources/images/note_48_recolored.png');
+                background-image: url('../images/note_48_recolored.png');
                 background-repeat: no-repeat;
                 /* background-color: white; */
             }
@@ -209,6 +209,7 @@ select[size="1"] {
                     0 6px 20px 0 rgba(0, 0, 0, 0.19);
                 transition: 0.5s;
                 transform-style: preserve-3d;
+                -webkit-transform-style: preserve-3d;
                 cursor: default;
                 -webkit-touch-callout: none;
                 -webkit-user-select: none;
@@ -220,6 +221,10 @@ select[size="1"] {
             
             #flashcard.flipped {
                 transform: rotateY(180deg);
+                -webkit-transform: rotateY(180deg);
+                -moz-transform: rotateY(180deg);
+                -ms-transform: rotateY(180deg);
+                -o-transform: rotateY(180deg);
             }
 
                 #front,
@@ -246,11 +251,19 @@ select[size="1"] {
 
                 #front {
                     transform: rotateY(0deg);
+                    -webkit-transform: rotateY(0deg);
+                    -moz-transform: rotateY(0deg);
+                    -ms-transform: rotateY(0deg);
+                    -o-transform: rotateY(0deg);
                     background-color: #F2F2F2;
                 }
 
                 #back {
                     transform: rotateY(180deg);
+                    -webkit-transform: rotateY(180deg);
+                    -moz-transform: rotateY(180deg);
+                    -ms-transform: rotateY(180deg);
+                    -o-transform: rotateY(180deg);
                     position: fixed;
                     top: 0;
                     left: 0;
@@ -280,7 +293,7 @@ select[size="1"] {
                 grid-area: skip;
                 width: 64px;
             }
-
+            
     footer {
         grid-area: footer;
         /* border-top: 1px solid #7E7260; */
