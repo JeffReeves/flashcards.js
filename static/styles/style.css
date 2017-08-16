@@ -209,6 +209,7 @@ select[size="1"] {
                     0 6px 20px 0 rgba(0, 0, 0, 0.19);
                 transition: 0.5s;
                 transform-style: preserve-3d;
+                -webkit-transform-style: preserve-3d;
                 cursor: default;
                 -webkit-touch-callout: none;
                 -webkit-user-select: none;
@@ -220,6 +221,10 @@ select[size="1"] {
             
             #flashcard.flipped {
                 transform: rotateY(180deg);
+                -webkit-transform: rotateY(180deg);
+                -moz-transform: rotateY(180deg);
+                -ms-transform: rotateY(180deg);
+                -o-transform: rotateY(180deg);
             }
 
                 #front,
@@ -246,11 +251,19 @@ select[size="1"] {
 
                 #front {
                     transform: rotateY(0deg);
+                    -webkit-transform: rotateY(0deg);
+                    -moz-transform: rotateY(0deg);
+                    -ms-transform: rotateY(0deg);
+                    -o-transform: rotateY(0deg);
                     background-color: #F2F2F2;
                 }
 
                 #back {
                     transform: rotateY(180deg);
+                    -webkit-transform: rotateY(180deg);
+                    -moz-transform: rotateY(180deg);
+                    -ms-transform: rotateY(180deg);
+                    -o-transform: rotateY(180deg);
                     position: fixed;
                     top: 0;
                     left: 0;
@@ -280,42 +293,7 @@ select[size="1"] {
                 grid-area: skip;
                 width: 64px;
             }
-
-        #login-modal, .modal {
-            display: none;
-            position: fixed; 
-            z-index: 1; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto;
-            background-color: rgb(0,0,0); 
-            background-color: rgba(0,0,0,0.4); 
-        }
-
-            .modal-content {
-                background-color: #fefefe;
-                margin: 15% auto;
-                padding: 20px;
-                border: 1px solid #888;
-                width: 50%;
-            }
-
-                .close {
-                    color: #aaa;
-                    float: right;
-                    font-size: 28px;
-                    font-weight: bold;
-                }
-
-                .close:hover,
-                .close:focus {
-                    color: black;
-                    text-decoration: none;
-                    cursor: pointer;
-                }
-
+            
     footer {
         grid-area: footer;
         /* border-top: 1px solid #7E7260; */

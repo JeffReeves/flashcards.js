@@ -26,7 +26,6 @@
 
         <div id="controls">
             <div id="menu">
-                [MENU]
             </div>
         </div>
     </header>
@@ -73,64 +72,14 @@
     <!-- jQuery -->
     <script type="text/javascript" src="scripts/jquery-3.2.1.min.js"></script>
 
-    <!-- load from app.js if available -->
     <script>
-        var user = "<%= user %>";
-
-        var appendOOJS = function(){
-            var body = document.getElementsByTagName('body')[0];
-
-            // oojs.js object ready for appending
-            var oojs = document.createElement('script');
-            oojs.setAttribute('type', 'text/javascript');
-            oojs.src = 'scripts/oojs.js';
-
-            body.appendChild(oojs);
-        };
-
-        var hideModal = function(e){
-            if(e.target == modal){
-                modal.style.display = 'none';
-            }
-        };
-
-        // if no user, load modal popup to login 
-        if(user === ''){
-
-            // display modal 
-            var modal = document.getElementById('login-modal');
-            var closeModalButton = document.getElementsByClassName('close')[0];
-            var loginModalButton = document.getElementById('login-button');
-            var loginUsername = document.getElementById('username');
-
-            loginModalButton.addEventListener('click', function(){
-
-                if(loginUsername.value){
-                    user = loginUsername.value.toLowerCase();
-                    appendOOJS();
-                    modal.style.display = 'none';
-                }
-            });
-
-            modal.style.display = 'block';
-
-            closeModalButton.addEventListener('click', function(){
-                modal.style.display = 'none';
-            });
-
-            window.addEventListener('click', hideModal);
-            // modal will then trigger the function to append the oojs script to the body
-            // after login, modal event listener will be removed
-        }
-        else {
-            appendOOJS();
-        }
+        // specify username of flashcard deck
+        var user = 'jeff';
     </script>   
 
     <!-- load flashcards.js -->
-    <!-- <script type="text/javascript" src="scripts/flashcards.js"></script> -->
-    <!-- <script type="text/javascript" src="procedural.js"></script> -->
-    <!-- <script type="text/javascript" src="scripts/oojs.js"></script> -->
+    <!-- <script type="text/javascript" src="scripts/example-decks.js"></script> -->
+    <script type="text/javascript" src="scripts/flashcards.js"></script>
 
 </body>
 </html>

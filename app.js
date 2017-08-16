@@ -22,10 +22,10 @@ app.set('ipaddr', '127.0.0.1');
 app.set('port', process.env.PORT || 9001);
 
 // view engine
-// app.engine('.html', require('ejs').__express);
-// app.set('views', __dirname + '/views');
-// app.set('view engine', 'html');
-app.set('view engine', 'ejs');
+app.engine('.html', require('ejs').__express);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'html');
+//app.set('view engine', 'ejs');
 
 // favicon
 app.use(favicon(path.join(__dirname, 'favicon.ico')));
@@ -58,23 +58,7 @@ var cards;
 // home
 app.get('/', function(req, res) {
     
-    // get a user if one was passed via domain.com/?user=jeff
-    var user = '';
-    if(req.query.user){
-        user = req.query.user;
-    }
-
-    res.render('index', {
-        user: user
-    });
-});
-
-// user/admin menu
-app.get('/admin', function(req, res) {
-
-    res.render('index', {
-        title: ''
-    });
+    res.render('index');
 });
 
 // 404 errors
