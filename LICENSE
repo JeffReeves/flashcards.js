@@ -1,21 +1,22 @@
-MIT License
+Copyright (c) 2017 Jeffrey Reeves. All rights reserved.
 
-Copyright (c) 2017 Jeffrey Reeves
+The intention of this application is to provide a lightweight flashcard app 
+for personal use.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This application is provided free of charge, but must not be used for 
+commercial use, nor sold or re-distributed by any other party other 
+than the creator of this application (Jeffrey Reeves). 
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Any individual or entity profiting from the distribution of this software (or 
+derivative works) is subject to forfeiture of any and all profits made, and 
+must immediately make said profits payable to the creator of this application
+or a charity of his choosing.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+This application may be forked and modified for personal use, but this 
+license must be present and visible within the repository. Failure to provide 
+this license will be seen as a breach of trust between the creator of this 
+application and the individual or entity that forked it. A breach of this 
+trust will result in an immediate revocation of the rights to fork and/or 
+modify this application, and the repository must be fully deleted and removed.
+If necessary, a request to have the repository removed by a repository 
+hosting provider may be submitted.
