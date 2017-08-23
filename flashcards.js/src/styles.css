@@ -2,11 +2,12 @@
 /* @import "~roboto-fontface/css/roboto/roboto-fontface.css";
 @import "~material-design-icons/iconfont/material-icons.css"; */
 
-body {
+html, body {
+    min-height: 100vh;
     margin: 0;
     border: 0;
     padding: 0;
-
+    background-color: #EFEACF;
 }
 
 .fill-space {

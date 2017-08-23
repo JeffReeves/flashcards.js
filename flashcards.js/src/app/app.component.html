@@ -1,24 +1,20 @@
-<md-toolbar color="primary">
-    <span>Flashcards.js</span>
-    <span class="fill-space"></span>
-    <button md-button [mdMenuTriggerFor]="appMenu"><md-icon>menu</md-icon> Menu</button>
-</md-toolbar>
-
-<md-toolbar>
-    <span>First Row</span>
-
-    <md-toolbar-row>
-        <span>Second Row</span>
-    </md-toolbar-row>
-
-    <md-toolbar-row>
-        <span>Third Row</span>
-    </md-toolbar-row>
-</md-toolbar>
-
-<md-menu #appMenu="mdMenu">
-    <button md-menu-item> Settings </button>
-    <button md-menu-item> Help </button>
-</md-menu>
-
-<router-outlet></router-outlet>
+<div class="app-component-container">
+    <header>
+        <md-toolbar color="primary">
+            <span>Flashcards.js</span>
+            <span class="fill-space"></span>
+            <button md-button [mdMenuTriggerFor]="appMenu"><md-icon>menu</md-icon> Menu</button>
+        </md-toolbar>
+    
+        <md-menu #appMenu="mdMenu">
+            <button md-menu-item> Settings </button>
+            <button md-menu-item> Help </button>
+        </md-menu>
+    </header>
+    <main>
+        <router-outlet></router-outlet>
+    </main>
+    <footer>
+        <p>flashcards.js created by Jeff Reeves &copy; 2017</p>
+    </footer>
+</div>
