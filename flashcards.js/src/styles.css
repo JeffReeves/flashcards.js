@@ -1,1 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
+/* import Roboto font and Material Design Icons font */
+@import "~roboto-fontface/css/roboto/roboto-fontface.css";
+@import "~material-design-icons/iconfont/material-icons.css";
+
+body {
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
+.fill-space {
+    flex: 1 1 auto;
+}
+
+/* Using custom Material theme in theme.scss */
+/* @import "~@angular/material/prebuilt-themes/deeppurple-amber.css"; */
