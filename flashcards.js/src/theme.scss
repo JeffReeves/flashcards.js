@@ -8,10 +8,150 @@
 // **Be sure that you only ever include this mixin once!**
 @include mat-core();
 
+// custom colors
+$sandstone: #7E7260; // header
+$parchment: #EFEACF; // background 
+$akaroa: #DBC9AF; // footer
+$pictonblue: #15C1FA; // icon and bright accents
+
+// palettes generated with http://mcg.mbitson.com/
+$md-sandstone: (
+  50 : #f0eeec,
+  100 : #d8d5cf,
+  200 : #bfb9b0,
+  300 : #a59c90,
+  400 : #918778,
+  500 : #7e7260,
+  600 : #766a58,
+  700 : #6b5f4e,
+  800 : #615544,
+  900 : #4e4233,
+  A100 : #ffd3a0,
+  A200 : #ffbc6d,
+  A400 : #ffa43a,
+  A700 : #ff9820,
+  contrast: (
+      50 : #000000,
+      100 : #000000,
+      200 : #000000,
+      300 : #000000,
+      400 : #000000,
+      500 : #ffffff,
+      600 : #ffffff,
+      700 : #ffffff,
+      800 : #ffffff,
+      900 : #ffffff,
+      A100 : #000000,
+      A200 : #000000,
+      A400 : #000000,
+      A700 : #000000,
+  )
+);
+
+$md-parchment: (
+  50 : #fdfcf9,
+  100 : #faf9f1,
+  200 : #f7f5e7,
+  300 : #f4f0dd,
+  400 : #f1edd6,
+  500 : #efeacf,
+  600 : #ede7ca,
+  700 : #ebe4c3,
+  800 : #e8e1bd,
+  900 : #e4dbb2,
+  A100 : #ffffff,
+  A200 : #ffffff,
+  A400 : #ffffff,
+  A700 : #ffffff,
+  contrast: (
+      50 : #000000,
+      100 : #000000,
+      200 : #000000,
+      300 : #000000,
+      400 : #000000,
+      500 : #000000,
+      600 : #000000,
+      700 : #000000,
+      800 : #000000,
+      900 : #000000,
+      A100 : #000000,
+      A200 : #000000,
+      A400 : #000000,
+      A700 : #000000,
+  )
+);
+
+$md-akaroa: (
+  50 : #fbf9f5,
+  100 : #f4efe7,
+  200 : #ede4d7,
+  300 : #e6d9c7,
+  400 : #e0d1bb,
+  500 : #dbc9af,
+  600 : #d7c3a8,
+  700 : #d2bc9f,
+  800 : #cdb596,
+  900 : #c4a986,
+  A100 : #ffffff,
+  A200 : #ffffff,
+  A400 : #fff7ec,
+  A700 : #ffebd3,
+  contrast: (
+      50 : #000000,
+      100 : #000000,
+      200 : #000000,
+      300 : #000000,
+      400 : #000000,
+      500 : #000000,
+      600 : #000000,
+      700 : #000000,
+      800 : #000000,
+      900 : #000000,
+      A100 : #000000,
+      A200 : #000000,
+      A400 : #000000,
+      A700 : #000000,
+  )
+);
+
+$md-pictonblue: (
+  50 : #e3f8fe,
+  100 : #b9ecfe,
+  200 : #8ae0fd,
+  300 : #5bd4fc,
+  400 : #38cafb,
+  500 : #15c1fa,
+  600 : #12bbf9,
+  700 : #0fb3f9,
+  800 : #0cabf8,
+  900 : #069ef6,
+  A100 : #ffffff,
+  A200 : #ebf7ff,
+  A400 : #b8e2ff,
+  A700 : #9ed8ff,
+  contrast: (
+      50 : #000000,
+      100 : #000000,
+      200 : #000000,
+      300 : #000000,
+      400 : #000000,
+      500 : #000000,
+      600 : #000000,
+      700 : #000000,
+      800 : #000000,
+      900 : #ffffff,
+      A100 : #000000,
+      A200 : #000000,
+      A400 : #000000,
+      A700 : #000000,
+  )
+);
+
 // Define the default theme (same as the example above).
-$flashcard-app-primary: mat-palette($mat-brown);
-$flashcard-app-accent:  mat-palette($mat-pink, A200, A100, A400);
-$flashcard-app-warn: mat-palette($mat-blue-grey);
+//$flashcard-app-primary: mat-palette($mat-brown);
+$flashcard-app-primary: mat-palette($md-sandstone);
+$flashcard-app-accent:  mat-palette($md-parchment, A200, A100, A400);
+$flashcard-app-warn: mat-palette($md-pictonblue);
 
 $flashcard-app-theme:   mat-light-theme($flashcard-app-primary, $flashcard-app-accent, $flashcard-app-warn);
 
