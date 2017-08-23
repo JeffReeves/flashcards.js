@@ -6,10 +6,12 @@ import { AppComponent } from './app.component';
 import { CustomMaterialModule } from './shared/custom-material/custom-material.module';
 
 import 'hammerjs';
+import { CardsComponent } from './cards/cards.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CardsComponent
   ],
   imports: [
     BrowserModule,
