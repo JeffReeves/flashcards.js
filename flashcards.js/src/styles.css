@@ -1,11 +1,12 @@
 /* import Roboto font and Material Design Icons font */
-@import "~roboto-fontface/css/roboto/roboto-fontface.css";
-@import "~material-design-icons/iconfont/material-icons.css";
+/* @import "~roboto-fontface/css/roboto/roboto-fontface.css";
+@import "~material-design-icons/iconfont/material-icons.css"; */
 
 body {
     margin: 0;
     border: 0;
     padding: 0;
+
 }
 
 .fill-space {
