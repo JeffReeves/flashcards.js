@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { CardsComponent } from "./cards/cards.component";
 
 const routes: Routes = [
-  {
-    path: '',
-    children: []
-  }
+  { path: '', component: CardsComponent, pathMatch: 'full' },
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
 @NgModule({

@@ -1,3 +1,31 @@
-<p>
-  cards works!
-</p>
+<div id="cards-container">
+    <div id="decks">
+        <select name="deck-select" id="deck-select"></select>
+    </div>
+
+    <div id="progress-bar">
+        <div id="correct-progress"></div>
+        <div id="incorrect-progress"></div>
+        <div id="skipped-progress"></div>
+    </div>
+
+    <div id="flashcard-container">
+        <div id="flashcard">
+            <div id="front">
+                <p></p>
+            </div>
+
+            <div id="back">
+                <p></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="buttons">
+        <div id="sub-button-container">
+            <button md-fab id="correct"><md-icon>check</md-icon></button>
+            <button md-fab id="incorrect"><md-icon>close</md-icon></button>
+        </div>
+        <button md-fab id="skip"><md-icon>arrow_forward</md-icon></button>
+    </div>
+</div>
