@@ -3,7 +3,7 @@
     min-width: 100vw;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 3rem 1fr auto;
+    grid-template-rows: 64px 1fr auto;
     grid-template-areas: 
         "header"
         "main"
@@ -22,7 +22,7 @@
         grid-template-rows: 1fr;
         grid-template-areas: 
             "brand controls controls"; */
-        background-color: #7E7260;
+        /* background-color: #7E7260; */
         /* box-shadow: 
             0 7px 14px 0 rgba(0, 0, 0, 0.5);         */
     }
