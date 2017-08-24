@@ -1,3 +1,63 @@
+:host { /* <app-root> */
+    min-height: 100vh;
+    min-width: 100vw;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 3rem 1fr auto;
+    grid-template-areas: 
+        "header"
+        "main"
+        "footer";
+    margin: 0;
+    border: 0;
+    padding: 0;
+    background-color: #EFEACF;
+}
+
+    header {
+        height: auto;
+        grid-area: header;
+        /* display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        grid-template-areas: 
+            "brand controls controls"; */
+        background-color: #7E7260;
+        /* box-shadow: 
+            0 7px 14px 0 rgba(0, 0, 0, 0.5);         */
+    }
+
+        #logo {
+            height: auto;
+            /* grid-area: logo; */
+        }
+
+    main {
+        height: 100%;
+        grid-area: main;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 0 1fr; 
+        /* 0fr needed because <router-outlet> 
+        places the routed view in a sibling div */
+    }
+
+    footer {
+        grid-area: footer;
+        display: grid;
+        background-color: #DBC9AF;
+        text-align: center;
+        /* box-shadow: 
+            0 -7px 14px -7px rgba(0, 0, 0, 0.5);  */
+    }
+
+        footer p {
+            color: rgba(132, 117, 102, 0.72);
+        }
+
+
+/* Material Design */
+
 .md-elevation-z1 {
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 
     0 1px 5px 0 rgba(0, 0, 0, 0.12), 
@@ -33,61 +93,3 @@
     0 6px 30px 5px rgba(0, 0, 0, 0.12), 
     0 8px 10px -5px rgba(0, 0, 0, 0.3);
 }
-
-.app-component-container {
-    /* display: flex;
-    flex-direction: column; */
-    /* min-height: 100vh; */
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 3rem 1fr auto;
-    grid-template-areas: 
-        "header"
-        "main"
-        "footer";
-    background-color: #EFEACF;
-    margin: 0;
-    border: 0;
-    padding: 0;
-}
-
-    header {
-        grid-area: header;
-        /* display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr;
-        grid-template-areas: 
-            "brand controls controls"; */
-        background-color: #7E7260;
-        box-shadow: 
-            0 7px 14px 0 rgba(0, 0, 0, 0.5);        
-    }
-
-        #logo {
-            height: 48px;
-            /* grid-area: logo; */
-        }
-
-    main {
-        /* flex: 1; */
-        height: 100%;
-        grid-area: main;
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 0 1fr; 
-        /* 0fr needed because <router-outlet> places 
-          the routed view in a sibling div */
-    }
-
-    footer {
-        grid-area: footer;
-        display: grid;
-        background-color: #DBC9AF;
-        text-align: center;
-        /* box-shadow: 
-            0 -7px 14px -7px rgba(0, 0, 0, 0.5);  */
-    }
-
-        footer p {
-            color: rgba(132, 117, 102, 0.72);
-        }

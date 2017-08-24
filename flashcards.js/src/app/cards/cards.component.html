@@ -1,34 +1,31 @@
-<div id="cards-container">
-        
-    <md-select placeholder="Deck" [(ngModel)]="selectedValue" name="deck" id="decks">
-        <md-option *ngFor="let deck of decks" [value]="deck.id">
-            {{deck.title}}
-        </md-option>
-    </md-select>
+<md-select placeholder="Deck" [(ngModel)]="selectedValue" name="deck" id="decks">
+    <md-option *ngFor="let deck of decks" [value]="deck.id">
+        {{deck.title}}
+    </md-option>
+</md-select>
 
-    <md-progress-bar id="progress-bar"
-        color="warn"
-        mode="determinate"
-        value="50">
-    </md-progress-bar>
+<md-progress-bar id="progress-bar"
+    color="warn"
+    mode="determinate"
+    value="50">
+</md-progress-bar>
 
-    <div id="flashcard-container">
-        <div id="flashcard">
-            <div id="front">
-                <p></p>
-            </div>
+<div id="flashcard-container">
+    <div id="flashcard">
+        <div id="front">
+            <p></p>
+        </div>
 
-            <div id="back">
-                <p></p>
-            </div>
+        <div id="back">
+            <p></p>
         </div>
     </div>
+</div>
 
-    <div id="buttons">
-        <div id="sub-button-container">
-            <button md-fab id="correct"><md-icon>check</md-icon></button>
-            <button md-fab id="incorrect"><md-icon>close</md-icon></button>
-        </div>
-        <button md-fab id="skip"><md-icon>arrow_forward</md-icon></button>
+<div id="buttons">
+    <div id="sub-button-container">
+        <button md-fab id="correct"><md-icon>check</md-icon></button>
+        <button md-fab id="incorrect"><md-icon>close</md-icon></button>
     </div>
+    <button md-fab id="skip"><md-icon>arrow_forward</md-icon></button>
 </div>

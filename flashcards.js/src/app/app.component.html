@@ -1,21 +1,19 @@
-<div class="app-component-container">
-    <header>
-        <md-toolbar color="primary" class="md-elevation-z3">
-            <img id="logo" src="../assets/images/logo_48.png">
-            <span>Flashcards.js</span>
-            <span class="fill-space"></span>
-            <button md-button [mdMenuTriggerFor]="appMenu"><md-icon>menu</md-icon> Menu</button>
-        </md-toolbar>
-    
-        <md-menu #appMenu="mdMenu">
-            <button md-menu-item> Settings </button>
-            <button md-menu-item> Help </button>
-        </md-menu>
-    </header>
-    <main>
-        <router-outlet></router-outlet>
-    </main>
-    <footer class="md-elevation-z3">
-        <p>flashcards.js created by Jeff Reeves &copy; 2017</p>
-    </footer>
-</div>
+<header>
+    <md-toolbar color="primary" class="md-elevation-z3">
+        <img id="logo" src="../assets/images/logo_48.png">
+        <span>flashcards.js</span>
+        <span class="fill-space"></span>
+        <button md-button [mdMenuTriggerFor]="appMenu"><md-icon>menu</md-icon> Menu</button>
+    </md-toolbar>
+
+    <md-menu #appMenu="mdMenu">
+        <button md-menu-item> Settings </button>
+        <button md-menu-item> Help </button>
+    </md-menu>
+</header>
+<main>
+    <router-outlet></router-outlet>
+</main>
+<footer class="md-elevation-z3">
+    <p>flashcards.js created by Jeff Reeves &copy; 2017</p>
+</footer>

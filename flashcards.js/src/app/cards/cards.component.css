@@ -1,4 +1,4 @@
-#cards-container {
+:host { /* <app-cards> */
     height: 100%;
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
@@ -12,6 +12,7 @@
 }
 
     #decks {
+        width: 75%;
         grid-area: decks;
         align-self: center;
         justify-self: center;
