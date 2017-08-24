@@ -10,13 +10,13 @@
     value="50">
 </md-progress-bar>
 
-<div id="flashcard-container">
-    <div id="flashcard">
-        <div id="front">
+<div id="flashcard-container" (mouseenter)="flipCard('back')" (mouseleave)="flipCard('front')">
+    <div id="flashcard" [class.flipped]="flipped">
+        <div id="front" (click)="flipCard('back')">
             <p></p>
         </div>
 
-        <div id="back">
+        <div id="back"(click)="flipCard('front')">
             <p></p>
         </div>
     </div>
