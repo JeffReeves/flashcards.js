@@ -4,11 +4,18 @@
     </md-option>
 </md-select>
 
-<md-progress-bar id="progress-bar"
+<div id="progress-bar">
+    <div id="correct-progress" [style.width]="numCorrect + '%'"></div>
+    <div id="skipped-progress" [style.width]="numSkipped + '%'"></div>
+    <div id="incorrect-progress" [style.width]="numIncorrect + '%'"></div>
+</div>
+
+<!-- <md-progress-bar id="progress-bar"
     color="warn"
     mode="determinate"
-    value="50">
-</md-progress-bar>
+    [value]="progValue"
+    (click)="increaseProg()">
+</md-progress-bar> -->
 
 <div id="flashcard-container" (mouseenter)="flipCard('back')" (mouseleave)="flipCard('front')">
     <div id="flashcard" [class.flipped]="flipped">
@@ -24,8 +31,8 @@
 
 <div id="buttons">
     <div id="sub-button-container">
-        <button md-fab id="correct"><md-icon>check</md-icon></button>
-        <button md-fab id="incorrect"><md-icon>close</md-icon></button>
+        <button md-fab id="correct" (click)="updateProgress('correct')"><md-icon>check</md-icon></button>
+        <button md-fab id="incorrect" (click)="updateProgress('incorrect')"><md-icon>close</md-icon></button>
     </div>
-    <button md-fab id="skip"><md-icon>arrow_forward</md-icon></button>
+    <button md-fab id="skip" (click)="updateProgress('skipped')"><md-icon>arrow_forward</md-icon></button>
 </div>

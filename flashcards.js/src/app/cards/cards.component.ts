@@ -7,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CardsComponent implements OnInit {
 
-    flipped = false;
+    flipped: boolean = false;
+
+    numCorrect: number = 0;
+    numIncorrect: number = 0;
+    numSkipped: number = 0;
     
     selectedValue: string;
 
@@ -31,6 +35,24 @@ export class CardsComponent implements OnInit {
         }
         else {
             this.flipped = false;
+        }
+    }
+
+    updateProgress(status: string): void {
+
+        console.log('clicked button ', status );
+
+        switch(status){
+            case 'correct':
+                console.log('clicked correct');
+                this.numCorrect = this.numCorrect + 1;
+                break;
+            case 'incorrect':
+                this.numIncorrect++;
+                break;
+            case 'skipped':
+                this.numSkipped++;
+                break;
         }
     }
 
