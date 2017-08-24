@@ -37,7 +37,7 @@
 .app-component-container {
     /* display: flex;
     flex-direction: column; */
-    min-height: 100vh;
+    /* min-height: 100vh; */
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 3rem 1fr auto;
@@ -53,28 +53,35 @@
 
     header {
         grid-area: header;
-        display: grid;
+        /* display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: 1fr;
         grid-template-areas: 
-            "brand controls controls";
+            "brand controls controls"; */
         background-color: #7E7260;
         box-shadow: 
             0 7px 14px 0 rgba(0, 0, 0, 0.5);        
     }
 
-        img#logo {
-            width: 48px;
-            grid-area: logo;
+        #logo {
+            height: 48px;
+            /* grid-area: logo; */
         }
 
     main {
         /* flex: 1; */
+        height: 100%;
         grid-area: main;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 0 1fr; 
+        /* 0fr needed because <router-outlet> places 
+          the routed view in a sibling div */
     }
 
     footer {
         grid-area: footer;
+        display: grid;
         background-color: #DBC9AF;
         text-align: center;
         /* box-shadow: 

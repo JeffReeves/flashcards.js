@@ -1,13 +1,16 @@
 <div id="cards-container">
-    <div id="decks">
-        <select name="deck-select" id="deck-select"></select>
-    </div>
+        
+    <md-select placeholder="Deck" [(ngModel)]="selectedValue" name="deck" id="decks">
+        <md-option *ngFor="let deck of decks" [value]="deck.id">
+            {{deck.title}}
+        </md-option>
+    </md-select>
 
-    <div id="progress-bar">
-        <div id="correct-progress"></div>
-        <div id="incorrect-progress"></div>
-        <div id="skipped-progress"></div>
-    </div>
+    <md-progress-bar id="progress-bar"
+        color="warn"
+        mode="determinate"
+        value="50">
+    </md-progress-bar>
 
     <div id="flashcard-container">
         <div id="flashcard">
