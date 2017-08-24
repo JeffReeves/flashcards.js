@@ -8,11 +8,13 @@ import { CustomMaterialModule } from './shared/custom-material/custom-material.m
 
 import 'hammerjs';
 import { CardsComponent } from './cards/cards.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CardsComponent
+    CardsComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -22,6 +24,9 @@ import { CardsComponent } from './cards/cards.component';
     CustomMaterialModule
   ],
   providers: [],
+  entryComponents: [
+    LoginComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

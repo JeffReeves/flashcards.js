@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MdButtonModule, MdCardModule, MdMenuModule, MdToolbarModule, MdIconModule, MdProgressBarModule, MdInputModule, MdSelectModule } from '@angular/material';
+import { MdButtonModule, MdCardModule, MdMenuModule, MdToolbarModule, MdIconModule, MdProgressBarModule, MdInputModule, MdSelectModule, MdDialogModule } from '@angular/material';
 
 
 @NgModule({
@@ -16,7 +16,8 @@ import { MdButtonModule, MdCardModule, MdMenuModule, MdToolbarModule, MdIconModu
     MdIconModule,
     MdProgressBarModule,
     MdInputModule,
-    MdSelectModule
+    MdSelectModule,
+    MdDialogModule 
   ],
   exports: [
     BrowserAnimationsModule,
@@ -27,7 +28,8 @@ import { MdButtonModule, MdCardModule, MdMenuModule, MdToolbarModule, MdIconModu
     MdIconModule,
     MdProgressBarModule,
     MdInputModule,
-    MdSelectModule
+    MdSelectModule,
+    MdDialogModule 
   ],
   declarations: []
 })
