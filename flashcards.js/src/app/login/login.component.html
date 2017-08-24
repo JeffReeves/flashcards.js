@@ -1,5 +1,13 @@
-<p>Please log in:</p>
-<button type="button" md-raised-button 
-    (click)="dialogRef.close(true)">OK</button>
+<section class="mat-typography">
+<h2>LOGIN</h2>
+<div class="modal-inputs">
+  <md-input-container>
+      <input mdInput placeholder="Username" [(ngModel)]="login.username">
+  </md-input-container>
+</div>
+
+<button type="submit" md-raised-button 
+    (click)="dialogRef.close(login)">OK</button>
 <button type="button" md-button 
     (click)="dialogRef.close()">Cancel</button>
+</section>

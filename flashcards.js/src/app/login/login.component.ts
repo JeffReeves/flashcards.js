@@ -8,6 +8,10 @@ import { MdDialogRef } from '@angular/material';
 })
 export class LoginComponent implements OnInit {
 
+  login: any = {
+    username: ''
+  };
+
   constructor(public dialogRef: MdDialogRef<LoginComponent>) {
   }
 
