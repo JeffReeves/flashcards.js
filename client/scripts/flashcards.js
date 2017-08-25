@@ -215,14 +215,14 @@ var Flashcards = function(){
         self.elements.flashcardContainer.addEventListener("mouseover", function(){
 
             // add class to flip card
-            flashcard.className = 'flipped';
+            flashcard.className += ' flipped';
         });
 
         // add event for mouse exit
         self.elements.flashcardContainer.addEventListener("mouseout", function(){
 
             // remove class to unflip
-            flashcard.removeAttribute('class');
+            flashcard.className = flashcard.className.replace(/(\s)?flipped(\s?)/, '');
         });
     };
 
@@ -363,15 +363,17 @@ var Flashcards = function(){
 
 var flashcards = new Flashcards;
 
-// load user from URL passed variable, if exists
-if(window.user){
-    flashcards.current.user = window.user;
-}
+flashcards.enableFlipping();
 
-flashcards.loadJSON(flashcards.current.user, function(){
-    flashcards.enableFlipping();
-    flashcards.enableButtons();
-    flashcards.enableDeckSelection();
-    flashcards.loadDeck(flashcards.decks);
-    flashcards.loadCard();
-});
+// load user from URL passed variable, if exists
+// if(window.user){
+//     flashcards.current.user = window.user;
+// }
+
+// flashcards.loadJSON(flashcards.current.user, function(){
+//     flashcards.enableFlipping();
+//     flashcards.enableButtons();
+//     flashcards.enableDeckSelection();
+//     flashcards.loadDeck(flashcards.decks);
+//     flashcards.loadCard();
+// });
