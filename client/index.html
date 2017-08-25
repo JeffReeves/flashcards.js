@@ -36,53 +36,65 @@
         </div>
 
         <div id="controls">
-            <div id="menu">
+            <div id="menu-dropdown">
+                <div class="mui-dropdown">
+                    <button class="mui-btn mui-btn--menu" data-mui-toggle="dropdown"><i class="material-icons">menu</i></button>
+                    <ul class="mui-dropdown__menu mui-dropdown__menu--right">
+                        <li><a href="#">View Cards</a></li>
+                        <li><a href="#">Edit Decks</a></li>
+                        <li><a href="#">Log Out</a></li>
+                    </ul>
+                </div>    
             </div>
         </div>
     </header>
+    
     <main>
-        <div class="mui-select" id="decks">
-            <select name="deck-select" id="deck-select">
-                <optgroup label="Linux+">
-                <option>CH1 - Command Line</option>
-                <option>CH2 - Stuff</option>
-                <option>CH2 - Libraries</option>
-                <option>CH2 - Processes</option>
-                </optgroup>
-                <optgroup label="Angular">
-                <option>Components</option>
-                <option>Modules</option>
-                </optgroup>
-            </select>
-            <label>Deck</label>
-        </div>
+        <section id="cards">
+            <div class="mui-select" id="decks">
+                <select name="deck-select" id="deck-select">
+                    <optgroup label="Linux+">
+                    <option>CH1 - Command Line</option>
+                    <option>CH2 - Stuff</option>
+                    <option>CH2 - Libraries</option>
+                    <option>CH2 - Processes</option>
+                    </optgroup>
+                    <optgroup label="Angular">
+                    <option>Components</option>
+                    <option>Modules</option>
+                    </optgroup>
+                </select>
+                <label>Deck</label>
+            </div>
 
-        <div id="progress-bar" class="mui--z1">
-            <div id="correct-progress"></div>
-            <div id="incorrect-progress"></div>
-            <div id="skipped-progress"></div>
-        </div>
+            <div id="progress-bar" class="mui--z1">
+                <div id="correct-progress"></div>
+                <div id="incorrect-progress"></div>
+                <div id="skipped-progress"></div>
+            </div>
 
-        <div id="flashcard-container">
-            <div id="flashcard" class="mui--z2">
-                <div id="front">
-                    <p></p>
-                </div>
+            <div id="flashcard-container">
+                <div id="flashcard" class="mui--z2">
+                    <div id="front">
+                        <p></p>
+                    </div>
 
-                <div id="back">
-                    <p></p>
+                    <div id="back">
+                        <p></p>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="buttons">
-            <!-- <img src="images/check_90.png" alt="Correct" id="correct"> -->
-            <!-- <img src="images/cross_90.png" alt="Incorrect" id="incorrect">
-            <img src="images/arrow_90.png" alt="Skip" id="skip"> -->
-            <button class="mui-btn mui-btn--fab mui-btn--correct" id="correct"><i class="material-icons">check</i></button>
-            <button class="mui-btn mui-btn--fab mui-btn--incorrect" id="incorrect"><i class="material-icons">close</i></button>
-            <button class="mui-btn mui-btn--fab mui-btn--skip" id="skip"><i class="material-icons">arrow_forward</i></button>
-        </div>
+            <div id="buttons">
+                <button class="mui-btn mui-btn--fab mui-btn--correct" id="correct"><i class="material-icons">check</i></button>
+                <button class="mui-btn mui-btn--fab mui-btn--incorrect" id="incorrect"><i class="material-icons">close</i></button>
+                <button class="mui-btn mui-btn--fab mui-btn--skip" id="skip"><i class="material-icons">arrow_forward</i></button>
+            </div>
+        </section>
+        
+        <section id="editor">
+            <div>This is where the editor will go</div>
+        </section>
     </main>
     <footer>
         <p>flashcards.js created by Jeff Reeves &copy; 2017</p>

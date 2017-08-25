@@ -377,3 +377,24 @@ flashcards.enableFlipping();
 //     flashcards.loadDeck(flashcards.decks);
 //     flashcards.loadCard();
 // });
+
+// TEST
+
+var changeView = function(){
+    console.log('changing view...');
+    var cardsView = document.getElementById('cards');
+    var editorView = document.getElementById('editor');
+
+    if(editorView.style.display === 'none' || cardsView.style.display === ''){
+        console.log('cardsView is grid');
+        cardsView.style.display = 'none';
+        editorView.style.display = 'grid';
+    }
+    else {
+        console.log('cardsView is NOT grid');
+        cardsView.style.display = 'grid';
+        editorView.style.display = 'none';    
+    }
+}
+
+
