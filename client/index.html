@@ -11,10 +11,21 @@
 
     <link rel='shortcut icon' href='favicon.ico' type='image/x-icon'>
 
+    <!-- MUI https://www.muicss.com/ -->
+    <link href="dependencies/mui-0.9.22/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <script src="dependencies/mui-0.9.22/js/mui.min.js"></script>
+
+    <!-- Material Icons http://google.github.io/material-design-icons/ -->
+    <link href="dependencies/material-design-icons-3.0.1/material-icons.css" rel="stylesheet" type="text/css" />
+
+    <!-- Font Awesome http://fontawesome.io/ -->
+    <link href="dependencies/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- main stylesheet -->
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-    <header>
+    <header class="mui--z3">
         <div id="brand">
             <div id="logo">
             </div>
@@ -30,18 +41,30 @@
         </div>
     </header>
     <main>
-        <div id="decks">
-            <select name="deck-select" id="deck-select"></select>
+        <div class="mui-select" id="decks">
+            <select name="deck-select" id="deck-select">
+                <optgroup label="Linux+">
+                <option>CH1 - Command Line</option>
+                <option>CH2 - Stuff</option>
+                <option>CH2 - Libraries</option>
+                <option>CH2 - Processes</option>
+                </optgroup>
+                <optgroup label="Angular">
+                <option>Components</option>
+                <option>Modules</option>
+                </optgroup>
+            </select>
+            <label>Deck</label>
         </div>
 
-        <div id="progress-bar">
+        <div id="progress-bar" class="mui--z1">
             <div id="correct-progress"></div>
             <div id="incorrect-progress"></div>
             <div id="skipped-progress"></div>
         </div>
 
         <div id="flashcard-container">
-            <div id="flashcard">
+            <div id="flashcard" class="mui--z2">
                 <div id="front">
                     <p></p>
                 </div>
@@ -53,16 +76,12 @@
         </div>
 
         <div id="buttons">
-            <img src="images/check_90.png" alt="Correct" id="correct">
-            <img src="images/cross_90.png" alt="Incorrect" id="incorrect">
-            <img src="images/arrow_alt3_90.png" alt="Skip" id="skip">
-        </div>
-        <div id='login-modal' class='modal' style='display: none;'>
-            <div class='modal-content'>
-                <span class='close'>&times;</span>
-                <input type="text" id="username" placeholder="enter a username"></input>
-                <button type="button" id="login-button">Login</button>
-            </div>
+            <!-- <img src="images/check_90.png" alt="Correct" id="correct"> -->
+            <!-- <img src="images/cross_90.png" alt="Incorrect" id="incorrect">
+            <img src="images/arrow_90.png" alt="Skip" id="skip"> -->
+            <button class="mui-btn mui-btn--fab mui-btn--correct" id="correct"><i class="material-icons">check</i></button>
+            <button class="mui-btn mui-btn--fab mui-btn--incorrect" id="incorrect"><i class="material-icons">close</i></button>
+            <button class="mui-btn mui-btn--fab mui-btn--skip" id="skip"><i class="material-icons">arrow_forward</i></button>
         </div>
     </main>
     <footer>
@@ -72,14 +91,9 @@
     <!-- jQuery -->
     <script type="text/javascript" src="scripts/jquery-3.2.1.min.js"></script>
 
-    <script>
-        // specify username of flashcard deck
-        var user = 'jeff';
-    </script>   
-
     <!-- load flashcards.js -->
     <!-- <script type="text/javascript" src="scripts/example-decks.js"></script> -->
-    <script type="text/javascript" src="scripts/flashcards.js"></script>
-
+    <!-- <script type="text/javascript" src="scripts/flashcards.js"></script> -->
 </body>
+<i class="md-icon dp48">check</i>
 </html>
