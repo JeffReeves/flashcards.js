@@ -7,6 +7,13 @@ var Flashcards = function(){
 
     // DOM elements
     this.elements = {
+
+        // 
+
+        // views
+        cardView: document.getElementById('cardView'),
+        editorView: document.getElementById('editorView'),
+
         // flashcards
         flashcardContainer: document.getElementById('flashcard-container'),
         flashcard: document.getElementById('flashcard'),
@@ -380,21 +387,21 @@ flashcards.enableFlipping();
 
 // TEST
 
-var changeView = function(){
-    console.log('changing view...');
-    var cardsView = document.getElementById('cards');
-    var editorView = document.getElementById('editor');
+// removes or adds a class to an element
+var toggleClass = function(_element, _class){ 
 
-    if(editorView.style.display === 'none' || cardsView.style.display === ''){
-        console.log('cardsView is grid');
-        cardsView.style.display = 'none';
-        editorView.style.display = 'grid';
+    // if no classes are present
+    if(_element.className === ''){
+        _element.className += _class;
     }
     else {
-        console.log('cardsView is NOT grid');
-        cardsView.style.display = 'grid';
-        editorView.style.display = 'none';    
+        // append class if not already present
+        if(_element.className.indexOf(_class) === -1){
+            _element.className += ' ' + _class;
+        }
+        // remove class and trim whitespace
+        else {
+            _element.className = _element.className.replace(_class, '').trim();
+        }
     }
-}
-
-
+};

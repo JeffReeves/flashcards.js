@@ -36,7 +36,7 @@
         </div>
 
         <div id="controls">
-            <div id="menu-dropdown">
+            <div id="dropdown">
                 <div class="mui-dropdown">
                     <button class="mui-btn mui-btn--menu" data-mui-toggle="dropdown"><i class="material-icons">menu</i></button>
                     <ul class="mui-dropdown__menu mui-dropdown__menu--right">
@@ -46,11 +46,21 @@
                     </ul>
                 </div>    
             </div>
+            <div id="menu">
+                    <div class="mui-dropdown">
+                        <button class="mui-btn mui-btn--menu" data-mui-toggle="dropdown"><i class="material-icons">menu</i></button>
+                        <ul class="mui-dropdown__menu mui-dropdown__menu--right">
+                            <li><a href="#">View Cards</a></li>
+                            <li><a href="#">Edit Decks</a></li>
+                            <li><a href="#">Log Out</a></li>
+                        </ul>
+                    </div>    
+                </div>
         </div>
     </header>
     
     <main>
-        <section id="cards">
+        <section id="cardView">
             <div class="mui-select" id="decks">
                 <select name="deck-select" id="deck-select">
                     <optgroup label="Linux+">
@@ -91,8 +101,8 @@
                 <button class="mui-btn mui-btn--fab mui-btn--skip" id="skip"><i class="material-icons">arrow_forward</i></button>
             </div>
         </section>
-        
-        <section id="editor">
+
+        <section id="editorView" class="disabled">
             <div>This is where the editor will go</div>
         </section>
     </main>
