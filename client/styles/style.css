@@ -293,7 +293,53 @@ html, body {
             color: rgba(132, 117, 102, 0.72);
             margin: 0;
         }
+
+    /* OVERLAY MODAL */
+
+    #modalOverlay {
+            display: block;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 99999999;
+            background-color: rgba(0,0,0,.2);
+            overflow: auto;
+        }
+
+        #loginModal {
+            display: grid;
+            height: 100%;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            grid-template-areas: 
+            ". . ."
+            ". login-form-container ."
+            ". . .";
+        }
+
+            #loginFormContainer {
+                grid-area: login-form-container;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                grid-template-rows: 1fr 1fr 1fr;
+                grid-template-areas: 
+                ". . ."
+                ". login-form ."
+                ". . .";
+                background-color: #F2F2F2;
+            }
+
+                #loginForm {
+                    grid-area: login-form;
+                }
 }
+
+
+
 
 /* customized MUI */
 

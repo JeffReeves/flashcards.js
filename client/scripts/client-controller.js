@@ -1,6 +1,7 @@
 // dependencies: jQuery v3.2.1, functions.js
 
-const _apiUrl = 'https://alchemist.digital/flashcards/api/';
+//const _apiUrl = 'https://alchemist.digital/flashcards/api/'; // PROD API
+const _apiUrl = '../test-api/'; // TEST API
 
 var User = (function(){
 
