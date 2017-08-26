@@ -2,6 +2,50 @@
 
 var fn = {
 
+    // https://stackoverflow.com/questions/247483/http-get-request-in-javascript
+    HttpClient: function() {
+        this.get = function(aUrl, aCallback) {
+            var anHttpRequest = new XMLHttpRequest();
+            anHttpRequest.onreadystatechange = function() { 
+                if (anHttpRequest.readyState == 4 && anHttpRequest.status == 200)
+                    aCallback(anHttpRequest.responseText);
+            }
+    
+            anHttpRequest.open( "GET", aUrl, true );            
+            anHttpRequest.send( null );
+        }
+    },
+
+    escapeJSONSpecialChars(jsonString) {
+        
+        return jsonString.replace(/\n/g, "\\n")
+            .replace(/\r/g, "\\r")
+            .replace(/\t/g, "\\t")
+            .replace(/\f/g, "\\f");
+    
+    },
+
+    // Fisher-Yates (aka Knuth) Shuffle
+    // Courtesy of https://bost.ocks.org/mike/shuffle/
+    shuffleArray: function(array){
+
+        var m = array.length, t, i;
+
+        // While there remain elements to shuffle...
+        while (m) {
+
+            // Pick a remaining element...
+            i = Math.floor(Math.random() * m--);
+
+            // And swap it with the current element.
+            t = array[m];
+            array[m] = array[i];
+            array[i] = t;
+        }
+
+        return array;
+    },
+        
     addClass: function(_element, _class){
         
         // append class if not already present
