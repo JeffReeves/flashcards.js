@@ -8,7 +8,13 @@ var Flashcards = function(){
     // DOM elements
     this.elements = {
 
-        // 
+        // controls 
+        dropdownMenu: document.getElementById('dropdown-menu'),
+
+        // menu options
+        menuCardView: document.getElementById('menu-card-view'),
+        menuEditView: document.getElementById('menu-edit-view'),
+        menuLoginModal: document.getElementById('menu-login-modal'),
 
         // views
         cardView: document.getElementById('cardView'),
@@ -219,17 +225,32 @@ var Flashcards = function(){
     // enables and disables card flipping
     this.enableFlipping = function(){
 
-        self.elements.flashcardContainer.addEventListener("mouseover", function(){
-
-            // add class to flip card
-            flashcard.className += ' flipped';
+        self.elements.flashcardContainer.addEventListener('mouseover', function(){
+            toggleClass(flashcards.elements.flashcard, 'flipped');
         });
 
         // add event for mouse exit
-        self.elements.flashcardContainer.addEventListener("mouseout", function(){
+        self.elements.flashcardContainer.addEventListener('mouseout', function(){
+            toggleClass(flashcards.elements.flashcard, 'flipped');
+        });
 
-            // remove class to unflip
-            flashcard.className = flashcard.className.replace(/(\s)?flipped(\s?)/, '');
+        // TEST ROUTES
+        self.elements.menuCardView.addEventListener('click', function(){
+            toggleClass(flashcards.elements.cardView, 'disabled');
+            toggleClass(flashcards.elements.editorView, 'disabled');
+            toggleClass(flashcards.elements.menuCardView, 'disabled');
+            toggleClass(flashcards.elements.menuEditView, 'disabled');
+        });
+
+        self.elements.menuEditView.addEventListener('click', function(){
+            toggleClass(flashcards.elements.cardView, 'disabled');
+            toggleClass(flashcards.elements.editorView, 'disabled');
+            toggleClass(flashcards.elements.menuEditView, 'disabled');
+            toggleClass(flashcards.elements.menuCardView, 'disabled');
+        });
+
+        self.elements.menuLoginModal.addEventListener('click', function(){
+            console.log('modal will popup');
         });
     };
 
@@ -390,18 +411,13 @@ flashcards.enableFlipping();
 // removes or adds a class to an element
 var toggleClass = function(_element, _class){ 
 
-    // if no classes are present
-    if(_element.className === ''){
-        _element.className += _class;
+    // append class if not already present
+    if(_element.className.indexOf(_class) === -1){
+        _element.className += ' ' + _class;
+        _element.className = _element.className.trim();
     }
+    // remove class and trim whitespace
     else {
-        // append class if not already present
-        if(_element.className.indexOf(_class) === -1){
-            _element.className += ' ' + _class;
-        }
-        // remove class and trim whitespace
-        else {
-            _element.className = _element.className.replace(_class, '').trim();
-        }
+        _element.className = _element.className.replace(_class, '').trim();
     }
 };

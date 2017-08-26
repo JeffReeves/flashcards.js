@@ -84,14 +84,15 @@ html, body {
         #controls {
             grid-area: controls;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             grid-template-rows: 1fr;
             grid-template-areas: 
-                "menu-dropdown menu-dropdown";
+                "controls-option";
         }
 
-            #menu-signed-in {
-                grid-area: menu-dropdown;
+            #dropdown-menu {
+                grid-area: controls-option;
+                display: grid;
                 justify-self: end;
                 align-self: center;
                 margin-right: 1rem;
