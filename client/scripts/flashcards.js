@@ -236,17 +236,19 @@ var Flashcards = function(){
 
         // TEST ROUTES
         self.elements.menuCardView.addEventListener('click', function(){
-            toggleClass(flashcards.elements.cardView, 'disabled');
-            toggleClass(flashcards.elements.editorView, 'disabled');
-            toggleClass(flashcards.elements.menuCardView, 'disabled');
-            toggleClass(flashcards.elements.menuEditView, 'disabled');
+            addClass(flashcards.elements.editorView, 'disabled');
+            removeClass(flashcards.elements.cardView, 'disabled');
+            
+            removeClass(flashcards.elements.menuEditView, 'disabled');
+            addClass(flashcards.elements.menuCardView, 'disabled');
         });
 
         self.elements.menuEditView.addEventListener('click', function(){
-            toggleClass(flashcards.elements.cardView, 'disabled');
-            toggleClass(flashcards.elements.editorView, 'disabled');
-            toggleClass(flashcards.elements.menuEditView, 'disabled');
-            toggleClass(flashcards.elements.menuCardView, 'disabled');
+            addClass(flashcards.elements.cardView, 'disabled');
+            removeClass(flashcards.elements.editorView, 'disabled');
+            
+            removeClass(flashcards.elements.menuCardView, 'disabled');            
+            addClass(flashcards.elements.menuEditView, 'disabled');
         });
 
         self.elements.menuLoginModal.addEventListener('click', function(){
@@ -421,3 +423,17 @@ var toggleClass = function(_element, _class){
         _element.className = _element.className.replace(_class, '').trim();
     }
 };
+
+var addClass = function(_element, _class){
+    // if class isn't already on the element, append it
+    if(_element.className.indexOf(_class) === -1){
+        _element.className += ' ' + _class;
+        // trim whitespace (just in case the element had no classes)
+        _element.className = _element.className.trim();
+    }
+}
+
+var removeClass = function(_element, _class){
+    // remove any instance of the class and trim whitespace
+    _element.className = _element.className.replace(_class, '').trim();    
+}
