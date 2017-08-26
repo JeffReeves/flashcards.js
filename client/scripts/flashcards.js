@@ -1,3 +1,5 @@
+// dependency: functions.js
+
 var Flashcards = function(){
 
     var self = this;
@@ -226,29 +228,23 @@ var Flashcards = function(){
     this.enableFlipping = function(){
 
         self.elements.flashcardContainer.addEventListener('mouseover', function(){
-            toggleClass(flashcards.elements.flashcard, 'flipped');
+            fn.toggleClass(this.children[0], 'flipped');
         });
 
         // add event for mouse exit
         self.elements.flashcardContainer.addEventListener('mouseout', function(){
-            toggleClass(flashcards.elements.flashcard, 'flipped');
+            fn.toggleClass(this.children[0], 'flipped');
         });
 
         // TEST ROUTES
         self.elements.menuCardView.addEventListener('click', function(){
-            addClass(flashcards.elements.editorView, 'disabled');
-            removeClass(flashcards.elements.cardView, 'disabled');
-            
-            removeClass(flashcards.elements.menuEditView, 'disabled');
-            addClass(flashcards.elements.menuCardView, 'disabled');
+            fn.setVisible('router-view', 'disabled', flashcards.elements.cardView.id);
+            fn.setVisible('router-menu', 'disabled', flashcards.elements.menuEditView.id);
         });
 
-        self.elements.menuEditView.addEventListener('click', function(){
-            addClass(flashcards.elements.cardView, 'disabled');
-            removeClass(flashcards.elements.editorView, 'disabled');
-            
-            removeClass(flashcards.elements.menuCardView, 'disabled');            
-            addClass(flashcards.elements.menuEditView, 'disabled');
+        self.elements.menuEditView.addEventListener('click', function(){    
+            fn.setVisible('router-view', 'disabled', flashcards.elements.editorView.id);
+            fn.setVisible('router-menu', 'disabled', flashcards.elements.menuCardView.id);
         });
 
         self.elements.menuLoginModal.addEventListener('click', function(){
@@ -409,31 +405,3 @@ flashcards.enableFlipping();
 // });
 
 // TEST
-
-// removes or adds a class to an element
-var toggleClass = function(_element, _class){ 
-
-    // append class if not already present
-    if(_element.className.indexOf(_class) === -1){
-        _element.className += ' ' + _class;
-        _element.className = _element.className.trim();
-    }
-    // remove class and trim whitespace
-    else {
-        _element.className = _element.className.replace(_class, '').trim();
-    }
-};
-
-var addClass = function(_element, _class){
-    // if class isn't already on the element, append it
-    if(_element.className.indexOf(_class) === -1){
-        _element.className += ' ' + _class;
-        // trim whitespace (just in case the element had no classes)
-        _element.className = _element.className.trim();
-    }
-}
-
-var removeClass = function(_element, _class){
-    // remove any instance of the class and trim whitespace
-    _element.className = _element.className.replace(_class, '').trim();    
-}
