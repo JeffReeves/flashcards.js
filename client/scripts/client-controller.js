@@ -128,9 +128,6 @@ var Card = (function(){
 
 var Modal = (function(){
 
-    var _element = document.createElement('div');
-    _element.id = 'loginModal'
-
     var _options = {
         'keyboard': true, 
         'static': false, 
@@ -140,11 +137,12 @@ var Modal = (function(){
         };
     
     function Modal(){
+        this.element = document.getElementById('loginModal');
         this.overlay = {};
     }
 
     Modal.prototype.open = function(){
-        mui.overlay('on', _options, _element);
+        mui.overlay('on', _options, this.element);
     }
 
     Modal.prototype.close = function(){
@@ -304,9 +302,10 @@ var Interface = (function(){
 
 
         // create an onchange event to switch selected deck
-        this.elements.deckSelect.addEventListener('change', function(){
-           console.log(this.value);
-        });
+        this.elements.deckSelect.addEventListener('change', function(data){
+            console.log('deck select data', data);
+            console.log('deck select this', this);
+        }.bind(this));
     }
 
     return Interface;
@@ -315,4 +314,3 @@ var Interface = (function(){
 // TEST
 var api = new Api(devApi);
 var interface = new Interface();
-//var user = new User('jeff'); // will eventually create user based on input into login modal

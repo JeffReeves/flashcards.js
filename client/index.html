@@ -54,7 +54,7 @@
             <div class="mui-select" id="decks">
                 <select name="deck-select" id="deck-select">
                     <optgroup label="Deck Group">
-                    <option>Please Login</option>
+                    <option>Decks Will Appear Here</option>
                     </optgroup>
                 </select>
                 <label>Deck</label>
@@ -69,11 +69,11 @@
             <div id="flashcard-container">
                 <div id="flashcard" class="mui--z2">
                     <div id="front">
-                        <p>Testing front</p>
+                        <p>Please log in</p>
                     </div>
 
                     <div id="back">
-                        <p>Testing back</p>
+                        <p></p>
                     </div>
                 </div>
             </div>
@@ -92,6 +92,23 @@
     <footer>
         <p>flashcards.js created by Jeff Reeves &copy; 2017</p>
     </footer>
+
+    <div id="loginModalContainer" style="display: none;">
+        <div id="loginModal">
+            <form class="mui-form" id="loginForm">
+                <legend>Login / Register</legend>
+                <div class="mui-textfield mui-textfield--float-label">
+                    <input type="text">
+                    <label>Username</label>
+                </div>
+                <div class="mui-textfield mui-textfield--float-label">
+                    <input type="password">
+                    <label>Password</label>
+                </div>
+                <button type="button" class="mui-btn mui-btn--raised">Login</button>
+            </form>
+        </div>
+    </div>
     
     <!-- jQuery -->
     <script type="text/javascript" src="scripts/jquery-3.2.1.min.js"></script>

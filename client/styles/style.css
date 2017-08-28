@@ -296,26 +296,43 @@ html, body {
 
     /* OVERLAY MODAL */
 
-    #modalOverlay {
-            display: block;
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 99999999;
-            background-color: rgba(0,0,0,.2);
-            overflow: auto;
-        }
+    #loginModalContainer {
+        display: none;
+    }
 
-        #loginModal {
+        /* #loginModal {
             width: 400px;
             height: 300px;
             margin: 100px auto;
             background-color: #F2F2F2;
+        } */
+
+        #loginModal {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr;
+            grid-template-areas: 
+            "login-form register-form";
+            width: 75%;
+            height: 60%;
+            margin: 100px auto;
+            background-color: #F2F2F2;
         }
+
+            #loginForm {
+                grid-area: login-form;
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr 1fr 1fr; 
+                margin: 20px 20px;
+
+            }
+
+            #registerForm {
+                grid-area: register-form;
+                display: grid;
+            }
+
 }
 
 
