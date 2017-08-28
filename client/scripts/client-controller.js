@@ -94,7 +94,7 @@ var Deck = (function(){
     function Deck(obj){
         this.title = obj.title;
         this.id = obj.id || null;
-        this.group = obj.group;
+        this.stack = obj.stack;
         this.cards = [];
 
         this.getCards(this.id);
@@ -258,22 +258,22 @@ var Interface = (function(){
     Interface.prototype.setupDeckSelection = function(){
 
         var decks = this.current.decks;  
-        var groupsNames = [];
+        var stackNames = [];
         var options = []; 
 
         // iterate through each deck
         for(var i = 0; i < decks.length; i++){
 
             // add the group to the list if it's not there already
-            if(groupsNames.indexOf(decks[i].group) === -1){
-                groupsNames.push(decks[i].group);
+            if(stackNames.indexOf(decks[i].stack) === -1){
+                stackNames.push(decks[i].stack);
             }
         }
 
         // iterate through each group on the group list
-        for(var i = 0; i < groupsNames.length; i++){
+        for(var i = 0; i < stackNames.length; i++){
 
-            var deckGroups = [];
+            var stacks = [];
 
             // and each deck
             for(var j = 0; j < decks.length; j++){
@@ -283,18 +283,18 @@ var Interface = (function(){
                     title: ''
                 };
 
-                if(groupsNames[i] === decks[j].group){
+                if(stackNames[i] === decks[j].stack){
                     deck.id = decks[j].id;
                     deck.title = decks[j].title;
 
-                    deckGroups.push(deck);
+                    stacks.push(deck);
                 }
             }
 
             // add the name and titles to the options list
             options.push({
-                name: groupsNames[i],
-                decks: deckGroups
+                name: stackNames[i],
+                decks: stacks
             });
         }
 
