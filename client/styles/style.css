@@ -311,31 +311,11 @@ html, body {
         }
 
         #loginModal {
-            display: grid;
-            height: 100%;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: 1fr 1fr 1fr;
-            grid-template-areas: 
-            ". . ."
-            ". login-form-container ."
-            ". . .";
+            width: 400px;
+            height: 300px;
+            margin: 100px auto;
+            background-color: #F2F2F2;
         }
-
-            #loginFormContainer {
-                grid-area: login-form-container;
-                display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
-                grid-template-rows: 1fr 1fr 1fr;
-                grid-template-areas: 
-                ". . ."
-                ". login-form ."
-                ". . .";
-                background-color: #F2F2F2;
-            }
-
-                #loginForm {
-                    grid-area: login-form;
-                }
 }
 
 
