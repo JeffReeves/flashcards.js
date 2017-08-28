@@ -8,44 +8,59 @@ var Api = (function(){
 
     function Api(url){
         this.url = url || devApi;
-        this.user = this.url + 'users/';
-        this.decks = this.url + 'decks/userid/';
-        this.cards = this.url + 'cards/deckid/';
+        this.userUrl = this.url + 'users/';
+        this.decksUrl = this.url + 'decks/userid/';
+        this.cardsUrl = this.url + 'cards/deckid/';
     }
 
-    Api.prototype.getData = function(self, type, value, success, failure){
+    Api.prototype.getUserData = function(username){
+        $.getJSON(api.userUrl + username)
+        .done(function(userData){
+            console.log('userData', userData[0].id);
+            return $.getJSON(api.decksUrl + userData[0].id);
+        }).then(function(deckData) {
+            console.log('deckData', deckData[0].id);
+            return $.getJSON(api.cardsUrl + deckData[0].id);
+        }).then(function(cardData){
+            console.log('cardData', cardData);
+        });
+    }
 
-        var url;
-
-        switch(type){
-            case 'user':
-                url = this.user + value;
-                break;
-            case 'decks':
-                url = this.decks + value;
-                break;
-            case 'cards':
-                url = this.cards + value;
-            default:
-                throw Error('[ERROR] value must be "user", "decks", or "cards"');
-        }
-
-        $.getJSON(url)
+    Api.prototype.getUserId = function(username){
+        return $.getJSON(api.user + username)
         .done(function(data){
-            console.log('this: ', this);
-            console.log('[DEBUG] getJSON success - data found: ', data);
-            if(success){
-                success(data);
-            }
-            return data;
-        }.bind(self))       
+            return data[0].id;
+        })       
         .fail(function() {
-            console.log('[DEBUG] getJSON failed');
-            if(failure){
-                failure();
-            }
-            throw Error('[ERROR] getData failed');
+            throw Error('[ERROR] getJSON failed');
         });  
+    }
+
+    Api.prototype.getDecks = function(username){
+        return this.getUserId(username).done(function(getUserId){
+            return $.getJSON(api.decks + getUserId[0].id)
+            .done(function(data){
+                var decks = [];
+                for(var i = 0; i < data.length; i++){
+                    return decks.push(new Deck(data[i]));
+                }
+            })       
+            .fail(function() {
+                throw Error('[ERROR] getJSON failed');
+            });  
+        });
+    }
+
+    Api.prototype.getCards = function(deckId){
+        $.getJSON(api.cards + deckId)
+        .done(function(data){
+            for(var i = 0; i < data.length; i++){
+                this.cards.push(new Card(data[i]));
+            }
+        }.bind(this))       
+        .fail(function() {
+            throw Error('[ERROR] getJSON failed');
+        });
     }
 
     return Api;
@@ -57,33 +72,6 @@ var User = (function(){
         this.username = username;
         this.id = 0;
         this.decks = [];
-
-        this.getUserId(this.username);
-    }
-
-    User.prototype.getUserId = function(username){
-        $.getJSON(api.user + username)
-        .done(function(data){
-            this.id = data[0].id;
-            this.getDecks(this.id);
-        }.bind(this))       
-        .fail(function() {
-            throw Error('[ERROR] getJSON failed');
-        });  
-    }
-
-    User.prototype.getDecks = function(userId){
-        $.getJSON(api.decks + userId)
-        .done(function(data){
-            for(var i = 0; i < data.length; i++){
-                this.decks.push(new Deck(data[i]));
-            }
-            console.log('this test:', this);
-            interface.userLogin(this);
-        }.bind(this))       
-        .fail(function() {
-            throw Error('[ERROR] getJSON failed');
-        });  
     }
 
     return User;
@@ -96,20 +84,6 @@ var Deck = (function(){
         this.id = obj.id || null;
         this.stack = obj.stack;
         this.cards = [];
-
-        this.getCards(this.id);
-    }
-
-    Deck.prototype.getCards = function(deckId){
-        $.getJSON(api.cards + deckId)
-        .done(function(data){
-            for(var i = 0; i < data.length; i++){
-                this.cards.push(new Card(data[i]));
-            }
-        }.bind(this))       
-        .fail(function() {
-            throw Error('[ERROR] getJSON failed');
-        });
     }
 
     return Deck;
