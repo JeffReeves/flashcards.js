@@ -37,7 +37,6 @@ var Api = (function(){
             if(success){
                 success(data);
             }
-            this.id = data[0].id;
             return data;
         }.bind(self))       
         .fail(function() {
@@ -54,28 +53,37 @@ var Api = (function(){
 
 var User = (function(){
 
-    function User(username, readyCallback){
+    function User(username){
         this.username = username;
         this.id = 0;
         this.decks = [];
 
-        this.onready = readyCallback;
+        this.getUserId(this.username);
     }
 
-    User.prototype.getUserId = function(){
-        console.log('[1] This in user.proto.getUserId: ', this);
-        api.getData(this, 'user', this.username, function(data){
-            console.log('[4] This in user getData: ', this);
-            this.result = data;
-        }.bind(this)); // window object without bind
-    } 
+    User.prototype.getUserId = function(username){
+        $.getJSON(api.user + username)
+        .done(function(data){
+            this.id = data[0].id;
+            this.getDecks(this.id);
+        }.bind(this))       
+        .fail(function() {
+            throw Error('[ERROR] getJSON failed');
+        });  
+    }
 
     User.prototype.getDecks = function(userId){
-        $.getJSON(api.decks + userId, function(response) {
-            for(var i = 0; i < response.length; i++){
-                this.decks.push(new Deck(response[i]));
+        $.getJSON(api.decks + userId)
+        .done(function(data){
+            for(var i = 0; i < data.length; i++){
+                this.decks.push(new Deck(data[i]));
             }
-        }.bind(this));
+            console.log('this test:', this);
+            interface.userLogin(this);
+        }.bind(this))       
+        .fail(function() {
+            throw Error('[ERROR] getJSON failed');
+        });  
     }
 
     return User;
@@ -93,11 +101,15 @@ var Deck = (function(){
     }
 
     Deck.prototype.getCards = function(deckId){
-        $.getJSON(api.cards + deckId, function(response) {
-            for(var i = 0; i < response.length; i++){
-                this.cards.push(new Card(response[i]));
+        $.getJSON(api.cards + deckId)
+        .done(function(data){
+            for(var i = 0; i < data.length; i++){
+                this.cards.push(new Card(data[i]));
             }
-        }.bind(this));
+        }.bind(this))       
+        .fail(function() {
+            throw Error('[ERROR] getJSON failed');
+        });
     }
 
     return Deck;
@@ -147,6 +159,10 @@ var Interface = (function(){
     function Interface(){
 
         this.elements = {
+
+            // modal
+            modal: new Modal(),
+
             // controls 
             dropdownMenu: document.getElementById('dropdown-menu'),
     
@@ -194,6 +210,11 @@ var Interface = (function(){
             incorrect: 0,
             skipped: 0
         };
+
+
+    }
+
+    Interface.prototype.setupEventListeners = function(){
     }
 
     Interface.prototype.userLogin = function(user){
@@ -204,10 +225,15 @@ var Interface = (function(){
 
         // deck details
         this.current.decks = user.decks;
+
+        this.setupDeckSelection();
     }
 
     Interface.prototype.addOptions = function(options){
     // options = [{name: '', decks: [{id: 0, title: ''}]}]
+
+        // remove existing dropdown elements
+        this.elements.deckSelect.innerHTML = '';
 
         for(var i = 0; i < options.length; i++){
 
@@ -233,8 +259,7 @@ var Interface = (function(){
 
     Interface.prototype.setupDeckSelection = function(){
 
-        var self = this;
-        var decks = self.current.decks;  
+        var decks = this.current.decks;  
         var groupsNames = [];
         var options = []; 
 
@@ -288,7 +313,6 @@ var Interface = (function(){
 }());
 
 // TEST
-var modal = new Modal();
 var api = new Api(devApi);
 var interface = new Interface();
 //var user = new User('jeff'); // will eventually create user based on input into login modal
