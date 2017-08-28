@@ -11,55 +11,25 @@ var Api = (function(){
         this.userUrl = this.url + 'users/';
         this.decksUrl = this.url + 'decks/userid/';
         this.cardsUrl = this.url + 'cards/deckid/';
+        this.allCardsUrl = this.url + 'cards/userid/';
     }
 
+    // old attempt - see User.prototype.getDecks for new
+    // removing this in next commit - keeping it in for reference
     Api.prototype.getUserData = function(username){
         $.getJSON(api.userUrl + username)
-        .done(function(userData){
-            console.log('userData', userData[0].id);
-            return $.getJSON(api.decksUrl + userData[0].id);
-        }).then(function(deckData) {
+        .then(function(userData){
+            var userId = userData[0].id;
+            console.log('userData', userData);
+            return $.getJSON(api.decksUrl + userId);
+        })
+        .then(function(deckData) {
+            var decks = deckData;
             console.log('deckData', deckData[0].id);
             return $.getJSON(api.cardsUrl + deckData[0].id);
-        }).then(function(cardData){
+        })
+        .then(function(cardData){
             console.log('cardData', cardData);
-        });
-    }
-
-    Api.prototype.getUserId = function(username){
-        return $.getJSON(api.user + username)
-        .done(function(data){
-            return data[0].id;
-        })       
-        .fail(function() {
-            throw Error('[ERROR] getJSON failed');
-        });  
-    }
-
-    Api.prototype.getDecks = function(username){
-        return this.getUserId(username).done(function(getUserId){
-            return $.getJSON(api.decks + getUserId[0].id)
-            .done(function(data){
-                var decks = [];
-                for(var i = 0; i < data.length; i++){
-                    return decks.push(new Deck(data[i]));
-                }
-            })       
-            .fail(function() {
-                throw Error('[ERROR] getJSON failed');
-            });  
-        });
-    }
-
-    Api.prototype.getCards = function(deckId){
-        $.getJSON(api.cards + deckId)
-        .done(function(data){
-            for(var i = 0; i < data.length; i++){
-                this.cards.push(new Card(data[i]));
-            }
-        }.bind(this))       
-        .fail(function() {
-            throw Error('[ERROR] getJSON failed');
         });
     }
 
@@ -72,6 +42,59 @@ var User = (function(){
         this.username = username;
         this.id = 0;
         this.decks = [];
+    }
+
+    User.prototype.getDecks = function(username){
+
+        var that = this;
+
+        $.getJSON(devApi + 'users/' + username)
+        .then(function(userData){
+            that.id = userData[0].id;
+            console.log('userData', userData);
+            return $.getJSON(devApi + 'decks/userid/' + that.id);
+        })
+        .then(function(deckData) {
+            that.decks = deckData;
+            for(var i = 0; i < that.decks.length; i++){
+                console.log('deckData', deckData[i]);
+            }
+            //return $.getJSON(api.cardsUrl + deckData[0].id);
+        });
+    }
+
+    User.prototype.getCards = function(username){
+        
+        var that = this;
+
+        $.getJSON(devApi + 'users/' + username)
+        .then(function(userData){
+            var userId = userData[0].id;
+            that.id = userId;
+            return $.getJSON(devApi + 'decks/userid/' + that.id);
+        })
+        .then(function(deckData) {
+            that.decks = deckData;
+            var requests = [];
+            // iterate through all decks
+            for(var i = 0; i < that.decks.length; i++){
+                var request = $.getJSON(devApi + 'cards/deckid/' + deckData[i].id);
+                requests.push(request);
+            }
+
+            // iterate through the list of getJSON requests for cards
+            $.when.apply($, requests)
+            .done(function(){
+                var data = arguments;
+                for(var i = 0; i < data.length; i++){
+                    var cards = data[i][0];
+                    that.decks[i].cards = cards;
+                }
+
+                // we now have all decks and cards for the user
+                console.log('got everything we need:', that);
+            })
+        });
     }
 
     return User;
