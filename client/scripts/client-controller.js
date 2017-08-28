@@ -1,41 +1,81 @@
 // 3rd party dependencies: jQuery v3.2.1, mui-0.9.22
 // local dependencies: functions.js
 
-//const _apiUrl = 'https://alchemist.digital/flashcards/api/'; // PROD API
-const _apiUrl = '../test-api/'; // TEST API
+const prodApi = 'https://alchemist.digital/flashcards/api/'; // PROD API
+const devApi = '../test-api/'; // TEST API
+
+var Api = (function(){
+
+    function Api(url){
+        this.url = url || devApi;
+        this.user = this.url + 'users/';
+        this.decks = this.url + 'decks/userid/';
+        this.cards = this.url + 'cards/deckid/';
+    }
+
+    Api.prototype.getData = function(self, type, value, success, failure){
+
+        var url;
+
+        switch(type){
+            case 'user':
+                url = this.user + value;
+                break;
+            case 'decks':
+                url = this.decks + value;
+                break;
+            case 'cards':
+                url = this.cards + value;
+            default:
+                throw Error('[ERROR] value must be "user", "decks", or "cards"');
+        }
+
+        $.getJSON(url)
+        .done(function(data){
+            console.log('this: ', this);
+            console.log('[DEBUG] getJSON success - data found: ', data);
+            if(success){
+                success(data);
+            }
+            this.id = data[0].id;
+            return data;
+        }.bind(self))       
+        .fail(function() {
+            console.log('[DEBUG] getJSON failed');
+            if(failure){
+                failure();
+            }
+            throw Error('[ERROR] getData failed');
+        });  
+    }
+
+    return Api;
+}());
 
 var User = (function(){
 
-    function User(username){
+    function User(username, readyCallback){
         this.username = username;
         this.id = 0;
         this.decks = [];
 
-        // get user id from db
-        this.getUserId(_apiUrl + 'users/' + this.username);
+        this.onready = readyCallback;
     }
 
-    User.prototype.getUserId = function(url){
-        var that = this;
-        $.getJSON(url, function(response) {
-            // set user id
-            that.id = response[0].id;
+    User.prototype.getUserId = function(){
+        console.log('[1] This in user.proto.getUserId: ', this);
+        api.getData(this, 'user', this.username, function(data){
+            console.log('[4] This in user getData: ', this);
+            this.result = data;
+        }.bind(this)); // window object without bind
+    } 
 
-            // get all decks that belong to that user id
-            that.getDecks(_apiUrl + 'decks/user/' + that.id);
-            return that.id;
-        });        
-    }
-
-    User.prototype.getDecks = function(url){
-        var that = this;
-        $.getJSON(url, function(response) {
-
+    User.prototype.getDecks = function(userId){
+        $.getJSON(api.decks + userId, function(response) {
             for(var i = 0; i < response.length; i++){
-                that.decks.push(new Deck(response[i]));
+                this.decks.push(new Deck(response[i]));
             }
-            return that.decks;
-        });
+        }.bind(this));
     }
 
     return User;
@@ -49,18 +89,15 @@ var Deck = (function(){
         this.group = obj.group;
         this.cards = [];
 
-        this.getCards(_apiUrl + 'cards/deckid/' + this.id);
+        this.getCards(this.id);
     }
 
-    Deck.prototype.getCards = function(url){
-        var that = this;
-        $.getJSON(url, function(response) {
-
+    Deck.prototype.getCards = function(deckId){
+        $.getJSON(api.cards + deckId, function(response) {
             for(var i = 0; i < response.length; i++){
-                that.cards.push(new Card(response[i]));
+                this.cards.push(new Card(response[i]));
             }
-            return that.cards;
-        });
+        }.bind(this));
     }
 
     return Deck;
@@ -108,6 +145,7 @@ var Modal = (function(){
 var Interface = (function(){
     
     function Interface(){
+
         this.elements = {
             // controls 
             dropdownMenu: document.getElementById('dropdown-menu'),
@@ -251,5 +289,6 @@ var Interface = (function(){
 
 // TEST
 var modal = new Modal();
+var api = new Api(devApi);
 var interface = new Interface();
 //var user = new User('jeff'); // will eventually create user based on input into login modal
