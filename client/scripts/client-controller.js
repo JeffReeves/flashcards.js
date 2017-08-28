@@ -302,10 +302,37 @@ var Interface = (function(){
 
 
         // create an onchange event to switch selected deck
-        this.elements.deckSelect.addEventListener('change', function(data){
-            console.log('deck select data', data);
-            console.log('deck select this', this);
+        this.elements.deckSelect.addEventListener('change', function(){
+            
+            var deckId = Number(interface.elements.deckSelect.value);
+            this.selectDeck(deckId);
+
         }.bind(this));
+    }
+
+    Interface.prototype.selectDeck = function(deckId){
+
+        // iterate through all current decks
+        for(var i = 0; i < this.current.decks.length; i++){
+            
+            // if the selected deck matches 
+            if(this.current.decks[i].id === deckId){
+                this.current.deck = this.current.decks[i];
+                this.current.cards = this.current.deck.cards;
+                this.current.card = this.current.cards[0];
+                this.current.totalCards = this.current.cards.length;
+
+                this.selectCard()
+            }
+        }
+    }
+
+    Interface.prototype.selectCard = function(){
+
+        // pop a card off of the deck 
+        this.current.card = this.current.cards.pop();
+        this.elements.frontText.innerText = this.current.card.front;
+        this.elements.backText.innerText = this.current.card.back;
     }
 
     return Interface;
