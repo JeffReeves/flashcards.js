@@ -256,13 +256,22 @@ var Interface = (function(){
     // enables and disables card flipping
     Interface.prototype.enableCardFlipping = function(){
         
-        this.elements.flashcardContainer.addEventListener('mouseover', function(){
-            fn.toggleClass(this.children[0], 'flipped');
+        this.elements.flashcardContainer.addEventListener('mouseenter', function(){
+            fn.addClass(this.children[0], 'flipped');
         });
 
         // add event for mouse exit
-        this.elements.flashcardContainer.addEventListener('mouseout', function(){
-            fn.toggleClass(this.children[0], 'flipped');
+        this.elements.flashcardContainer.addEventListener('mouseleave', function(){
+            fn.removeClass(this.children[0], 'flipped');
+        });
+
+        // to assist mobile users so they don't have to tap outside of card
+        this.elements.back.addEventListener('click', function(){
+            fn.removeClass(this.parentNode, 'flipped');
+        });
+
+        this.elements.front.addEventListener('click', function(){
+            fn.addClass(this.parentNode, 'flipped');
         });
 
         // TEST ROUTES
