@@ -4,6 +4,8 @@
 const prodApi = 'https://alchemist.digital/flashcards/api/'; // PROD API
 const devApi = '../test-api/'; // TEST API
 
+var user = {};
+
 var Api = (function(){
 
     function Api(url){
@@ -29,12 +31,12 @@ var User = (function(){
 
     User.prototype.getCards = function(username){
         
-        var that = this;
+        var self = this;
 
         $.getJSON(devApi + 'users/' + username)
         .then(function(userData){
             var user = userData[0];
-            that.id = user.id;
+            self.id = user.id;
             return $.getJSON(devApi + 'decks/userid/' + user.id);
         })
         .then(function(deckData) {
@@ -46,7 +48,7 @@ var User = (function(){
                 var request = $.getJSON(devApi + 'cards/deckid/' + deck.id);
                 requests.push(request);
 
-                that.decks.push(new Deck(deck));
+                self.decks.push(new Deck(deck));
             }
 
             // iterate through the list of getJSON requests for cards
@@ -57,12 +59,12 @@ var User = (function(){
                     var cards = data[i][0];
                     for(var j = 0; j < cards.length; j++){
                         var card = cards[j];
-                        that.decks[i].cards.push(new Card(card));
+                        self.decks[i].cards.push(new Card(card));
                     }
                 }
 
                 // we now have all decks and cards for the user
-                console.log('got everything we need:', that);
+                console.log('got everything we need:', self);
             })
         });
     }
@@ -99,17 +101,27 @@ var Modal = (function(){
         'keyboard': true, 
         'static': false, 
         'onclose': function() {
-                console.log('modal closed');
+                //console.log('modal closed');
             } 
         };
     
     function Modal(){
-        this.element = document.getElementById('loginModal');
-        this.overlay = {};
+        this.elements = {
+            modal: document.getElementById('loginModal'),
+            loginButton: document.getElementById('loginButton'),
+            username: document.getElementById('loginUsername'),
+            password: document.getElementById('loginPassword')
+        };
+        
+        this.elements.loginButton.addEventListener('click', function(){
+            var username = this.elements.username.value;
+            user = new User(username);
+            this.close();
+        }.bind(this));
     }
 
     Modal.prototype.open = function(){
-        mui.overlay('on', _options, this.element);
+        mui.overlay('on', _options, this.elements.modal);
     }
 
     Modal.prototype.close = function(){
@@ -176,10 +188,15 @@ var Interface = (function(){
             skipped: 0
         };
 
-
+        this.initialize();
     }
 
-    Interface.prototype.setupEventListeners = function(){
+
+    Interface.prototype.initialize = function(){
+    // sets up everything we need to be ready on the interface
+
+        // open the login modal
+        this.elements.modal.open();
     }
 
     Interface.prototype.userLogin = function(user){
@@ -193,6 +210,8 @@ var Interface = (function(){
 
         this.setupDeckSelection();
     }
+
+
 
     Interface.prototype.addOptions = function(options){
     // options = [{name: '', decks: [{id: 0, title: ''}]}]

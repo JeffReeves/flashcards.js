@@ -309,11 +309,11 @@ html, body {
 
         #loginModal {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr ;
             grid-template-rows: 1fr;
             grid-template-areas: 
-            "login-form register-form";
-            width: 75%;
+            "login-form";
+            width: 50%;
             height: 60%;
             margin: 100px auto;
             background-color: #F2F2F2;
@@ -327,12 +327,6 @@ html, body {
                 margin: 20px 20px;
 
             }
-
-            #registerForm {
-                grid-area: register-form;
-                display: grid;
-            }
-
 }
 
 
