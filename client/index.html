@@ -86,7 +86,46 @@
         </section>
 
         <section id="editorView" class="router-view disabled">
-            <div>This is where the editor will go</div>
+            <div id="showDecks" class="router-editor-view">
+                <h3>Editor</h3>
+                <p>Select a deck or add a new one.</p>
+                <div class="mui-select" id="editor-decks">
+                    <select name="editor-deck-select" id="editor-deck-select">
+                        <optgroup label="Deck Group">
+                        <option>Decks Will Appear Here</option>
+                        </optgroup>
+                    </select>
+                    <label>Deck</label>
+                </div>
+            </div>
+            <div id="addDeck" class="router-editor-view">
+                <form class="mui-form" id="addDeckForm">
+                    <legend>Add Deck</legend>
+                    <div class="mui-textfield mui-textfield--float-label">
+                        <input type="text" id="newDeckStack" required>
+                        <label>Stack</label>
+                    </div>
+                    <div class="mui-textfield mui-textfield--float-label">
+                        <input type="text" id="newDeckTitle" required>
+                        <label>Title</label>
+                    </div>
+                    <button type="submit" class="mui-btn mui-btn--raised" id="saveNewDeckButton">Save</button>
+                </form>
+            </div>
+            <div id="addCard" class="router-editor-view">
+                <form class="mui-form" id="addCardForm">
+                    <legend>Add Card</legend>
+                    <div class="mui-textfield mui-textfield--float-label">
+                        <input type="text" id="newCardFront" required>
+                        <label>Front</label>
+                    </div>
+                    <div class="mui-textfield mui-textfield--float-label">
+                        <input type="text" id="newCardBack" required>
+                        <label>Back</label>
+                    </div>
+                    <button type="button" class="mui-btn mui-btn--raised" id="saveNewCardButton">Save</button>
+                </form>
+            </div>
         </section>
     </main>
     <footer>
@@ -98,14 +137,14 @@
             <form class="mui-form" id="loginForm">
                 <legend>Login / Register</legend>
                 <div class="mui-textfield mui-textfield--float-label">
-                    <input type="text" id="loginUsername">
+                    <input type="text" id="loginUsername" required value="jeff">
                     <label>Username</label>
                 </div>
                 <div class="mui-textfield mui-textfield--float-label">
                     <input type="password" id="loginPassword">
                     <label>Password</label>
                 </div>
-                <button type="button" class="mui-btn mui-btn--raised" id="loginButton">Login</button>
+                <button type="submit" class="mui-btn mui-btn--raised" id="loginButton">Login</button>
             </form>
         </div>
     </div>

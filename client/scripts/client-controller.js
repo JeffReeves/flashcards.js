@@ -125,6 +125,10 @@ var Modal = (function(){
 
         // if the login button is clicked 
         this.elements.loginButton.addEventListener('click', function(){
+
+            // remove default events for submit
+            event.preventDefault();
+
             // try to get a value from the username input field
             var username = this.elements.username.value;
             // and if a username value was entered
@@ -159,51 +163,66 @@ var Interface = (function(){
             // modal
             modal: new Modal(),
 
+
             // controls 
             dropdownMenu: document.getElementById('dropdown-menu'),
-    
+            
             // menu options
             menuCardView: document.getElementById('menu-card-view'),
             menuEditView: document.getElementById('menu-edit-view'),
             menuLoginModal: document.getElementById('menu-login-modal'),
-    
+
             // views
             cardView: document.getElementById('cardView'),
             editorView: document.getElementById('editorView'),
-    
-            // flashcards
-            flashcardContainer: document.getElementById('flashcard-container'),
-            flashcard: document.getElementById('flashcard'),
-            front: document.getElementById('front'),
-            back: document.getElementById('back'),
-            frontText: front.getElementsByTagName('p')[0],
-            backText: back.getElementsByTagName('p')[0],
-    
-            // progress bar
-            progressBar: document.getElementById('progress-bar'),
-            correctProgress: document.getElementById('correct-progress'),
-            incorrectProgress: document.getElementById('incorrect-progress'),
-            skippedProgress: document.getElementById('skipped-progress'),
-    
-            // dropdown to select decks
-            deckSelect: document.getElementById('deck-select'),
-    
-            // buttons
-            correctButton: document.getElementById('correct'),
-            incorrectButton: document.getElementById('incorrect'),
-            skipButton: document.getElementById('skip')
+
+            // card view
+            
+                // dropdown to select decks
+                deckSelect: document.getElementById('deck-select'),
+
+                // progress bar
+                progressBar: document.getElementById('progress-bar'),
+                correctProgress: document.getElementById('correct-progress'),
+                incorrectProgress: document.getElementById('incorrect-progress'),
+                skippedProgress: document.getElementById('skipped-progress'),
+
+                // flashcards
+                flashcardContainer: document.getElementById('flashcard-container'),
+                flashcard: document.getElementById('flashcard'),
+                front: document.getElementById('front'),
+                back: document.getElementById('back'),
+                frontText: front.getElementsByTagName('p')[0],
+                backText: back.getElementsByTagName('p')[0],
+
+                // buttons
+                correctButton: document.getElementById('correct'),
+                incorrectButton: document.getElementById('incorrect'),
+                skipButton: document.getElementById('skip'),
+
+            // editor view
+            showDecks: document.getElementById('showDecks'),
+            addCard: document.getElementById('addCard'),
+
+                // dropdown select
+                editorDeckSelect: document.getElementById('editor-deck-select'),                
+
+                // add card view
+                newCardFront: document.getElementById('newCardFront'),
+                newCardBack: document.getElementById('newCardBack'),
+                saveNewCardButton: document.getElementById('saveNewCardButton')
         };
 
         // set a number of values to hold for the interface's sake
         this.current = {};
 
-        this.clearCurrnt();
+        this.clearCurrent();
 
         // start the initialization process
         this.initialize();
     }
 
-    Interface.prototype.clearCurrnt = function(){
+    Interface.prototype.clearCurrent = function(){
         this.current = {
             username: '',
             userId: 0,
@@ -260,8 +279,11 @@ var Interface = (function(){
             user = undefined;
 
             // remove all current values 
-            this.clearCurrnt();
-            
+            this.clearCurrent();
+
+            // reset progress
+            this.resetProgress();
+
             this.elements.modal.open();
         }.bind(this));
     }
@@ -271,7 +293,7 @@ var Interface = (function(){
         console.log('[DEBUG] Interface.enableButtons');
 
         // add events for button presses
-        this.elements.correctButton.addEventListener("click", function(){
+        this.elements.correctButton.addEventListener('click', function(){
 
             // send button to get id
             var button = this.elements.correctButton.id;
@@ -286,7 +308,7 @@ var Interface = (function(){
             } 
         }.bind(this));
 
-        this.elements.incorrectButton.addEventListener("click", function(){
+        this.elements.incorrectButton.addEventListener('click', function(){
 
             // send button to get id
             var button = this.elements.incorrectButton.id;
@@ -304,7 +326,7 @@ var Interface = (function(){
             }
         }.bind(this));
 
-        this.elements.skipButton.addEventListener("click", function(){
+        this.elements.skipButton.addEventListener('click', function(){
 
             // send button to get id
             var button = this.elements.skipButton.id;
@@ -416,7 +438,16 @@ var Interface = (function(){
         // card details
         this.current.cards = user.decks[0];
 
+        // initialize the deck selection dropdown and event handlers 
         this.setupDeckSelection();
+
+        // add items to the editor view
+        this.setupEditor();
+    }
+
+    // creates items on the editor view
+    Interface.prototype.setupEditor = function(){
+
     }
 
     Interface.prototype.addOptions = function(options){
@@ -442,7 +473,7 @@ var Interface = (function(){
                 optionGroup.appendChild(option);
             }
 
-            // append it to the select dropdown
+            // append it to the card view select dropdown
             this.elements.deckSelect.appendChild(optionGroup);
         }       
     }
