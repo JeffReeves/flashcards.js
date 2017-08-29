@@ -250,31 +250,35 @@ var Interface = (function(){
         this.enableCardFlipping();
 
         // activate the buttons
-        this.enableButtons();
+        this.initializeButtons();
     }
 
     // enables and disables card flipping
     Interface.prototype.enableCardFlipping = function(){
         
         this.elements.flashcardContainer.addEventListener('mouseenter', function(){
-            fn.addClass(this.children[0], 'flipped');
-        });
+            fn.addClass(this.elements.flashcard, 'flipped');
+            this.disableButtons();
+        }.bind(this));
 
         // add event for mouse exit
         this.elements.flashcardContainer.addEventListener('mouseleave', function(){
-            fn.removeClass(this.children[0], 'flipped');
-        });
+            fn.removeClass(this.elements.flashcard, 'flipped');
+            this.enableButtons();
+        }.bind(this));
 
         // to assist mobile users so they don't have to tap outside of card
+        this.elements.front.addEventListener('click', function(){
+            fn.addClass(this.elements.flashcard, 'flipped');
+            this.disableButtons();
+        }.bind(this));
+
         this.elements.back.addEventListener('click', function(){
             fn.removeClass(this.parentNode, 'flipped');
-        });
+            this.enableButtons();
+        }.bind(this));
 
-        this.elements.front.addEventListener('click', function(){
-            fn.addClass(this.parentNode, 'flipped');
-        });
-
-        // TEST ROUTES
+        // ROUTES
         this.elements.menuCardView.addEventListener('click', function(){
             fn.setVisible('router-view', 'disabled', this.elements.cardView.id);
             fn.setVisible('router-menu', 'disabled', this.elements.menuEditView.id);
@@ -300,9 +304,9 @@ var Interface = (function(){
         }.bind(this));
     }
 
-    Interface.prototype.enableButtons = function(){
+    Interface.prototype.initializeButtons = function(){
 
-        console.log('[DEBUG] Interface.enableButtons');
+        console.log('[DEBUG] Interface.initializeButtons');
 
         // add events for button presses
         this.elements.correctButton.addEventListener('click', function(){
@@ -355,6 +359,23 @@ var Interface = (function(){
                 this.setCard();       
             }     
         }.bind(this));
+    }
+
+    Interface.prototype.enableButtons = function(){
+        this.elements.correctButton.removeAttribute('disabled');
+        this.elements.incorrectButton.removeAttribute('disabled');
+        this.elements.skipButton.removeAttribute('disabled');
+    }
+
+
+    Interface.prototype.disableButtons = function(){
+        
+        // add 'disabled' class to buttons to prevent 
+        // clicking while the back is shown
+        // otherwise it risks giving away the next answer
+        this.elements.correctButton.setAttribute('disabled', 'disabled');
+        this.elements.incorrectButton.setAttribute('disabled', 'disabled');
+        this.elements.skipButton.setAttribute('disabled', 'disabled');
     }
 
     Interface.prototype.resetProgress = function(){
