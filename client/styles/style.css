@@ -193,7 +193,10 @@ html, body {
                     user-select: none;
                 }
                 
-                #flashcard.flipped {
+                #flashcard.flipped
+                /* , #flashcard:hover */ /* alternative option */ {
+                    transform-style: preserve-3d;
+                    -webkit-transform-style: preserve-3d;
                     transform: rotateY(180deg);
                     -webkit-transform: rotateY(180deg);
                     -moz-transform: rotateY(180deg);
@@ -208,7 +211,7 @@ html, body {
                         overflow: hidden;
                         backface-visibility: hidden;
                         display: grid;
-                        grid-template-columns: 1fr 2fr 1fr;
+                        grid-template-columns: 1fr 3fr 1fr;
                         grid-template-rows: 1fr;
                         grid-template-areas: 
                             ". cardtext .";
@@ -224,6 +227,8 @@ html, body {
                     }
 
                     #front {
+                        transform-style: preserve-3d;
+                        -webkit-transform-style: preserve-3d;
                         transform: rotateY(0deg);
                         -webkit-transform: rotateY(0deg);
                         -moz-transform: rotateY(0deg);
@@ -233,6 +238,8 @@ html, body {
                     }
 
                     #back {
+                        transform-style: preserve-3d;
+                        -webkit-transform-style: preserve-3d;
                         transform: rotateY(180deg);
                         -webkit-transform: rotateY(180deg);
                         -moz-transform: rotateY(180deg);
