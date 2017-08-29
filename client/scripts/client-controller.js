@@ -1,5 +1,6 @@
 // 3rd party dependencies: jQuery v3.2.1, mui-0.9.22
 // local dependencies: functions.js
+'use strict';
 
 var apiUrl = '/flashcards/api/'; // PROD API
 
@@ -71,7 +72,7 @@ var User = (function(){
                 console.log('got everything we need:', self);
 
                 // tell the interface that a user logged in
-                interface.userLogin(self);
+                flashcardsjs.interface.userLogin(self);
             })
         });
     }
@@ -137,7 +138,7 @@ var Modal = (function(){
             // and if a username value was entered
             if(username){
                 // create the user
-                user = new User(username);
+                flashcardsjs.user = new User(username);
                 // and close the modal
                 this.close();
             }
@@ -292,7 +293,7 @@ var Interface = (function(){
         this.elements.menuLoginModal.addEventListener('click', function(){
             
             // remove user from current end destroy user object
-            user = undefined;
+            flashcardsjs.user = undefined;
 
             // remove all current values 
             this.clearCurrent();
@@ -569,7 +570,7 @@ var Interface = (function(){
         // create an onchange event to switch selected deck
         this.elements.deckSelect.addEventListener('change', function(){
             
-            var deckId = Number(interface.elements.deckSelect.value);
+            var deckId = Number(flashcardsjs.interface.elements.deckSelect.value);
             this.selectDeck(deckId);
 
             // reset progress bar
@@ -630,5 +631,6 @@ var Interface = (function(){
 }());
 
 // TEST
+var flashcardsjs = {};
 //var api = new Api(apiUrl); // set up the API so we can read from it
-var interface = new Interface(); // create a new interface
+flashcardsjs.interface = new Interface(); // create a new interface
