@@ -5,16 +5,42 @@ var db = require('../database.js');
 
 //== ROUTES ===================================================================
 
-router.get('/decks/user/:username', function(req, res) {
+router.get('/users/:username', function(req, res) {
+    
+        var username = req.params.username;
+    
+        // select all users by username
+        var query = 'SELECT users.id, users.username ' +
+                    'FROM users ' +
+                    'WHERE users.username = "' + username + '" ';
+    
+        db.getConnection(function(err, connection){
+    
+            connection.query(query, function(error, results, fields) {
+    
+                connection.release();
+    
+                if(results){
+                    res.send(results);
+                }
+    
+                if(error){
+                    res.send(error);
+                }
+            });
+        });
+    });
 
-    var username = req.params.username;
+router.get('/decks/userid/:id', function(req, res) {
+
+    var userId = req.params.id;
 
     // select all decks for the username
-    var query = 'SELECT decks.id, decks.title ' +
+    var query = 'SELECT decks.id, decks.title, decks.stack ' +
                 'FROM decks ' +
                 'INNER JOIN users ' +
                 'ON decks.userid=users.id ' +
-                'WHERE users.username = "' + username + '" ' +
+                'WHERE users.id = "' + userId + '" ' +
                 'ORDER BY decks.id;';
 
     db.getConnection(function(err, connection){
@@ -34,19 +60,19 @@ router.get('/decks/user/:username', function(req, res) {
     });
 });
 
-router.get('/cards/user/:username', function(req, res) {
+router.get('/cards/userid/:userid', function(req, res) {
 
-    var username = req.params.username;
+    var userid = req.params.userid;
 
     // select all cards for a user
     var query = 'SELECT ' +
-            'cards.deckid, decks.title, cards.id, cards.front, cards.back, cards.status ' +
+            'cards.front, cards.back, cards.id, cards.deckid ' +
             'FROM users ' +
             'INNER JOIN decks ' +
             'ON decks.userid = users.id ' +
             'INNER JOIN cards ' +
             'ON cards.deckid = decks.id ' +
-            'WHERE users.username = "' + username + '" ' +
+            'WHERE users.id = "' + userid + '" ' +
             'ORDER BY decks.id, cards.id;';
 
     db.getConnection(function(err, connection){
