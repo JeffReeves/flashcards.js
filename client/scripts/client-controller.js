@@ -376,6 +376,12 @@ var Interface = (function(){
         this.elements.correctButton.setAttribute('disabled', 'disabled');
         this.elements.incorrectButton.setAttribute('disabled', 'disabled');
         this.elements.skipButton.setAttribute('disabled', 'disabled');
+
+        // UPDATE NEEDED:
+        // This doesn't work as expected because click events still 
+        // trigger. I will need to either add an invisible div over the 
+        // buttons to block clicks through it, or prevent the event 
+        // from doing anything if the disabled attribute is present
     }
 
     Interface.prototype.resetProgress = function(){
@@ -592,6 +598,8 @@ var Interface = (function(){
         }
 
         this.current.cards = this.current.deck.cards;
+        // shuffle cards so their order can't be memorized easily
+        this.current.cards = fn.shuffleArray(this.current.cards);
         this.current.totalCards = this.current.cards.length;
 
         // select a new card off the top
