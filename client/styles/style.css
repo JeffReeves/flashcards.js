@@ -184,6 +184,7 @@ html, body {
                     transition: 0.5s;
                     transform-style: preserve-3d;
                     -webkit-transform-style: preserve-3d;
+                    outline: 1px solid transparent;
                     cursor: default;
                     -webkit-touch-callout: none;
                     -webkit-user-select: none;
@@ -197,6 +198,7 @@ html, body {
                 /* , #flashcard:hover */ /* alternative option */ {
                     transform-style: preserve-3d;
                     -webkit-transform-style: preserve-3d;
+                    outline: 1px solid transparent;
                     transform: rotateY(180deg);
                     -webkit-transform: rotateY(180deg);
                     -moz-transform: rotateY(180deg);
@@ -229,6 +231,7 @@ html, body {
                     #front {
                         transform-style: preserve-3d;
                         -webkit-transform-style: preserve-3d;
+                        outline: 1px solid transparent;
                         transform: rotateY(0deg);
                         -webkit-transform: rotateY(0deg);
                         -moz-transform: rotateY(0deg);
@@ -240,6 +243,7 @@ html, body {
                     #back {
                         transform-style: preserve-3d;
                         -webkit-transform-style: preserve-3d;
+                        outline: 1px solid transparent;
                         transform: rotateY(180deg);
                         -webkit-transform: rotateY(180deg);
                         -moz-transform: rotateY(180deg);
