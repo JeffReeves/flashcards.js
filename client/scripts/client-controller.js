@@ -1,15 +1,18 @@
 // 3rd party dependencies: jQuery v3.2.1, mui-0.9.22
 // local dependencies: functions.js
 
-const prodApi = '/flashcards/api/'; // PROD API
-const devApi = '../test-api/'; // TEST API
+var apiUrl = '/flashcards/api/'; // PROD API
+
+if(window.location.origin.indexOf('alchemist.digital') === -1){
+    apiUrl = '../test-api/'; // DEV API
+}
 
 var user = {};
 
 var Api = (function(){
 
     function Api(url){
-        this.url = url || devApi;
+        this.url = url || apiUrl;
         this.userUrl = this.url + 'users/';
         this.decksUrl = this.url + 'decks/userid/';
         this.cardsUrl = this.url + 'cards/deckid/';
@@ -34,11 +37,11 @@ var User = (function(){
         
         var self = this;
 
-        $.getJSON(devApi + 'users/' + username)
+        $.getJSON(apiUrl + 'users/' + username)
         .then(function(userData){
             var user = userData[0];
             self.id = user.id;
-            return $.getJSON(devApi + 'decks/userid/' + user.id);
+            return $.getJSON(apiUrl + 'decks/userid/' + user.id);
         })
         .then(function(deckData) {
             var decks = deckData;
@@ -46,7 +49,7 @@ var User = (function(){
             // iterate through all decks
             for(var i = 0; i < decks.length; i++){
                 var deck = deckData[i];
-                var request = $.getJSON(devApi + 'cards/deckid/' + deck.id);
+                var request = $.getJSON(apiUrl + 'cards/deckid/' + deck.id);
                 requests.push(request);
 
                 self.decks.push(new Deck(deck));
@@ -589,5 +592,5 @@ var Interface = (function(){
 }());
 
 // TEST
-//var api = new Api(devApi); // set up the API so we can read from it
+//var api = new Api(apiUrl); // set up the API so we can read from it
 var interface = new Interface(); // create a new interface
