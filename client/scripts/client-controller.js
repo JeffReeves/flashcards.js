@@ -14,25 +14,6 @@ var Api = (function(){
         this.allCardsUrl = this.url + 'cards/userid/';
     }
 
-    // old attempt - see User.prototype.getDecks for new
-    // removing this in next commit - keeping it in for reference
-    Api.prototype.getUserData = function(username){
-        $.getJSON(api.userUrl + username)
-        .then(function(userData){
-            var userId = userData[0].id;
-            console.log('userData', userData);
-            return $.getJSON(api.decksUrl + userId);
-        })
-        .then(function(deckData) {
-            var decks = deckData;
-            console.log('deckData', deckData[0].id);
-            return $.getJSON(api.cardsUrl + deckData[0].id);
-        })
-        .then(function(cardData){
-            console.log('cardData', cardData);
-        });
-    }
-
     return Api;
 }());
 
@@ -42,25 +23,8 @@ var User = (function(){
         this.username = username;
         this.id = 0;
         this.decks = [];
-    }
 
-    User.prototype.getDecks = function(username){
-
-        var that = this;
-
-        $.getJSON(devApi + 'users/' + username)
-        .then(function(userData){
-            that.id = userData[0].id;
-            console.log('userData', userData);
-            return $.getJSON(devApi + 'decks/userid/' + that.id);
-        })
-        .then(function(deckData) {
-            that.decks = deckData;
-            for(var i = 0; i < that.decks.length; i++){
-                console.log('deckData', deckData[i]);
-            }
-            //return $.getJSON(api.cardsUrl + deckData[0].id);
-        });
+        this.getCards(this.username);
     }
 
     User.prototype.getCards = function(username){
@@ -69,17 +33,20 @@ var User = (function(){
 
         $.getJSON(devApi + 'users/' + username)
         .then(function(userData){
-            var userId = userData[0].id;
-            that.id = userId;
-            return $.getJSON(devApi + 'decks/userid/' + that.id);
+            var user = userData[0];
+            that.id = user.id;
+            return $.getJSON(devApi + 'decks/userid/' + user.id);
         })
         .then(function(deckData) {
-            that.decks = deckData;
+            var decks = deckData;
             var requests = [];
             // iterate through all decks
-            for(var i = 0; i < that.decks.length; i++){
-                var request = $.getJSON(devApi + 'cards/deckid/' + deckData[i].id);
+            for(var i = 0; i < decks.length; i++){
+                var deck = deckData[i];
+                var request = $.getJSON(devApi + 'cards/deckid/' + deck.id);
                 requests.push(request);
+
+                that.decks.push(new Deck(deck));
             }
 
             // iterate through the list of getJSON requests for cards
@@ -88,7 +55,10 @@ var User = (function(){
                 var data = arguments;
                 for(var i = 0; i < data.length; i++){
                     var cards = data[i][0];
-                    that.decks[i].cards = cards;
+                    for(var j = 0; j < cards.length; j++){
+                        var card = cards[j];
+                        that.decks[i].cards.push(new Card(card));
+                    }
                 }
 
                 // we now have all decks and cards for the user
