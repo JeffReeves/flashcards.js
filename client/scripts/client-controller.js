@@ -1,7 +1,7 @@
 // 3rd party dependencies: jQuery v3.2.1, mui-0.9.22
 // local dependencies: functions.js
 
-const prodApi = 'https://alchemist.digital/flashcards/api/'; // PROD API
+const prodApi = '/flashcards/api/'; // PROD API
 const devApi = '../test-api/'; // TEST API
 
 var user = {};
@@ -195,6 +195,15 @@ var Interface = (function(){
         };
 
         // set a number of values to hold for the interface's sake
+        this.current = {};
+
+        this.clearCurrnt();
+
+        // start the initialization process
+        this.initialize();
+    }
+
+    Interface.prototype.clearCurrnt = function(){
         this.current = {
             username: '',
             userId: 0,
@@ -207,9 +216,6 @@ var Interface = (function(){
             incorrect: 0,
             skipped: 0
         };
-
-        // start the initialization process
-        this.initialize();
     }
 
     // sets up everything we need to be ready on the interface
@@ -239,18 +245,25 @@ var Interface = (function(){
 
         // TEST ROUTES
         this.elements.menuCardView.addEventListener('click', function(){
-            fn.setVisible('router-view', 'disabled', flashcards.elements.cardView.id);
-            fn.setVisible('router-menu', 'disabled', flashcards.elements.menuEditView.id);
-        });
+            fn.setVisible('router-view', 'disabled', this.elements.cardView.id);
+            fn.setVisible('router-menu', 'disabled', this.elements.menuEditView.id);
+        }.bind(this));
 
         this.elements.menuEditView.addEventListener('click', function(){    
-            fn.setVisible('router-view', 'disabled', flashcards.elements.editorView.id);
-            fn.setVisible('router-menu', 'disabled', flashcards.elements.menuCardView.id);
-        });
+            fn.setVisible('router-view', 'disabled', this.elements.editorView.id);
+            fn.setVisible('router-menu', 'disabled', this.elements.menuCardView.id);
+        }.bind(this));
 
         this.elements.menuLoginModal.addEventListener('click', function(){
-            console.log('modal will popup');
-        });
+            
+            // remove user from current end destroy user object
+            user = undefined;
+
+            // remove all current values 
+            this.clearCurrnt();
+            
+            this.elements.modal.open();
+        }.bind(this));
     }
 
     Interface.prototype.enableButtons = function(){
@@ -260,12 +273,8 @@ var Interface = (function(){
         // add events for button presses
         this.elements.correctButton.addEventListener("click", function(){
 
-            console.log('[DEBUG] correct button clicked');
-
             // send button to get id
             var button = this.elements.correctButton.id;
-
-            console.log('[DEBUG] button', button);
 
             if(this.current.card.status !== undefined){
 
