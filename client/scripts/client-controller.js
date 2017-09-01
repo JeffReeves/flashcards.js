@@ -8,21 +8,6 @@ if(window.location.origin.indexOf('alchemist.digital') === -1){
     apiUrl = '../test-api/'; // DEV API
 }
 
-var user = {};
-
-var Api = (function(){
-
-    function Api(url){
-        this.url = url || apiUrl;
-        this.userUrl = this.url + 'users/';
-        this.decksUrl = this.url + 'decks/userid/';
-        this.cardsUrl = this.url + 'cards/deckid/';
-        this.allCardsUrl = this.url + 'cards/userid/';
-    }
-
-    return Api;
-}());
-
 var User = (function(){
 
     function User(username){
@@ -167,7 +152,6 @@ var Interface = (function(){
             // modal
             modal: new Modal(),
 
-
             // controls 
             dropdownMenu: document.getElementById('dropdown-menu'),
             
@@ -220,6 +204,7 @@ var Interface = (function(){
         // set a number of values to hold for the interface's sake
         this.current = {};
 
+        // clear all current values
         this.clearCurrent();
 
         // start the initialization process
@@ -248,124 +233,94 @@ var Interface = (function(){
         this.elements.modal.open();
 
         // set the method for flipping cards
-        this.enableCardFlipping();
-
-        // activate the buttons
-        this.initializeButtons();
+        this.enableEventListeners();
     }
 
-    // enables and disables card flipping
-    Interface.prototype.enableCardFlipping = function(){
-        
-        this.elements.flashcardContainer.addEventListener('mouseenter', function(){
-            fn.addClass(this.elements.flashcard, 'flipped');
-            this.disableButtons();
-        }.bind(this));
+    Interface.prototype.getButtonValue = function(){
 
-        // add event for mouse exit
-        this.elements.flashcardContainer.addEventListener('mouseleave', function(){
-            fn.removeClass(this.elements.flashcard, 'flipped');
-            this.enableButtons();
-        }.bind(this));
+        var self = flashcardsjs.interface;
 
-        // to assist mobile users so they don't have to tap outside of card
-        this.elements.front.addEventListener('click', function(){
-            fn.addClass(this.elements.flashcard, 'flipped');
-            this.disableButtons();
-        }.bind(this));
+        // get the id of the button
+        var buttonId = this.id;
 
-        this.elements.back.addEventListener('click', function(){
-            fn.removeClass(this.parentNode, 'flipped');
-            this.enableButtons();
-        }.bind(this));
+        if(self.current.card.status !== undefined){
 
-        // ROUTES
-        this.elements.menuCardView.addEventListener('click', function(){
-            fn.setVisible('router-view', 'disabled', this.elements.cardView.id);
-            fn.setVisible('router-menu', 'disabled', this.elements.menuEditView.id);
-        }.bind(this));
+            // update progress
+            self.updateProgress(buttonId);
 
-        this.elements.menuEditView.addEventListener('click', function(){    
-            fn.setVisible('router-view', 'disabled', this.elements.editorView.id);
-            fn.setVisible('router-menu', 'disabled', this.elements.menuCardView.id);
-        }.bind(this));
-
-        this.elements.menuLoginModal.addEventListener('click', function(){
-            
-            // remove user from current end destroy user object
-            flashcardsjs.user = undefined;
-
-            // remove all current values 
-            this.clearCurrent();
-
-            // reset progress
-            this.resetProgress();
-
-            this.elements.modal.open();
-        }.bind(this));
-    }
-
-    Interface.prototype.initializeButtons = function(){
-
-        console.log('[DEBUG] Interface.initializeButtons');
-
-        // add events for button presses
-        this.elements.correctButton.addEventListener('click', function(){
-
-            // send button to get id
-            var button = this.elements.correctButton.id;
-
-            if(this.current.card.status !== undefined){
-
-                // update progress
-                this.updateProgress(button);
-                
-                // load the next card
-                this.setCard();           
-            } 
-        }.bind(this));
-
-        this.elements.incorrectButton.addEventListener('click', function(){
-
-            // send button to get id
-            var button = this.elements.incorrectButton.id;
-
-            if(this.current.card.status !== undefined){
-
-                // update progress
-                this.updateProgress(button);
+            if(buttonId === 'incorrect' || buttonId === 'skip'){
 
                 // move card to back of deck
-                this.current.cards.unshift(this.current.card);
-                
-                // load the next card
-                this.setCard();  
+                self.current.cards.unshift(this.current.card);
             }
-        }.bind(this));
 
-        this.elements.skipButton.addEventListener('click', function(){
+            // load the next card
+            self.setCard(); 
+        }    
+    }
 
-            // send button to get id
-            var button = this.elements.skipButton.id;
+    Interface.prototype.flipCard = function(){
+        var self = flashcardsjs.interface;
+        fn.addClass(self.elements.flashcard, 'flipped');
+        self.disableButtons();
+    }
 
-            if(this.current.card.status !== undefined){
-            
-                // update progress
-                this.updateProgress(button);
-                    
-                // move card to back of deck
-                this.current.cards.unshift(this.current.card);
-                    
-                // load the next card
-                this.setCard();       
-            }     
-        }.bind(this));
+    Interface.prototype.flipCardBack = function(){
+        var self = flashcardsjs.interface;
+        fn.removeClass(self.elements.flashcard, 'flipped');
+        self.enableButtons();
+    }
+
+    Interface.prototype.changeVisibleRoute = function(){
+        var self = flashcardsjs.interface;
+        fn.setVisible('router-view', 'disabled', self.elements.cardView.id);
+        fn.setVisible('router-menu', 'disabled', self.elements.menuEditView.id);
+    }
+
+    // occurs after a user has logged in
+    Interface.prototype.userLogin = function(user){
+    
+        // user details
+        this.current.username = user.username;
+        this.current.userId = user.id;
+
+        // deck details
+        this.current.decks = user.decks;
+
+        // card details
+        this.current.cards = user.decks[0];
+
+        // initialize the deck selection dropdown and event handlers 
+        this.setupDeckSelection();
+
+        // add items to the editor view
+        this.setupEditor();
+    }
+
+    Interface.prototype.logOut = function(){
+        var self = flashcardsjs;
+
+        // remove user from current end destroy user object
+        self.user = undefined;
+        
+        // remove all current values 
+        self.interface.clearCurrent();
+
+        // reset progress
+        self.interface.resetProgress();
+
+        // re-open the login modal
+        self.interface.elements.modal.open();
     }
 
     Interface.prototype.enableButtons = function(){
         this.elements.correctButton.removeAttribute('disabled');
         this.elements.incorrectButton.removeAttribute('disabled');
         this.elements.skipButton.removeAttribute('disabled');
+
+        this.elements.correctButton.addEventListener('click', this.getButtonValue);
+        this.elements.incorrectButton.addEventListener('click', this.getButtonValue);
+        this.elements.skipButton.addEventListener('click', this.getButtonValue);
     }
 
 
@@ -378,20 +333,41 @@ var Interface = (function(){
         this.elements.incorrectButton.setAttribute('disabled', 'disabled');
         this.elements.skipButton.setAttribute('disabled', 'disabled');
 
-        // UPDATE NEEDED:
-        // This doesn't work as expected because click events still 
-        // trigger. I will need to either add an invisible div over the 
-        // buttons to block clicks through it, or prevent the event 
-        // from doing anything if the disabled attribute is present
+        this.elements.correctButton.removeEventListener('click', this.getButtonValue);
+        this.elements.incorrectButton.removeEventListener('click', this.getButtonValue);
+        this.elements.skipButton.removeEventListener('click', this.getButtonValue);
+    }
+
+    // enables and disables card flipping
+    Interface.prototype.enableEventListeners = function(){
+        
+        // mouse enter and leave events to flip card
+        this.elements.flashcardContainer.addEventListener('mouseenter', this.flipCard);
+        this.elements.flashcardContainer.addEventListener('mouseleave', this.flipCardBack);
+
+        // helps mobile users since they can't enter or leave with a mouse
+        this.elements.front.addEventListener('click', this.flipCard);
+        this.elements.back.addEventListener('click', this.flipCardBack);
+
+        // ROUTES
+        this.elements.menuCardView.addEventListener('click', this.changeVisibleRoute);
+        this.elements.menuEditView.addEventListener('click', this.changeVisibleRoute);
+
+        // logout
+        this.elements.menuLoginModal.addEventListener('click', this.logOut);
+
+        // add events for button presses
+        this.enableButtons();
     }
 
     Interface.prototype.resetProgress = function(){
 
-        console.log('[DEBUG] Interface.resetProgress');
-
+        // reset the width to 0
         this.elements.correctProgress.style.width = '0%';
         this.elements.incorrectProgress.style.width = '0%';
         this.elements.skippedProgress.style.width = '0%';
+
+        // reset the current values to 0
         this.current.correct = 0;
         this.current.incorrect = 0;
         this.current.skipped = 0;
@@ -399,8 +375,6 @@ var Interface = (function(){
 
     // updates the progress bar
     Interface.prototype.updateProgress = function(button){
-
-        console.log('[DEBUG] Interface.updateProgress');
 
         // get current card's status
         var status = this.current.card.status;
@@ -460,30 +434,16 @@ var Interface = (function(){
                 break;
         }
 
-        this.elements.correctProgress.style.width = (this.current.correct / this.current.totalCards) * 100 + '%';
-        this.elements.incorrectProgress.style.width = (this.current.incorrect / this.current.totalCards) * 100 + '%';
-        this.elements.skippedProgress.style.width = (this.current.skipped / this.current.totalCards) * 100 + '%';
+        // set the width equal to the percentage of correct/incorrect/skipped 
+        this.elements.correctProgress.style.width = 
+            (this.current.correct / this.current.totalCards) * 100 + '%';
+
+        this.elements.incorrectProgress.style.width = 
+            (this.current.incorrect / this.current.totalCards) * 100 + '%';
+
+        this.elements.skippedProgress.style.width = 
+            (this.current.skipped / this.current.totalCards) * 100 + '%';
     };
-
-    // occurs after a user has logged in
-    Interface.prototype.userLogin = function(user){
-
-        // user details
-        this.current.username = user.username;
-        this.current.userId = user.id;
-
-        // deck details
-        this.current.decks = user.decks;
-
-        // card details
-        this.current.cards = user.decks[0];
-
-        // initialize the deck selection dropdown and event handlers 
-        this.setupDeckSelection();
-
-        // add items to the editor view
-        this.setupEditor();
-    }
 
     // creates items on the editor view
     Interface.prototype.setupEditor = function(){
@@ -630,7 +590,6 @@ var Interface = (function(){
     return Interface;
 }());
 
-// TEST
+// MAIN
 var flashcardsjs = {};
-//var api = new Api(apiUrl); // set up the API so we can read from it
 flashcardsjs.interface = new Interface(); // create a new interface
