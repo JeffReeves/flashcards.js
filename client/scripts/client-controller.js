@@ -2,6 +2,12 @@
 // local dependencies: functions.js
 'use strict';
 
+// UPDATES NEEDED:
+// - CREATE A PROTOTYPE METHOD TO SET THE 
+//     INTERFACE BACK TO A DEFAULT CONDITION ON LOGOUT
+// - EDITOR VIEW DROPDOWN NEEDS TO DISPLAY ALL DECKS
+// - EDITOR VIEW NEEDS A COMPLETED VIEW AND ROUTER
+
 var apiUrl = '/flashcards/api/'; // PROD API
 
 if(window.location.origin.indexOf('alchemist.digital') === -1){
@@ -282,6 +288,13 @@ var Interface = (function(){
         // card details
         this.current.cards = user.decks[0];
 
+        // hide the login menu item
+        fn.addClass(this.elements.menuLogin, 'disabled');
+
+        // show the editor view and logout menu items
+        fn.removeClass(this.elements.menuEditView, 'disabled');
+        fn.removeClass(this.elements.menuLogout, 'disabled');
+
         // initialize the deck selection dropdown and event handlers 
         this.setupDeckSelection();
 
@@ -308,6 +321,17 @@ var Interface = (function(){
 
         // reset progress
         self.interface.resetProgress();
+
+        // show the login menu item
+        fn.removeClass(self.interface.elements.menuLogin, 'disabled');
+        
+        // hide the card view, editor view, and logout menu items
+        fn.addClass(self.interface.elements.menuCardView, 'disabled');
+        fn.addClass(self.interface.elements.menuEditView, 'disabled');
+        fn.addClass(self.interface.elements.menuLogout, 'disabled');
+
+        // move to card view
+        fn.setVisible('router-view', 'disabled', self.interface.elements.cardView.id);
 
         // re-open the login modal
         self.interface.elements.modal.open();
