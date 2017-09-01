@@ -160,6 +160,7 @@ var Interface = (function(){
 
             // controls 
             dropdownMenu: document.getElementById('dropdown-menu'),
+            editorDropdownMenu: document.getElementById('editor-decks'),
             
             // menu options
             menuLogin: document.getElementById('menu-login'),
@@ -174,7 +175,7 @@ var Interface = (function(){
             // card view
             
                 // dropdown to select decks
-                deckSelect: document.getElementById('deck-select'),
+                cardDeckSelect: document.getElementById('card-deck-select'),
 
                 // progress bar
                 progressBar: document.getElementById('progress-bar'),
@@ -299,7 +300,7 @@ var Interface = (function(){
         this.setupDeckSelection();
 
         // add items to the editor view
-        this.setupEditor();
+        //this.setupEditor();
     }
 
     Interface.prototype.logIn = function(){
@@ -356,13 +357,11 @@ var Interface = (function(){
 
         // ROUTES
         this.elements.menuCardView.addEventListener('click', function(){
-            console.log('clicked card menu buttton');
             fn.setVisible('router-view', 'disabled', this.elements.cardView.id);
             fn.setVisible('router-menu', 'disabled', this.elements.menuEditView.id);
         }.bind(this));
 
         this.elements.menuEditView.addEventListener('click', function(){
-            console.log('clicked edit menu buttton');
             fn.setVisible('router-view', 'disabled', this.elements.editorView.id);
             fn.setVisible('router-menu', 'disabled', this.elements.menuCardView.id);
         }.bind(this));
@@ -460,17 +459,13 @@ var Interface = (function(){
             (this.current.skipped / this.current.totalCards) * 100 + '%';
     };
 
-    // creates items on the editor view
-    Interface.prototype.setupEditor = function(){
-
-    }
-
     Interface.prototype.addOptions = function(options){
     // options = [{stack: '', decks: [{id: 0, title: ''}]}]
 
         // remove existing dropdown elements
-        this.elements.deckSelect.innerHTML = '';
+        this.elements.cardDeckSelect.innerHTML = '';
 
+        // card deck select options
         for(var i = 0; i < options.length; i++){
 
             // add option group for deck groups
@@ -489,7 +484,31 @@ var Interface = (function(){
             }
 
             // append it to the card view select dropdown
-            this.elements.deckSelect.appendChild(optionGroup);
+            this.elements.cardDeckSelect.appendChild(optionGroup);
+        }
+
+        // editor deck select options
+        this.elements.editorDeckSelect.innerHTML = '';
+
+        for(var i = 0; i < options.length; i++){
+            
+            // add option group for deck groups
+            var optionGroup = document.createElement('optgroup');
+            optionGroup.label = options[i].stack;
+
+            for(var j = 0; j < options[i].decks.length; j++){
+
+                // add option for each deck
+                var option = document.createElement('option');
+                option.setAttribute('value', options[i].decks[j].id);
+                option.text = options[i].decks[j].title;
+
+                // append it to the select dropdown
+                optionGroup.appendChild(option);
+            }
+
+            // append it to the card view select dropdown
+            this.elements.editorDeckSelect.appendChild(optionGroup);
         }       
     }
 
@@ -539,24 +558,32 @@ var Interface = (function(){
         // add the options to the drop-down
         this.addOptions(options);
 
-        // set a default deck
-        this.selectDeck();
+        // set a default deck for the card view
+        this.selectCardViewDeck();
 
-        // create an onchange event to switch selected deck
-        this.elements.deckSelect.addEventListener('change', function(){
+        // create an onchange event to switch selected card view deck
+        this.elements.cardDeckSelect.addEventListener('change', function(){
             
-            var deckId = Number(flashcardsjs.interface.elements.deckSelect.value);
-            this.selectDeck(deckId);
+            var deckId = Number(this.elements.cardDeckSelect.value);
+            this.selectCardViewDeck(deckId);
 
             // reset progress bar
             this.resetProgress();
+
+        }.bind(this));
+
+        // create an onchange event to switch selected editor view deck
+        this.elements.editorDeckSelect.addEventListener('change', function(){
+            
+            var deckId = Number(this.elements.editorDeckSelect.value);
+            console.log('Deck ID in editor view:', deckId);
 
         }.bind(this));
     }
 
     // set the current deck to the one selected in the dropdown
     // or default to the first one available
-    Interface.prototype.selectDeck = function(deckId){
+    Interface.prototype.selectCardViewDeck = function(deckId){
 
         if(deckId){
 

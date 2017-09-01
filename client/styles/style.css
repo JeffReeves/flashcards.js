@@ -114,19 +114,19 @@ html, body {
             grid-template-rows: 1fr auto 3fr 1fr;
             grid-row-gap: 1rem;
             grid-template-areas:
-                ". decks ."
+                ". card-decks ."
                 ". progress-bar ."
                 ". flashcard-container ."
                 ". buttons .";
         }
 
-            #decks {
-                grid-area: decks;
+            #card-decks {
+                grid-area: card-decks;
                 align-self: end;
                 justify-self: center;
             }
 
-                #deck-select {
+                #card-deck-select {
                     font-size: 18px;
                     font-family: 'Roboto', sans-serif;
                     padding: 4px 2px;
@@ -279,11 +279,53 @@ html, body {
     #editorView {
         grid-area: router;
         display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr;
+        grid-template-columns: 1fr 3fr 1fr;
+        grid-template-rows: 1fr 3fr 1fr;
         grid-template-areas:
-            " . ";
+            " . . . "
+            " . editor-router . "
+            " . . . ";
     }
+
+        #show-decks {
+            grid-area: editor-router;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 1fr;
+            grid-template-areas:
+                " editor-decks "
+                " deck-button-container ";
+            align-self: center;
+        }
+
+            #editor-decks {
+                grid-area: editor-decks;
+                align-self: center;
+            }
+
+            #editor-deck-button-container {
+                grid-area: deck-button-container;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr;
+                grid-template-areas:
+                " deck-edit-button deck-add-button ";
+                justify-self: center;
+                align-self: center;
+                
+            }
+
+                #editor-deck-edit-button {
+                    grid-area: deck-edit-button;
+                    color: #7e7260;
+                    justify-self: center;
+                }
+
+                #editor-deck-add-button {
+                    grid-area: deck-add-button;
+                    color: #7e7260;
+                    justify-self: center;
+                }
             
     footer {
         grid-area: footer;
