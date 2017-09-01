@@ -261,13 +261,11 @@ var Interface = (function(){
     Interface.prototype.flipCard = function(){
         var self = flashcardsjs.interface;
         fn.addClass(self.elements.flashcard, 'flipped');
-        self.disableButtons();
     }
 
     Interface.prototype.flipCardBack = function(){
         var self = flashcardsjs.interface;
         fn.removeClass(self.elements.flashcard, 'flipped');
-        self.enableButtons();
     }
 
     Interface.prototype.changeVisibleRoute = function(){
@@ -313,28 +311,9 @@ var Interface = (function(){
     }
 
     Interface.prototype.enableButtons = function(){
-        this.elements.correctButton.removeAttribute('disabled');
-        this.elements.incorrectButton.removeAttribute('disabled');
-        this.elements.skipButton.removeAttribute('disabled');
-
         this.elements.correctButton.addEventListener('click', this.getButtonValue);
         this.elements.incorrectButton.addEventListener('click', this.getButtonValue);
         this.elements.skipButton.addEventListener('click', this.getButtonValue);
-    }
-
-
-    Interface.prototype.disableButtons = function(){
-        
-        // add 'disabled' class to buttons to prevent 
-        // clicking while the back is shown
-        // otherwise it risks giving away the next answer
-        this.elements.correctButton.setAttribute('disabled', 'disabled');
-        this.elements.incorrectButton.setAttribute('disabled', 'disabled');
-        this.elements.skipButton.setAttribute('disabled', 'disabled');
-
-        this.elements.correctButton.removeEventListener('click', this.getButtonValue);
-        this.elements.incorrectButton.removeEventListener('click', this.getButtonValue);
-        this.elements.skipButton.removeEventListener('click', this.getButtonValue);
     }
 
     // enables and disables card flipping
@@ -567,18 +546,14 @@ var Interface = (function(){
     }
 
     Interface.prototype.setFront = function(text){
-        console.log('set front this', this);
         this.elements.frontText.innerText = text;
     }
 
     Interface.prototype.setBack = function(text){
-        console.log('set back this', this);
         this.elements.backText.innerText = text;
     }
 
     Interface.prototype.getNewCard = function(){
-
-        console.log('[DEBUG] Interface.getNewCard');
         
         if(this.current.cards.length > 0){
 
@@ -588,14 +563,11 @@ var Interface = (function(){
             // set the text on the card
             this.setFront(this.current.card.front);
 
-            
-
             // set the back to blank and wait 500 ms to set the back text
             // this prevents the user from seeing it ahead of time on card changes
             this.setBack('');
 
             setTimeout(function(){
-                console.log('settimeout this', this);
                 this.setBack(this.current.card.back);
             }.bind(this), 500); // equal to transition time in style.css
         }
