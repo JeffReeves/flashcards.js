@@ -156,9 +156,10 @@ var Interface = (function(){
             dropdownMenu: document.getElementById('dropdown-menu'),
             
             // menu options
+            menuLogin: document.getElementById('menu-login'),
             menuCardView: document.getElementById('menu-card-view'),
             menuEditView: document.getElementById('menu-edit-view'),
-            menuLoginModal: document.getElementById('menu-login-modal'),
+            menuLogout: document.getElementById('menu-logout'),
 
             // views
             cardView: document.getElementById('cardView'),
@@ -288,6 +289,14 @@ var Interface = (function(){
         this.setupEditor();
     }
 
+    Interface.prototype.logIn = function(){
+
+        var self = flashcardsjs;
+
+        // open the login modal
+        self.interface.elements.modal.open();
+    }
+
     Interface.prototype.logOut = function(){
         var self = flashcardsjs;
 
@@ -334,8 +343,9 @@ var Interface = (function(){
             fn.setVisible('router-menu', 'disabled', this.elements.menuCardView.id);
         }.bind(this));
 
-        // logout
-        this.elements.menuLoginModal.addEventListener('click', this.logOut);
+        // login / logout
+        this.elements.menuLogin.addEventListener('click', this.logIn);
+        this.elements.menuLogout.addEventListener('click', this.logOut);
 
         // add events for button presses
         this.enableButtons();
