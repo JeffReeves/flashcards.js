@@ -268,12 +268,6 @@ var Interface = (function(){
         fn.removeClass(self.elements.flashcard, 'flipped');
     }
 
-    Interface.prototype.changeVisibleRoute = function(){
-        var self = flashcardsjs.interface;
-        fn.setVisible('router-view', 'disabled', self.elements.cardView.id);
-        fn.setVisible('router-menu', 'disabled', self.elements.menuEditView.id);
-    }
-
     // occurs after a user has logged in
     Interface.prototype.userLogin = function(user){
     
@@ -328,8 +322,17 @@ var Interface = (function(){
         this.elements.back.addEventListener('click', this.flipCardBack);
 
         // ROUTES
-        this.elements.menuCardView.addEventListener('click', this.changeVisibleRoute);
-        this.elements.menuEditView.addEventListener('click', this.changeVisibleRoute);
+        this.elements.menuCardView.addEventListener('click', function(){
+            console.log('clicked card menu buttton');
+            fn.setVisible('router-view', 'disabled', this.elements.cardView.id);
+            fn.setVisible('router-menu', 'disabled', this.elements.menuEditView.id);
+        }.bind(this));
+
+        this.elements.menuEditView.addEventListener('click', function(){
+            console.log('clicked edit menu buttton');
+            fn.setVisible('router-view', 'disabled', this.elements.editorView.id);
+            fn.setVisible('router-menu', 'disabled', this.elements.menuCardView.id);
+        }.bind(this));
 
         // logout
         this.elements.menuLoginModal.addEventListener('click', this.logOut);
@@ -574,8 +577,8 @@ var Interface = (function(){
         else {
             this.current.card = {};
             this.current.cards = [];
-            this.elements.frontText.innerText = 'Congratulations! You\'ve finished the deck!';
-            this.elements.backText.innerText = 'You didn\'t believe me did you? =P';            
+            this.setFront('Congratulations! You\'ve finished the deck!');
+            this.setBack('You didn\'t believe me did you? =P');           
         }
     }
 
