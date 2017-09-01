@@ -251,11 +251,10 @@ var Interface = (function(){
             if(buttonId === 'incorrect' || buttonId === 'skip'){
 
                 // move card to back of deck
-                self.current.cards.unshift(this.current.card);
+                self.current.cards.unshift(self.current.card);
             }
 
-            // load the next card
-            self.setCard(); 
+            self.getNewCard(); 
         }    
     }
 
@@ -564,20 +563,41 @@ var Interface = (function(){
         this.current.totalCards = this.current.cards.length;
 
         // select a new card off the top
-        this.setCard()
+        this.getNewCard()
     }
 
-    Interface.prototype.setCard = function(){
+    Interface.prototype.setFront = function(text){
+        console.log('set front this', this);
+        this.elements.frontText.innerText = text;
+    }
 
-        console.log('[DEBUG] Interface.setCard');
+    Interface.prototype.setBack = function(text){
+        console.log('set back this', this);
+        this.elements.backText.innerText = text;
+    }
 
+    Interface.prototype.getNewCard = function(){
+
+        console.log('[DEBUG] Interface.getNewCard');
+        
         if(this.current.cards.length > 0){
+
             // pop a card off of the deck 
             this.current.card = this.current.cards.pop();
 
             // set the text on the card
-            this.elements.frontText.innerText = this.current.card.front;
-            this.elements.backText.innerText = this.current.card.back;
+            this.setFront(this.current.card.front);
+
+            
+
+            // set the back to blank and wait 500 ms to set the back text
+            // this prevents the user from seeing it ahead of time on card changes
+            this.setBack('');
+
+            setTimeout(function(){
+                console.log('settimeout this', this);
+                this.setBack(this.current.card.back);
+            }.bind(this), 500); // equal to transition time in style.css
         }
         else {
             this.current.card = {};
