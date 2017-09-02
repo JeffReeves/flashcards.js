@@ -168,11 +168,8 @@ var Interface = (function(){
             menuEditView: document.getElementById('menu-edit-view'),
             menuLogout: document.getElementById('menu-logout'),
 
-            // views
-            cardView: document.getElementById('cardView'),
-            editorView: document.getElementById('editorView'),
-
             // card view
+            cardView: document.getElementById('cardView'),
             
                 // dropdown to select decks
                 cardDeckSelect: document.getElementById('card-deck-select'),
@@ -197,23 +194,35 @@ var Interface = (function(){
                 skipButton: document.getElementById('skip'),
 
             // editor view
+            editorView: document.getElementById('editorView'),
             showDecks: document.getElementById('show-decks'),
 
-                // edit decks view
-                EditDeck: document.getElementById('edit-deck'),
+                // dropdown select
+                editorDeckSelect: document.getElementById('editor-deck-select'),     
+                
+                // deck edit / add buttons
+                editorDeckEditButton: document.getElementById('editor-deck-edit-button'),
+                editorDeckAddButton: document.getElementById('editor-deck-add-button'),
+                editorCardAddButton: document.getElementById('editor-card-add-button'),
 
-                    // dropdown select
-                    editorDeckSelect: document.getElementById('editor-deck-select'),     
-                    
-                    // deck edit / add buttons
-                    editorDeckEditButton: document.getElementById('editor-deck-edit-button'),
-                    editorDeckAddButton: document.getElementById('editor-deck-add-button'),
-                    editorCardAddButton: document.getElementById('editor-card-add-button'),
+                // edit decks view
+                editDeck: document.getElementById('edit-deck'),
+
+                    // edit deck form
+                    editDeckForm: document.getElementById('edit-deck-form'),
+
+                        // input fields
+                        editDeckStack: document.getElementById('edit-deck-stack'),
+                        editDeckTitle: document.getElementById('edit-deck-title'),
+
+                        // buttons
+                        editDeckSaveButton: document.getElementById('edit-deck-save-button'),
+                        editDeckCancelButton: document.getElementById('edit-deck-cancel-button'),
 
                 // add decks view
                 addDeck: document.getElementById('add-deck'),
                 
-                    // edit decks 
+                    // add deck form 
                     addDeckForm: document.getElementById('add-deck-form'),
 
                         // input fields
@@ -227,11 +236,16 @@ var Interface = (function(){
                 // add card view
                 addCard: document.getElementById('add-card'),
 
-                    // add card view
-                    newCardFront: document.getElementById('new-card-front'),
-                    newCardBack: document.getElementById('new-card-back'),
-                    addCardSaveButton: document.getElementById('add-card-save-button'),
-                    addCardCancelButton: document.getElementById('add-card-cancel-button')
+                    // add card form
+                    addCardForm: document.getElementById('add-card-form'),
+                
+                        // add card view
+                        newCardFront: document.getElementById('new-card-front'),
+                        newCardBack: document.getElementById('new-card-back'),
+
+                        // buttons
+                        addCardSaveButton: document.getElementById('add-card-save-button'),
+                        addCardCancelButton: document.getElementById('add-card-cancel-button')
         };
 
         // set a number of values to hold for the interface's sake
@@ -401,6 +415,8 @@ var Interface = (function(){
             // get id of deck selected
             var idNumber = this.elements.editorDeckSelect.value;
             console.log('edit deck: ', idNumber);
+
+            fn.setVisible('router-editor-view', 'disabled', this.elements.editDeck.id);
         }.bind(this));
 
         // add deck button
@@ -415,6 +431,18 @@ var Interface = (function(){
             fn.setVisible('router-editor-view', 'disabled', this.elements.addCard.id);
         }.bind(this));
 
+        // edit deck's save button
+        this.elements.editDeckSaveButton.addEventListener('click', function(){
+            console.log('editing existing deck...')
+            var stack = this.elements.editDeckStack.value;
+            var title = this.elements.editDeckTitle.value;
+
+            // TODO: sanitize input and send to API via POST request
+            console.log('[Existing Deck]');
+            console.log('Stack: ', stack);
+            console.log('Title: ', title);
+        }.bind(this));
+
         // add deck's save button
         this.elements.addDeckSaveButton.addEventListener('click', function(){
             console.log('saving new deck...')
@@ -425,6 +453,23 @@ var Interface = (function(){
             console.log('[New Deck]');
             console.log('Stack: ', stack);
             console.log('Title: ', title);
+        }.bind(this));
+
+        // add cards's save button
+        this.elements.addCardSaveButton.addEventListener('click', function(){
+            console.log('saving new card...')
+            var front = this.elements.newCardFront.value;
+            var back = this.elements.newCardBack.value;
+
+            // TODO: sanitize input and send to API via POST request
+            console.log('[New Card]');
+            console.log('Front: ', front);
+            console.log('Back: ', back);
+        }.bind(this));
+
+        // edit deck's cancel button
+        this.elements.editDeckCancelButton.addEventListener('click', function(){
+            fn.setVisible('router-editor-view', 'disabled', this.elements.showDecks.id);
         }.bind(this));
 
         // add deck's cancel button
