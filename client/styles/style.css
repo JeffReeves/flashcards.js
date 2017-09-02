@@ -428,6 +428,23 @@ html, body {
                 margin: 20px 20px;
 
             }
+
+    /* MOBILE DEVICE IN PORTRAIT MODE */
+    @media all and (orientation:portrait){
+        
+        #editor-deck-button-container {
+            grid-area: deck-button-container;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            grid-template-areas:
+            " deck-edit-button deck-add-button "
+            " card-add-button card-add-button ";
+            justify-self: center;
+            align-self: center;
+            
+        }
+    }
 }
 
 
