@@ -197,16 +197,37 @@ var Interface = (function(){
                 skipButton: document.getElementById('skip'),
 
             // editor view
-            showDecks: document.getElementById('showDecks'),
-            addCard: document.getElementById('addCard'),
+            showDecks: document.getElementById('show-decks'),
 
-                // dropdown select
-                editorDeckSelect: document.getElementById('editor-deck-select'),                
+                // add decks view
+                addEditDecks: document.getElementById('add-edit-decks'),
+
+                    // edit decks 
+                    addDeckForm: document.getElementById('add-deck-form'),
+
+                        // input fields
+                        newDeckStack: document.getElementById('new-deck-stack'),
+                        newDeckTitle: document.getElementById('new-deck-title'),
+
+                        // buttons
+                        addDeckSaveButton: document.getElementById('add-deck-save-button'),
+                        addDeckCancelButton: document.getElementById('add-deck-cancel-button'),
 
                 // add card view
-                newCardFront: document.getElementById('newCardFront'),
-                newCardBack: document.getElementById('newCardBack'),
-                saveNewCardButton: document.getElementById('saveNewCardButton')
+                addCard: document.getElementById('add-card'),
+
+                    // dropdown select
+                    editorDeckSelect: document.getElementById('editor-deck-select'),     
+                    
+                    // deck edit / add buttons
+                    editorDeckEditButton: document.getElementById('editor-deck-edit-button'),
+                    editorDeckAddButton: document.getElementById('editor-deck-add-button'),
+
+                        // add card view
+                        newCardFront: document.getElementById('new-card-front'),
+                        newCardBack: document.getElementById('new-card-back'),
+                        addCardSaveButton: document.getElementById('add-card-save-button'),
+                        addCardCancelButton: document.getElementById('add-card-cancel-button')
         };
 
         // set a number of values to hold for the interface's sake
@@ -338,7 +359,7 @@ var Interface = (function(){
         self.interface.elements.modal.open();
     }
 
-    Interface.prototype.enableButtons = function(){
+    Interface.prototype.enableCardButtons = function(){
         this.elements.correctButton.addEventListener('click', this.getButtonValue);
         this.elements.incorrectButton.addEventListener('click', this.getButtonValue);
         this.elements.skipButton.addEventListener('click', this.getButtonValue);
@@ -370,8 +391,29 @@ var Interface = (function(){
         this.elements.menuLogin.addEventListener('click', this.logIn);
         this.elements.menuLogout.addEventListener('click', this.logOut);
 
+        // editor deck select, edit, and add buttons
+        this.elements.editorDeckEditButton.addEventListener('click', function(){
+            console.log('clicked edit button');
+            // get id of deck selected
+            var idNumber = this.elements.editorDeckSelect.value;
+            console.log('edit deck: ', idNumber);
+        }.bind(this));
+
+        this.elements.editorDeckAddButton.addEventListener('click', function(){
+            console.log('clicked add button');
+            fn.setVisible('router-editor-view', 'disabled', this.elements.addEditDecks.id);
+        }.bind(this));
+
+        this.elements.addDeckCancelButton.addEventListener('click', function(){
+            fn.setVisible('router-editor-view', 'disabled', this.elements.showDecks.id);
+        }.bind(this));
+
+        this.elements.addDeckCancelButton.addEventListener('click', function(){
+            fn.setVisible('router-editor-view', 'disabled', this.elements.showDecks.id);
+        }.bind(this));
+
         // add events for button presses
-        this.enableButtons();
+        this.enableCardButtons();
     }
 
     Interface.prototype.resetProgress = function(){
@@ -569,14 +611,6 @@ var Interface = (function(){
 
             // reset progress bar
             this.resetProgress();
-
-        }.bind(this));
-
-        // create an onchange event to switch selected editor view deck
-        this.elements.editorDeckSelect.addEventListener('change', function(){
-            
-            var deckId = Number(this.elements.editorDeckSelect.value);
-            console.log('Deck ID in editor view:', deckId);
 
         }.bind(this));
     }

@@ -101,32 +101,34 @@
                     <button class="mui-btn mui-btn--raised" id="editor-deck-add-button">Add New</button>
                 </div>
             </div>
-            <div id="addDeck" class="router-editor-view disabled">
-                <form class="mui-form" id="addDeckForm">
+            <div id="add-edit-decks" class="router-editor-view disabled">
+                <form class="mui-form" id="add-deck-form">
                     <legend>Add Deck</legend>
                     <div class="mui-textfield mui-textfield--float-label">
-                        <input type="text" id="newDeckStack" required>
+                        <input type="text" id="new-deck-stack">
                         <label>Stack</label>
                     </div>
                     <div class="mui-textfield mui-textfield--float-label">
-                        <input type="text" id="newDeckTitle" required>
+                        <input type="text" id="new-deck-title">
                         <label>Title</label>
                     </div>
-                    <button type="submit" class="mui-btn mui-btn--raised" id="saveNewDeckButton">Save</button>
+                    <button type="button" class="mui-btn mui-btn--raised" id="add-deck-save-button">Save</button>
+                    <button type="button" class="mui-btn mui-btn--raised" id="add-deck-cancel-button">Cancel</button>
                 </form>
             </div>
-            <div id="addCard" class="router-editor-view disabled">
-                <form class="mui-form" id="addCardForm">
+            <div id="add-card" class="router-editor-view disabled">
+                <form class="mui-form" id="add-card-form">
                     <legend>Add Card</legend>
                     <div class="mui-textfield mui-textfield--float-label">
-                        <input type="text" id="newCardFront" required>
+                        <input type="text" id="new-card-front">
                         <label>Front</label>
                     </div>
                     <div class="mui-textfield mui-textfield--float-label">
-                        <input type="text" id="newCardBack" required>
+                        <input type="text" id="new-card-back">
                         <label>Back</label>
                     </div>
-                    <button type="button" class="mui-btn mui-btn--raised" id="saveNewCardButton">Save</button>
+                    <button type="button" class="mui-btn mui-btn--raised" id="add-card-save-button">Save</button>
+                    <button type="button" class="mui-btn mui-btn--raised" id="add-deck-cancel-button">Cancel</button>
                 </form>
             </div>
         </section>

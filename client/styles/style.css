@@ -326,7 +326,32 @@ html, body {
                     color: #7e7260;
                     justify-self: center;
                 }
-            
+
+        #add-edit-decks {
+            grid-area: editor-router;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+            grid-template-areas:
+                " add-deck-form ";
+            align-self: center;
+        }
+
+            #add-deck-form {
+                grid-area: add-deck-form;
+            }
+
+        #add-card {
+            grid-area: editor-router;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 1fr;
+            grid-template-areas:
+                " editor-decks "
+                " deck-button-container ";
+            align-self: center;
+        }
+
     footer {
         grid-area: footer;
         display: grid;
