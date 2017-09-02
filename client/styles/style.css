@@ -306,10 +306,10 @@ html, body {
             #editor-deck-button-container {
                 grid-area: deck-button-container;
                 display: grid;
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr 1fr 1fr;
                 grid-template-rows: 1fr;
                 grid-template-areas:
-                " deck-edit-button deck-add-button ";
+                " deck-edit-button deck-add-button card-add-button ";
                 justify-self: center;
                 align-self: center;
                 
@@ -327,7 +327,27 @@ html, body {
                     justify-self: center;
                 }
 
-        #add-edit-decks {
+                #editor-card-add-button {
+                    grid-area: card-add-button;
+                    color: #7e7260;
+                    justify-self: center;
+                }
+
+        #edit-deck {
+            grid-area: editor-router;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+            grid-template-areas:
+                " edit-deck-form ";
+            align-self: center;
+        }
+
+            #edit-deck-form {
+                grid-area: edit-deck-form;
+            }
+
+        #add-deck {
             grid-area: editor-router;
             display: grid;
             grid-template-columns: 1fr;
@@ -345,12 +365,15 @@ html, body {
             grid-area: editor-router;
             display: grid;
             grid-template-columns: 1fr;
-            grid-template-rows: 1fr 1fr;
+            grid-template-rows: 1fr;
             grid-template-areas:
-                " editor-decks "
-                " deck-button-container ";
+                " add-card-form ";
             align-self: center;
         }
+
+            #add-card-form {
+                grid-area: add-card-form;
+            }
 
     footer {
         grid-area: footer;

@@ -199,9 +199,20 @@ var Interface = (function(){
             // editor view
             showDecks: document.getElementById('show-decks'),
 
-                // add decks view
-                addEditDecks: document.getElementById('add-edit-decks'),
+                // edit decks view
+                EditDeck: document.getElementById('edit-deck'),
 
+                    // dropdown select
+                    editorDeckSelect: document.getElementById('editor-deck-select'),     
+                    
+                    // deck edit / add buttons
+                    editorDeckEditButton: document.getElementById('editor-deck-edit-button'),
+                    editorDeckAddButton: document.getElementById('editor-deck-add-button'),
+                    editorCardAddButton: document.getElementById('editor-card-add-button'),
+
+                // add decks view
+                addDeck: document.getElementById('add-deck'),
+                
                     // edit decks 
                     addDeckForm: document.getElementById('add-deck-form'),
 
@@ -212,22 +223,15 @@ var Interface = (function(){
                         // buttons
                         addDeckSaveButton: document.getElementById('add-deck-save-button'),
                         addDeckCancelButton: document.getElementById('add-deck-cancel-button'),
-
+                                        
                 // add card view
                 addCard: document.getElementById('add-card'),
 
-                    // dropdown select
-                    editorDeckSelect: document.getElementById('editor-deck-select'),     
-                    
-                    // deck edit / add buttons
-                    editorDeckEditButton: document.getElementById('editor-deck-edit-button'),
-                    editorDeckAddButton: document.getElementById('editor-deck-add-button'),
-
-                        // add card view
-                        newCardFront: document.getElementById('new-card-front'),
-                        newCardBack: document.getElementById('new-card-back'),
-                        addCardSaveButton: document.getElementById('add-card-save-button'),
-                        addCardCancelButton: document.getElementById('add-card-cancel-button')
+                    // add card view
+                    newCardFront: document.getElementById('new-card-front'),
+                    newCardBack: document.getElementById('new-card-back'),
+                    addCardSaveButton: document.getElementById('add-card-save-button'),
+                    addCardCancelButton: document.getElementById('add-card-cancel-button')
         };
 
         // set a number of values to hold for the interface's sake
@@ -391,24 +395,45 @@ var Interface = (function(){
         this.elements.menuLogin.addEventListener('click', this.logIn);
         this.elements.menuLogout.addEventListener('click', this.logOut);
 
-        // editor deck select, edit, and add buttons
+        // edit deck button
         this.elements.editorDeckEditButton.addEventListener('click', function(){
-            console.log('clicked edit button');
+            console.log('clicked edit deck button');
             // get id of deck selected
             var idNumber = this.elements.editorDeckSelect.value;
             console.log('edit deck: ', idNumber);
         }.bind(this));
 
+        // add deck button
         this.elements.editorDeckAddButton.addEventListener('click', function(){
-            console.log('clicked add button');
-            fn.setVisible('router-editor-view', 'disabled', this.elements.addEditDecks.id);
+            console.log('clicked add deck button');
+            fn.setVisible('router-editor-view', 'disabled', this.elements.addDeck.id);
         }.bind(this));
 
+        // add card button
+        this.elements.editorCardAddButton.addEventListener('click', function(){
+            console.log('clicked add card button');
+            fn.setVisible('router-editor-view', 'disabled', this.elements.addCard.id);
+        }.bind(this));
+
+        // add deck's save button
+        this.elements.addDeckSaveButton.addEventListener('click', function(){
+            console.log('saving new deck...')
+            var stack = this.elements.newDeckStack.value;
+            var title = this.elements.newDeckTitle.value;
+
+            // TODO: sanitize input and send to API via POST request
+            console.log('[New Deck]');
+            console.log('Stack: ', stack);
+            console.log('Title: ', title);
+        }.bind(this));
+
+        // add deck's cancel button
         this.elements.addDeckCancelButton.addEventListener('click', function(){
             fn.setVisible('router-editor-view', 'disabled', this.elements.showDecks.id);
         }.bind(this));
 
-        this.elements.addDeckCancelButton.addEventListener('click', function(){
+        // add card's cancel button
+        this.elements.addCardCancelButton.addEventListener('click', function(){
             fn.setVisible('router-editor-view', 'disabled', this.elements.showDecks.id);
         }.bind(this));
 
