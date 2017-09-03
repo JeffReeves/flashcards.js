@@ -306,6 +306,7 @@ html, body {
 
             #editor-deck-buttons {
                 grid-area: editor-deck-buttons;
+                display: grid;
                 grid-template-columns: 1fr 1fr;
                 grid-template-rows: 1fr;
                 justify-self: center;
@@ -462,6 +463,11 @@ html, body {
 .mui-btn.mui-btn--editor {
     color: #7e7260;
     padding: 0 10px;
+}
+
+.mui-btn .material-icons.editor-icon {
+    font-size: 16px;
+    color: #7e7260;
 }
 
 .mui-btn .material-icons {
