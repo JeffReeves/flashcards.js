@@ -293,8 +293,8 @@ html, body {
             grid-template-columns: 3fr 1fr;
             grid-template-rows: 1fr 1fr;
             grid-template-areas:
-                " editor-decks editor-deck-edit-button"
-                " deck-button-container deck-button-container ";
+                " editor-decks editor-deck-buttons "
+                " editor-cards editor-card-buttons ";
             align-self: center;
         }
 
@@ -304,41 +304,47 @@ html, body {
                 align-self: center;
             }
 
-
-            #editor-deck-edit-button {
-                grid-area: editor-deck-edit-button;
+            #editor-deck-buttons {
+                grid-area: editor-deck-buttons;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr;
                 justify-self: center;
                 align-self: center;
             }
 
-            #editor-deck-button-container {
-                grid-area: deck-button-container;
+                #editor-deck-edit-button {
+                    justify-self: center;
+                    align-self: center;
+                }
+
+                #editor-deck-add-button {
+                    justify-self: center;
+                    align-self: center;
+                }
+
+            #editor-cards {
+                grid-area: editor-cards;
+                align-self: center;
+            }
+
+            #editor-card-buttons {
+                grid-area: editor-card-buttons;
                 display: grid;
                 grid-template-columns: 1fr 1fr;
-                grid-template-rows: 1fr 1fr;
-                grid-template-areas:
-                "  . card-edit-button "
-                " deck-add-button card-add-button ";
+                grid-template-rows: 1fr;
                 justify-self: center;
                 align-self: center;
                 
             }
 
-
-
-                #editor-deck-add-button {
-                    grid-area: deck-add-button;
-                    justify-self: center;
-                }
-
                 #editor-card-edit-button {
-                    grid-area: card-edit-button;
                     justify-self: center;
+                    align-self: center;
                 }
 
                 #editor-card-add-button {
-                    grid-area: card-add-button;
                     justify-self: center;
+                    align-self: center;
                 }
 
         #edit-deck {
@@ -455,6 +461,7 @@ html, body {
 
 .mui-btn.mui-btn--editor {
     color: #7e7260;
+    padding: 0 10px;
 }
 
 .mui-btn .material-icons {
