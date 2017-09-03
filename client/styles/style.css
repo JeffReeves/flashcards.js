@@ -282,54 +282,62 @@ html, body {
         grid-template-columns: 1fr 3fr 1fr;
         grid-template-rows: 1fr 3fr 1fr;
         grid-template-areas:
-            " . . . "
             " . editor-router . "
-            " . . . ";
+            " . editor-router . "
+            " . editor-router . ";
     }
 
         #show-decks {
             grid-area: editor-router;
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 3fr 1fr;
             grid-template-rows: 1fr 1fr;
             grid-template-areas:
-                " editor-decks "
-                " deck-button-container ";
+                " editor-decks editor-deck-edit-button"
+                " deck-button-container deck-button-container ";
             align-self: center;
         }
+
 
             #editor-decks {
                 grid-area: editor-decks;
                 align-self: center;
             }
 
+
+            #editor-deck-edit-button {
+                grid-area: editor-deck-edit-button;
+                justify-self: center;
+                align-self: center;
+            }
+
             #editor-deck-button-container {
                 grid-area: deck-button-container;
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
-                grid-template-rows: 1fr;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr 1fr;
                 grid-template-areas:
-                " deck-edit-button deck-add-button card-add-button ";
+                "  . card-edit-button "
+                " deck-add-button card-add-button ";
                 justify-self: center;
                 align-self: center;
                 
             }
 
-                #editor-deck-edit-button {
-                    grid-area: deck-edit-button;
-                    color: #7e7260;
-                    justify-self: center;
-                }
+
 
                 #editor-deck-add-button {
                     grid-area: deck-add-button;
-                    color: #7e7260;
+                    justify-self: center;
+                }
+
+                #editor-card-edit-button {
+                    grid-area: card-edit-button;
                     justify-self: center;
                 }
 
                 #editor-card-add-button {
                     grid-area: card-add-button;
-                    color: #7e7260;
                     justify-self: center;
                 }
 
@@ -401,13 +409,6 @@ html, body {
         display: none;
     }
 
-        /* #loginModal {
-            width: 400px;
-            height: 300px;
-            margin: 100px auto;
-            background-color: #F2F2F2;
-        } */
-
         #loginModal {
             display: grid;
             grid-template-columns: 1fr ;
@@ -431,7 +432,7 @@ html, body {
 
     /* MOBILE DEVICE IN PORTRAIT MODE */
     @media all and (orientation:portrait){
-        
+
         #editor-deck-button-container {
             grid-area: deck-button-container;
             display: grid;
@@ -451,6 +452,10 @@ html, body {
 
 
 /* customized MUI */
+
+.mui-btn.mui-btn--editor {
+    color: #7e7260;
+}
 
 .mui-btn .material-icons {
     font-size: 48px;
