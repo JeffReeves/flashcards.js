@@ -202,8 +202,13 @@ var Interface = (function(){
                 
                 // deck edit / add buttons
                 editorDeckEditButton: document.getElementById('editor-deck-edit-button'),
-                editorCardEditButton: document.getElementById('editor-card-edit-button'),
                 editorDeckAddButton: document.getElementById('editor-deck-add-button'),
+
+                // card input field
+                editorCardInput: document.getElementById('editor-card'),
+
+                // card buttons
+                editorCardEditButton: document.getElementById('editor-card-edit-button'),
                 editorCardAddButton: document.getElementById('editor-card-add-button'),
 
                 // edit decks view
@@ -234,6 +239,20 @@ var Interface = (function(){
                         addDeckSaveButton: document.getElementById('add-deck-save-button'),
                         addDeckCancelButton: document.getElementById('add-deck-cancel-button'),
                                         
+                // add card view
+                editCard: document.getElementById('edit-card'),
+
+                    // add card form
+                    editCardForm: document.getElementById('edit-card-form'),
+                
+                        // add card view
+                        editCardFront: document.getElementById('edit-card-front'),
+                        editCardBack: document.getElementById('edit-card-back'),
+
+                        // buttons
+                        editCardSaveButton: document.getElementById('edit-card-save-button'),
+                        editCardCancelButton: document.getElementById('edit-card-cancel-button'),
+                
                 // add card view
                 addCard: document.getElementById('add-card'),
 
@@ -384,6 +403,27 @@ var Interface = (function(){
         this.elements.skipButton.addEventListener('click', this.getButtonValue);
     }
 
+    Interface.prototype.setInputDirty = function(){
+        // untouched classes "mui--is-empty mui--is-untouched mui--is-pristine"
+        // touched classes "mui--is-touched mui--is-dirty mui--is-not-empty"
+        fn.removeClass(this.elements.editDeckStack, 'mui--is-empty');
+        fn.removeClass(this.elements.editDeckStack, 'mui--is-untouched');
+        fn.removeClass(this.elements.editDeckStack, 'mui--is-pristine');
+
+        fn.removeClass(this.elements.editDeckTitle, 'mui--is-empty');
+        fn.removeClass(this.elements.editDeckTitle, 'mui--is-untouched');
+        fn.removeClass(this.elements.editDeckTitle, 'mui--is-pristine');
+
+        fn.addClass(this.elements.editDeckStack, 'mui--is-touched');
+        fn.addClass(this.elements.editDeckStack, 'mui--is-dirty');
+        fn.addClass(this.elements.editDeckStack, 'mui--is-not-empty');
+
+        fn.addClass(this.elements.editDeckTitle, 'mui--is-touched');
+        fn.addClass(this.elements.editDeckTitle, 'mui--is-dirty');
+        fn.addClass(this.elements.editDeckTitle, 'mui--is-not-empty');
+        
+    }
+
     // enables and disables card flipping
     Interface.prototype.enableEventListeners = function(){
         
@@ -413,10 +453,33 @@ var Interface = (function(){
         // edit deck button
         this.elements.editorDeckEditButton.addEventListener('click', function(){
             console.log('clicked edit deck button');
+
+            var deckSelect = this.elements.editorDeckSelect;
             // get id of deck selected
-            var idNumber = this.elements.editorDeckSelect.value;
+            var idNumber = deckSelect.value;
             console.log('edit deck: ', idNumber);
 
+            // iterate over optgroups to get the stack/group of the deck
+            var optgroups = deckSelect.getElementsByTagName('optgroup');
+            for(var i = 0; i < optgroups.length; i++){
+
+                var label = optgroups[i].label;
+
+                var decks = optgroups[i].getElementsByTagName('option');
+                for(var j = 0; j < decks.length; j++){
+
+                    var value = decks[j].value;
+                    var innerText = decks[j].innerText;
+                    if(value === idNumber){
+                        console.log('deck group is:', label);
+                        this.elements.editDeckStack.value = label;
+                        this.elements.editDeckTitle.value = innerText;
+
+                        this.setInputDirty();
+                    }
+                }
+            }
+            
             fn.setVisible('router-editor-view', 'disabled', this.elements.editDeck.id);
         }.bind(this));
 

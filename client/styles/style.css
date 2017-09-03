@@ -290,7 +290,7 @@ html, body {
         #show-decks {
             grid-area: editor-router;
             display: grid;
-            grid-template-columns: 3fr 1fr;
+            grid-template-columns: 2fr 1fr;
             grid-template-rows: 1fr 1fr;
             grid-template-areas:
                 " editor-decks editor-deck-buttons "
