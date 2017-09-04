@@ -484,7 +484,34 @@ var Interface = (function(){
 
         // edit deck button
         this.elements.editorDeckEditButton.addEventListener('click', function(){
-            //fn.setVisible('router-editor-view', 'disabled', this.elements.editDeck.id);
+            var deckSelect = this.elements.editorDeckSelect;
+            // get id of deck selected
+            var idNumber = deckSelect.value;
+
+            // iterate over optgroups to get the stack/group of the deck
+            var optgroups = deckSelect.getElementsByTagName('optgroup');
+            for(var i = 0; i < optgroups.length; i++){
+
+                var label = optgroups[i].label;
+
+                var decks = optgroups[i].getElementsByTagName('option');
+                for(var j = 0; j < decks.length; j++){
+
+                    var value = decks[j].value;
+                    var innerText = decks[j].innerText;
+                    if(value === idNumber){
+
+                        this.elements.editDeckStack.value = label;
+                        this.elements.editDeckTitle.value = innerText;
+
+                        this.setInputDirty([
+                            this.elements.editDeckStack, 
+                            this.elements.editDeckTitle]);
+                    }
+                }
+            }
+            
+            fn.setVisible('router-editor-view', 'disabled', this.elements.editDeck.id);
         }.bind(this));
 
         // add deck button
@@ -529,46 +556,47 @@ var Interface = (function(){
 
         // edit card button
         this.elements.editorCardEditButton.addEventListener('click', function(){
-            console.log('clicked edit card button');
 
-            var cardSearch = this.elements.editorCardInput.value;
+            if(this.elements.editorCardInput.value){
 
-            // split into front and back of card
-            var split = cardSearch.split('---');
-            var front, back;
+                var cardSearch = this.elements.editorCardInput.value;
+                // split into front and back of card
+                var split = cardSearch.split('---');
+                var front, back;
 
-            // found out which part is the back and which is the front
-            for(var i = 0; i < split.length; i++){
-                if(split[i].indexOf('Front') !== -1){
-                    front = split[i];
+                // found out which part is the back and which is the front
+                for(var i = 0; i < split.length; i++){
+                    if(split[i].indexOf('Front') !== -1){
+                        front = split[i];
+                    }
+                    else {
+                        back = split[i];
+                    }
                 }
-                else {
-                    back = split[i];
+
+                // strip out just the front
+                var front = front.replace('Front:', '').trim();
+
+                //iterate through all cards held in the editor
+                for(var i = 0; i < this.current.editorCards.length; i++){
+
+                    var editorCardFront = this.current.editorCards[i].front;
+
+                    // if a match is found, get its id
+                    if(editorCardFront.indexOf(front) !== -1){
+
+                        this.current.editorCard = this.current.editorCards[i];
+                        this.elements.editCardFront.value = this.current.editorCard.front;
+                        this.elements.editCardBack.value = this.current.editorCard.back;
+                        this.setInputDirty([
+                            this.elements.editCardFront,
+                            this.elements.editCardBack
+                        ]);
+                    }
                 }
+
+                fn.setVisible('router-editor-view', 'disabled', this.elements.editCard.id);
             }
-
-            // strip out just the front
-            var front = front.replace('Front:', '').trim();
-
-            //iterate through all cards held in the editor
-            for(var i = 0; i < this.current.editorCards.length; i++){
-
-                var editorCardFront = this.current.editorCards[i].front;
-
-                // if a match is found, get its id
-                if(editorCardFront.indexOf(front) !== -1){
-                    console.log('found card:', this.current.editorCards[i]);
-                    var card = this.current.editorCards[i];
-                    this.elements.editCardFront.value = card.front;
-                    this.elements.editCardBack.value = card.back;
-                    this.setInputDirty([
-                        this.elements.editCardFront,
-                        this.elements.editCardBack
-                    ]);
-                }
-            }
-
-            fn.setVisible('router-editor-view', 'disabled', this.elements.editCard.id);
         }.bind(this));
 
         // add card button
@@ -606,9 +634,11 @@ var Interface = (function(){
             console.log('editing card...')
             var front = this.elements.editCardFront.value;
             var back = this.elements.editCardBack.value;
+            var id = this.current.editorCard.id;
 
             // TODO: sanitize input and send to API via POST request
-            console.log('[New Card]');
+            console.log('[Edited Card]');
+            console.log('Id: ', id);
             console.log('Front: ', front);
             console.log('Back: ', back);
         }.bind(this));
