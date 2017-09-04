@@ -5,6 +5,37 @@ var db = require('../database.js');
 
 //== ROUTES ===================================================================
 
+// select exists(select * from users where users.username = "jeff" limit 1) as exists;
+router.get('/userexists/:username', function(req, res) {
+    
+        var username = req.params.username;
+    
+        // select all users by username
+        var query = 'SELECT EXISTS(SELECT * ' +
+                    'FROM users ' +
+                    'WHERE users.username = "' + username + '"LIMIT 1) ' +
+                    'AS userexists';
+    
+        db.getConnection(function(err, connection){
+    
+            connection.query(query, function(error, results, fields) {
+    
+                connection.release();
+    
+                if(results){
+                    // returns [{"userexists":1}] if true
+                    // returns [{"userexists":0}] if false
+                    res.send(results);
+                }
+    
+                if(error){
+                    res.send(error);
+                }
+            });
+        });
+    });
+
+// get a user by username
 router.get('/users/:username', function(req, res) {
     
         var username = req.params.username;
@@ -12,7 +43,7 @@ router.get('/users/:username', function(req, res) {
         // select all users by username
         var query = 'SELECT users.id, users.username ' +
                     'FROM users ' +
-                    'WHERE users.username = "' + username + '" ';
+                    'WHERE users.username = "' + username + '"LIMIT 1 ';
     
         db.getConnection(function(err, connection){
     
@@ -120,8 +151,92 @@ router.get('/cards/deckid/:deckid', function(req, res) {
     });
 });
 
-router.post('/decks/all', function(req, res){
+router.get('/create/user/:username', function(req, res){
 
+    var username = req.params.username;
+    var password = 'default';
+
+    var ultimateResults = [];
+    var ultimateError = [];
+
+    // insert a new user
+    var insertUser = 'INSERT INTO users (username, password) ' + 
+    'VALUES ("' + username + '", "' + password + '") ';
+
+    db.getConnection(function(err, connection){
+        
+        connection.query(insertUser, function(error, results, fields) {
+
+            connection.release();
+
+            // if successful at creating user
+            if(results){
+
+                // add results to the ultimate results
+                ultimateResults.push(results);
+
+                // create a default stack and deck
+                var insertDeck = 'INSERT INTO decks (userid, title, stack) ' +
+                'SELECT id, "First Deck", "Default" ' + 
+                'FROM users WHERE username = "' + username + '";';
+
+                db.getConnection(function(err, connection){
+                    
+                    connection.query(insertDeck, function(error, results, fields) {
+
+                        connection.release();
+
+                        // if successful at creating the stack and deck
+                        if(results){
+
+                            // add results to the ultimate results
+                            ultimateResults.push(results);
+
+                            // create a first card for the user
+                            var insertCards = 
+                            'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+                            'SET @deckid = (SELECT id FROM decks WHERE userid = @userid AND title = "First Deck"); ' +
+                            'INSERT INTO cards (deckid, front, back) ' +
+                            'VALUES (@deckid, ' +
+                            '"Hover or click on me to flip me over", ' +
+                            '"Pretty cool, huh?\n\nNow feel free to add your own decks and cards."' +
+                            ');'
+
+                            db.getConnection(function(err, connection){
+                                
+                                connection.query(insertCards, function(error, results, fields) {
+            
+                                    connection.release();
+            
+                                    // if successful at creating the stack and deck
+                                    if(results){
+                                        // add results to the ultimate results
+                                        ultimateResults.push(results);
+
+                                        res.send(ultimateResults);
+                                    }
+            
+                                    if(error){
+                                        res.send(error);
+                                    }
+                                });
+                            });
+                        }
+
+                        if(error){
+                            res.send(error);
+                        }
+                    });
+                });
+
+                // res.send(ultimateResults);
+            }
+
+            if(error){
+                res.send(error);
+            }
+        });
+    });
 });
 
 module.exports = router;

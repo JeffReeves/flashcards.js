@@ -5,6 +5,8 @@
 // UPDATES NEEDED:
 // - Get login modal to change to registration if the user doesn't exist
 // - Link all save and delete buttons with an API POST request 
+// - fully clone the users.decks into the interface.current.decks, 
+//     to prevent the pop method from actually removing the users.decks.cards.
 
 var apiUrl = '/flashcards/api/'; // PROD API
 
@@ -36,11 +38,13 @@ var User = (function(){
         .then(function(deckData) {
             var decks = deckData;
             var requests = [];
+            var numRequests = 0;
             // iterate through all decks
             for(var i = 0; i < decks.length; i++){
                 var deck = deckData[i];
                 var request = $.getJSON(apiUrl + 'cards/deckid/' + deck.id);
                 requests.push(request);
+                numRequests++;
 
                 self.decks.push(new Deck(deck));
             }
@@ -50,10 +54,24 @@ var User = (function(){
             .done(function(){
                 var data = arguments;
                 for(var i = 0; i < data.length; i++){
-                    var cards = data[i][0];
-                    for(var j = 0; j < cards.length; j++){
-                        var card = cards[j];
-                        self.decks[i].cards.push(new Card(card));
+
+                    if(Array.isArray(data[i])){
+                        var cards = [];
+
+                        // if only one card exists
+                        if(data[i][0].length === undefined){
+                            // add it to an array to be parsed
+                            cards.push(data[i][0]);
+                        }
+                        else {
+                            // otherwise set the array to the existing array of cards
+                            cards = data[i][0];
+                        }
+
+                        for(var j = 0; j < cards.length; j++){
+                            var card = cards[j];
+                            self.decks[i].cards.push(new Card(card));
+                        }
                     }
                 }
 
@@ -126,27 +144,39 @@ var Modal = (function(){
             var username = this.elements.username.value;
 
             var self = this;
+
             // and if a username value was entered
             if(username){
 
                 // check if the user exists
-                $.getJSON(apiUrl + 'users/' + username)
+                $.getJSON(apiUrl + 'userexists/' + username)
                 .done(function(userData){
 
-                    console.log('userData', userData);
-
-                    if(userData.length > 0){
+                    // if the user exists
+                    if(userData[0].userexists === 1){
                         // then create the User object with it
                         // create the user
                         flashcardsjs.user = new User(username);
-                        
-                        // and close the modal
-                        self.close();
                     }
                     else {
                         // TODO: make a POST request and create the new user
                         console.log('Creating new user...');
+                        
+                        $.getJSON(apiUrl + 'create/user/' + username)
+                        .done(function(data){
+                            console.log('created user successfully!', data);
+                        })
+                        .fail(function(data){
+                            console.log('failed to create new user', data);
+                        })
+                        .then(function(data){
+                            console.log('finished with create user method', data);
+                            flashcardsjs.user = new User(username);
+                        });
                     }
+
+                    // close the modal
+                    self.close();
                 });
             }
         }.bind(this));
@@ -372,6 +402,12 @@ var Interface = (function(){
 
             self.getNewCard(); 
         }    
+        else {
+
+            // TODO: ran out of cards, restart the deck
+            //self.selectCardViewDeck(self.current.deck.id);
+            //self.resetProgress();
+        }
     }
 
     Interface.prototype.flipCard = function(){
