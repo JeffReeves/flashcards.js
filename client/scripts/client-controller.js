@@ -124,12 +124,30 @@ var Modal = (function(){
 
             // try to get a value from the username input field
             var username = this.elements.username.value;
+
+            var self = this;
             // and if a username value was entered
             if(username){
-                // create the user
-                flashcardsjs.user = new User(username);
-                // and close the modal
-                this.close();
+
+                // check if the user exists
+                $.getJSON(apiUrl + 'users/' + username)
+                .done(function(userData){
+
+                    console.log('userData', userData);
+
+                    if(userData.length > 0){
+                        // then create the User object with it
+                        // create the user
+                        flashcardsjs.user = new User(username);
+                        
+                        // and close the modal
+                        self.close();
+                    }
+                    else {
+                        // TODO: make a POST request and create the new user
+                        console.log('Creating new user...');
+                    }
+                });
             }
         }.bind(this));
     }
