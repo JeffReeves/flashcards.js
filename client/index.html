@@ -101,8 +101,12 @@
                     <button class="mui-btn mui-btn--raised mui-btn--editor" id="editor-deck-add-button"><i class="material-icons editor-icon">library_add</i></button>
                 </div>
                 <div id="editor-card" class="mui-textfield mui-textfield--float-label">
-                    <textarea type="text" id="editor-card-input"></textarea>
+                    <textarea id="editor-card-input" 
+                        autocomplete="off" 
+                        autocorrect="off" 
+                        autocapitalize="off"></textarea>
                     <label>Find Card</label>
+                    <span id="editor-card-select-all">Select All</span>
                 </div>
                 <div id="editor-card-buttons">                    
                     <button type="button" class="mui-btn mui-btn--raised mui-btn--editor" id="editor-card-edit-button"><i class="material-icons editor-icon">edit</i></button>
@@ -144,11 +148,17 @@
                 <form class="mui-form" id="edit-card-form">
                     <legend>Edit Card</legend>
                     <div class="mui-textfield mui-textfield--float-label">
-                        <textarea type="text" id="edit-card-front"></textarea>
+                        <textarea id="edit-card-front" 
+                            autocomplete="off" 
+                            autocorrect="off" 
+                            autocapitalize="off"></textarea>
                         <label>Front</label>
                     </div>
                     <div class="mui-textfield mui-textfield--float-label">
-                        <textarea type="text" id="edit-card-back"></textarea>
+                        <textarea id="edit-card-back"
+                            autocomplete="off" 
+                            autocorrect="off" 
+                            autocapitalize="off"></textarea>
                         <label>Back</label>
                     </div>
                     <button type="button" class="mui-btn mui-btn--raised mui-btn--editor" id="edit-card-save-button">Save</button>
@@ -160,11 +170,17 @@
                 <form class="mui-form" id="add-card-form">
                     <legend>Add Card</legend>
                     <div class="mui-textfield mui-textfield--float-label">
-                            <textarea type="text" id="new-card-front"></textarea>
+                            <textarea id="new-card-front"
+                                autocomplete="off" 
+                                autocorrect="off" 
+                                autocapitalize="off"></textarea>
                         <label>Front</label>
                     </div>
                     <div class="mui-textfield mui-textfield--float-label">
-                        <textarea type="text" id="new-card-back"></textarea>
+                        <textarea id="new-card-back"
+                            autocomplete="off" 
+                            autocorrect="off" 
+                            autocapitalize="off"></textarea>
                         <label>Back</label>
                     </div>
                     <button type="button" class="mui-btn mui-btn--raised mui-btn--editor" id="add-card-save-button">Save</button>

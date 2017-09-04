@@ -160,7 +160,7 @@ var Interface = (function(){
 
             // controls 
             dropdownMenu: document.getElementById('dropdown-menu'),
-            editorDropdownMenu: document.getElementById('editor-decks'),
+            editorDropdownMenu: document.getElementById('editor-deck-select'),
             
             // menu options
             menuLogin: document.getElementById('menu-login'),
@@ -206,6 +206,7 @@ var Interface = (function(){
 
                 // card input field
                 editorCardInput: document.getElementById('editor-card-input'),
+                editorCardSelectAll: document.getElementById('editor-card-select-all'),
 
                 // card buttons
                 editorCardEditButton: document.getElementById('editor-card-edit-button'),
@@ -303,9 +304,10 @@ var Interface = (function(){
         var self = this;
         $('#editor-card-input').autoComplete({
             minChars: 2,
+            cache: false,
             source: function(term, suggest){
                 term = term.toLowerCase();
-                var choices = flashcardsjs.interface.current.cards;
+                var choices = flashcardsjs.interface.current.editorDeck.cards;
                 var suggestions = [];
                 for(var i = 0; i < choices.length; i++){
                     if(choices[i].front.toLowerCase().indexOf(term) !== -1){
@@ -375,9 +377,7 @@ var Interface = (function(){
 
         // deck details
         this.current.decks = user.decks;
-
-        // card details
-        this.current.cards = user.decks[0];
+        this.current.editorDecks = user.decks;
 
         // hide the login menu item
         fn.addClass(this.elements.menuLogin, 'disabled');
@@ -476,37 +476,15 @@ var Interface = (function(){
         this.elements.menuLogin.addEventListener('click', this.logIn);
         this.elements.menuLogout.addEventListener('click', this.logOut);
 
+        // deck selection dropdown
+        this.elements.editorDropdownMenu.addEventListener('change', function(){
+            var idNumber = Number(this.elements.editorDeckSelect.value);
+            this.selectEditorDeck(idNumber);
+        }.bind(this));
+
         // edit deck button
         this.elements.editorDeckEditButton.addEventListener('click', function(){
-
-            var deckSelect = this.elements.editorDeckSelect;
-            // get id of deck selected
-            var idNumber = deckSelect.value;
-
-            // iterate over optgroups to get the stack/group of the deck
-            var optgroups = deckSelect.getElementsByTagName('optgroup');
-            for(var i = 0; i < optgroups.length; i++){
-
-                var label = optgroups[i].label;
-
-                var decks = optgroups[i].getElementsByTagName('option');
-                for(var j = 0; j < decks.length; j++){
-
-                    var value = decks[j].value;
-                    var innerText = decks[j].innerText;
-                    if(value === idNumber){
-
-                        this.elements.editDeckStack.value = label;
-                        this.elements.editDeckTitle.value = innerText;
-
-                        this.setInputDirty([
-                            this.elements.editDeckStack, 
-                            this.elements.editDeckTitle]);
-                    }
-                }
-            }
-            
-            fn.setVisible('router-editor-view', 'disabled', this.elements.editDeck.id);
+            //fn.setVisible('router-editor-view', 'disabled', this.elements.editDeck.id);
         }.bind(this));
 
         // add deck button
@@ -541,12 +519,55 @@ var Interface = (function(){
             fn.setVisible('router-editor-view', 'disabled', this.elements.addDeck.id);
         }.bind(this));
 
+        // find card textarea field
+        this.elements.editorCardSelectAll.addEventListener('click', function(){
+
+            // select everything in this field so its easy to type over
+            this.elements.editorCardInput.focus();
+            this.elements.editorCardInput.select();
+        }.bind(this));
+
         // edit card button
         this.elements.editorCardEditButton.addEventListener('click', function(){
             console.log('clicked edit card button');
 
             var cardSearch = this.elements.editorCardInput.value;
-            console.log('search', cardSearch); 
+
+            // split into front and back of card
+            var split = cardSearch.split('---');
+            var front, back;
+
+            // found out which part is the back and which is the front
+            for(var i = 0; i < split.length; i++){
+                if(split[i].indexOf('Front') !== -1){
+                    front = split[i];
+                }
+                else {
+                    back = split[i];
+                }
+            }
+
+            // strip out just the front
+            var front = front.replace('Front:', '').trim();
+
+            //iterate through all cards held in the editor
+            for(var i = 0; i < this.current.editorCards.length; i++){
+
+                var editorCardFront = this.current.editorCards[i].front;
+
+                // if a match is found, get its id
+                if(editorCardFront.indexOf(front) !== -1){
+                    console.log('found card:', this.current.editorCards[i]);
+                    var card = this.current.editorCards[i];
+                    this.elements.editCardFront.value = card.front;
+                    this.elements.editCardBack.value = card.back;
+                    this.setInputDirty([
+                        this.elements.editCardFront,
+                        this.elements.editCardBack
+                    ]);
+                }
+            }
+
             fn.setVisible('router-editor-view', 'disabled', this.elements.editCard.id);
         }.bind(this));
 
@@ -815,6 +836,9 @@ var Interface = (function(){
         // set a default deck for the card view
         this.selectCardViewDeck();
 
+        // set the default deck for editor view
+        this.selectEditorDeck();
+
         // create an onchange event to switch selected card view deck
         this.elements.cardDeckSelect.addEventListener('change', function(){
             
@@ -825,6 +849,27 @@ var Interface = (function(){
             this.resetProgress();
 
         }.bind(this));
+    }
+
+    Interface.prototype.selectEditorDeck = function(deckId){
+        // set the editor decks and cards after the user logs in
+
+        if(deckId){
+            
+            // iterate through all current decks
+            for(var i = 0; i < this.current.editorDecks.length; i++){
+                
+                // if the selected deck matches 
+                if(this.current.editorDecks[i].id === deckId){
+                    this.current.editorDeck = this.current.editorDecks[i];
+                }
+            }
+        }
+        else {
+            this.current.editorDeck = this.current.editorDecks[0];
+        }
+
+        this.current.editorCards = this.current.editorDeck.cards;
     }
 
     // set the current deck to the one selected in the dropdown

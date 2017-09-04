@@ -333,7 +333,12 @@ textarea {
             }
 
                 #editor-card-input {
-                    height: 138px;
+                    /* resize: vertical; */
+                }
+
+                #editor-card-select-all {
+                    float: right;
+                    font-size: 12px;
                 }
 
             #editor-card-buttons {
@@ -548,3 +553,7 @@ textarea {
     .mui-btn--skip:hover {
         background-color: #0B7CB0;
     }
+
+.mui-textfield>textarea {
+    min-height: 128px;
+}
