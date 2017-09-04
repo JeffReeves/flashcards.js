@@ -1,12 +1,10 @@
-// 3rd party dependencies: jQuery v3.2.1, mui-0.9.22
+// 3rd party dependencies: jQuery v3.2.1, mui-0.9.22, jQuery-autoComplete-1.0.7
 // local dependencies: functions.js
 'use strict';
 
 // UPDATES NEEDED:
-// - CREATE A PROTOTYPE METHOD TO SET THE 
-//     INTERFACE BACK TO A DEFAULT CONDITION ON LOGOUT
-// - EDITOR VIEW DROPDOWN NEEDS TO DISPLAY ALL DECKS
-// - EDITOR VIEW NEEDS A COMPLETED VIEW AND ROUTER
+// - Get login modal to change to registration if the user doesn't exist
+// - Link all save and delete buttons with an API POST request 
 
 var apiUrl = '/flashcards/api/'; // PROD API
 
