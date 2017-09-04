@@ -411,6 +411,15 @@ var Interface = (function(){
         // reset progress
         self.interface.resetProgress();
 
+        // set the front and back of the cards
+        self.interface.setFront('Please log in');
+        self.interface.setBack('');
+
+        // set the dropdown menu back to empty
+        self.interface.elements.cardDeckSelect.innerHTML = '<optgroup label="Deck Group"> ' +
+            '<option>Decks Will Appear Here</option>' +
+            '</optgroup>';
+
         // show the login menu item
         fn.removeClass(self.interface.elements.menuLogin, 'disabled');
         
