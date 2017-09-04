@@ -205,7 +205,7 @@ var Interface = (function(){
                 editorDeckAddButton: document.getElementById('editor-deck-add-button'),
 
                 // card input field
-                editorCardInput: document.getElementById('editor-card'),
+                editorCardInput: document.getElementById('editor-card-input'),
 
                 // card buttons
                 editorCardEditButton: document.getElementById('editor-card-edit-button'),
@@ -291,8 +291,34 @@ var Interface = (function(){
             totalCards: 0,
             correct: 0,
             incorrect: 0,
-            skipped: 0
+            skipped: 0,
+            editorDecks: [],
+            editorDeck: [],
+            editorCards: [],
+            editorCard: []
         };
+    }
+
+    Interface.prototype.setupFindCardAutoComplete = function(){
+        var self = this;
+        $('#editor-card-input').autoComplete({
+            minChars: 2,
+            source: function(term, suggest){
+                term = term.toLowerCase();
+                var choices = flashcardsjs.interface.current.cards;
+                var suggestions = [];
+                for(var i = 0; i < choices.length; i++){
+                    if(choices[i].front.toLowerCase().indexOf(term) !== -1){
+                        suggestions.push('Front: ' + choices[i].front + '\n---\nBack: ' + choices[i].back);
+                    } 
+                    else if(choices[i].back.toLowerCase().indexOf(term) !== -1) {
+
+                        suggestions.push('Back: ' + choices[i].back + '\n---\nFront: ' + choices[i].front);
+                    }
+                }
+                suggest(suggestions);
+            }
+        });
     }
 
     // sets up everything we need to be ready on the interface
@@ -303,6 +329,9 @@ var Interface = (function(){
 
         // set the method for flipping cards
         this.enableEventListeners();
+
+        // enable the autocomplete option on the find card input field
+        this.setupFindCardAutoComplete();
     }
 
     Interface.prototype.getButtonValue = function(){
@@ -512,6 +541,15 @@ var Interface = (function(){
             fn.setVisible('router-editor-view', 'disabled', this.elements.addDeck.id);
         }.bind(this));
 
+        // edit card button
+        this.elements.editorCardEditButton.addEventListener('click', function(){
+            console.log('clicked edit card button');
+
+            var cardSearch = this.elements.editorCardInput.value;
+            console.log('search', cardSearch); 
+            fn.setVisible('router-editor-view', 'disabled', this.elements.editCard.id);
+        }.bind(this));
+
         // add card button
         this.elements.editorCardAddButton.addEventListener('click', function(){
             console.log('clicked add card button');
@@ -542,6 +580,18 @@ var Interface = (function(){
             console.log('Title: ', title);
         }.bind(this));
 
+        // edit cards's save button
+        this.elements.editCardSaveButton.addEventListener('click', function(){
+            console.log('editing card...')
+            var front = this.elements.editCardFront.value;
+            var back = this.elements.editCardBack.value;
+
+            // TODO: sanitize input and send to API via POST request
+            console.log('[New Card]');
+            console.log('Front: ', front);
+            console.log('Back: ', back);
+        }.bind(this));
+
         // add cards's save button
         this.elements.addCardSaveButton.addEventListener('click', function(){
             console.log('saving new card...')
@@ -561,6 +611,11 @@ var Interface = (function(){
 
         // add deck's cancel button
         this.elements.addDeckCancelButton.addEventListener('click', function(){
+            fn.setVisible('router-editor-view', 'disabled', this.elements.showDecks.id);
+        }.bind(this));
+
+        // edit card's cancel button
+        this.elements.editCardCancelButton.addEventListener('click', function(){
             fn.setVisible('router-editor-view', 'disabled', this.elements.showDecks.id);
         }.bind(this));
 
