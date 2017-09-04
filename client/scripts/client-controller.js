@@ -224,6 +224,7 @@ var Interface = (function(){
                         // buttons
                         editDeckSaveButton: document.getElementById('edit-deck-save-button'),
                         editDeckCancelButton: document.getElementById('edit-deck-cancel-button'),
+                        editDeckDeleteButton: document.getElementById('edit-deck-delete-button'),
 
                 // add decks view
                 addDeck: document.getElementById('add-deck'),
@@ -252,6 +253,7 @@ var Interface = (function(){
                         // buttons
                         editCardSaveButton: document.getElementById('edit-card-save-button'),
                         editCardCancelButton: document.getElementById('edit-card-cancel-button'),
+                        editCardDeleteButton: document.getElementById('edit-card-delete-button'),
                 
                 // add card view
                 addCard: document.getElementById('add-card'),
