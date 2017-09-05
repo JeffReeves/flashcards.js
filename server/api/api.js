@@ -36,7 +36,7 @@ router.get('/userexists/:username', function(req, res) {
     });
 
 // get a user by username
-router.get('/users/:username', function(req, res) {
+router.get('/user/:username', function(req, res) {
     
         var username = req.params.username;
     
@@ -52,7 +52,7 @@ router.get('/users/:username', function(req, res) {
                 connection.release();
     
                 if(results){
-                    res.send(results);
+                    res.send(results[0]);
                 }
     
                 if(error){
