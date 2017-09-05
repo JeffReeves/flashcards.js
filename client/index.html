@@ -51,6 +51,7 @@
     </header>
     
     <main>
+        <!-- CARD VIEW -->
         <section id="cardView" class="router-view">
             <div class="mui-select" id="card-decks">
                 <select name="card-deck-select" id="card-deck-select">
@@ -86,7 +87,10 @@
             </div>
         </section>
 
+        <!-- EDITOR VIEW -->
         <section id="editorView" class="router-view disabled">
+
+            <!-- MAIN EDITOR VIEW -->
             <div id="show-decks" class="router-editor-view">
                 <div id="editor-decks" class="mui-select">
                     <select name="editor-deck-select" id="editor-deck-select">
@@ -113,6 +117,8 @@
                     <button type="button" class="mui-btn mui-btn--raised mui-btn--editor" id="editor-card-add-button"><i class="material-icons editor-icon">add</i></button>
                 </div>
             </div>
+
+            <!-- EDIT DECK VIEW -->
             <div id="edit-deck" class="router-editor-view disabled">
                 <form class="mui-form" id="edit-deck-form">
                     <legend>Edit Deck</legend>
@@ -129,6 +135,8 @@
                     <button type="button" class="mui-btn mui-btn--raised mui-btn--editor" id="edit-deck-delete-button">Delete</button>
                 </form>
             </div>
+
+            <!-- ADD DECK VIEW -->
             <div id="add-deck" class="router-editor-view disabled">
                 <form class="mui-form" id="add-deck-form">
                     <legend>Add Deck</legend>
@@ -144,6 +152,8 @@
                     <button type="button" class="mui-btn mui-btn--raised mui-btn--editor" id="add-deck-cancel-button">Cancel</button>
                 </form>
             </div>
+
+            <!-- EDIT CARD VIEW -->
             <div id="edit-card" class="router-editor-view disabled">
                 <form class="mui-form" id="edit-card-form">
                     <legend>Edit Card</legend>
@@ -166,6 +176,8 @@
                     <button type="button" class="mui-btn mui-btn--raised mui-btn--editor" id="edit-card-delete-button">Delete</button>
                 </form>
             </div>
+
+            <!-- ADD CARD VIEW -->
             <div id="add-card" class="router-editor-view disabled">
                 <form class="mui-form" id="add-card-form">
                     <legend>Add Card</legend>
@@ -189,10 +201,12 @@
             </div>
         </section>
     </main>
+
     <footer>
         <p>flashcards.js created by Jeff Reeves &copy; 2017</p>
     </footer>
 
+    <!-- LOGIN MODAL -->
     <div id="loginModalContainer" style="display: none;">
         <div id="loginModal">
             <form class="mui-form" id="loginForm">
@@ -217,10 +231,10 @@
     <link href="dependencies/jQuery-autoComplete-1.0.7/jquery.auto-complete.css" rel="stylesheet" type="text/css" />
     <script src="dependencies/jQuery-autoComplete-1.0.7/jquery.auto-complete.js"></script>
     
-    <!-- load flashcards.js -->
-    <!-- <script type="text/javascript" src="scripts/example-decks.js"></script> -->
+    <!-- shared functions -->
     <script type="text/javascript" src="scripts/functions.js"></script>
-    <!-- <script type="text/javascript" src="scripts/flashcards.js"></script> -->
+
+    <!-- main client logic -->
     <script type="text/javascript" src="scripts/client-controller.js"></script>
 </body>
 </html>
