@@ -3,8 +3,6 @@
 'use strict';
 
 // UPDATES NEEDED:
-// - Get login modal to change to registration if the user doesn't exist
-// - Link all save and delete buttons with an API POST request 
 // - fully clone the users.decks into the interface.current.decks, 
 //     to prevent the pop method from actually removing the users.decks.cards.
 
@@ -142,6 +140,7 @@ var Modal = (function(){
 
             // try to get a value from the username input field
             var username = this.elements.username.value;
+            var password = this.elements.password.value || '';
 
             var self = this;
 
@@ -159,17 +158,13 @@ var Modal = (function(){
                         flashcardsjs.user = new User(username);
                     }
                     else {
-                        // TODO: make a POST request and create the new user
                         console.log('Creating new user...');
-                        
-                        $.getJSON(apiUrl + 'create/user/' + username)
+
+                        $.post(apiUrl + '/create/user', { 
+                            username: username,
+                            password: password
+                        }) 
                         .done(function(data){
-                            console.log('created user successfully!', data);
-                        })
-                        .fail(function(data){
-                            console.log('failed to create new user', data);
-                        })
-                        .then(function(data){
                             console.log('finished with create user method', data);
                             flashcardsjs.user = new User(username);
                         });
@@ -668,52 +663,114 @@ var Interface = (function(){
 
         // edit deck's save button
         this.elements.editDeckSaveButton.addEventListener('click', function(){
+            
+            var self = this;
+            
             console.log('editing existing deck...')
             var stack = this.elements.editDeckStack.value;
             var title = this.elements.editDeckTitle.value;
+            var username = this.current.username;
+            var deckId = this.current.editorDeck.id;
 
-            // TODO: sanitize input and send to API via POST request
-            console.log('[Existing Deck]');
-            console.log('Stack: ', stack);
-            console.log('Title: ', title);
+            $.post(apiUrl + '/edit/deck', { 
+                stack: stack, 
+                title: title,
+                username: username,
+                deckId: deckId
+            }) 
+            .done(function(data){
+                console.log('Edited existing deck', data);
+                console.log('[Existing Deck]');
+                console.log('Stack: ', stack);
+                console.log('Title: ', title);
+                console.log('username: ', username);
+                console.log('deckId: ', deckId);
+                fn.setVisible('router-editor-view', 'disabled', self.elements.showDecks.id);
+            });
         }.bind(this));
 
         // add deck's save button
         this.elements.addDeckSaveButton.addEventListener('click', function(){
+            
+            var self = this;
+            
             console.log('saving new deck...')
             var stack = this.elements.newDeckStack.value;
             var title = this.elements.newDeckTitle.value;
+            var username = this.current.username;
 
-            // TODO: sanitize input and send to API via POST request
-            console.log('[New Deck]');
-            console.log('Stack: ', stack);
-            console.log('Title: ', title);
+            $.post(apiUrl + '/create/deck', { 
+                stack: stack, 
+                title: title,
+                username: username
+            }) 
+            .done(function(data){
+                console.log('Created new deck', data);
+                console.log('[New Deck]');
+                console.log('Stack: ', stack);
+                console.log('Title: ', title);
+                fn.setVisible('router-editor-view', 'disabled', self.elements.showDecks.id);
+            });
+
         }.bind(this));
 
         // edit cards's save button
         this.elements.editCardSaveButton.addEventListener('click', function(){
+            
+            var self = this;
+            
             console.log('editing card...')
+            var username = this.current.username;
+            var cardId = this.current.editorCard.id;
+            var deckId = this.current.editorDeck.id;
             var front = this.elements.editCardFront.value;
             var back = this.elements.editCardBack.value;
-            var id = this.current.editorCard.id;
 
-            // TODO: sanitize input and send to API via POST request
-            console.log('[Edited Card]');
-            console.log('Id: ', id);
-            console.log('Front: ', front);
-            console.log('Back: ', back);
+            $.post(apiUrl + '/edit/card', { 
+                front: front, 
+                back: back,
+                cardId: cardId,
+                deckId: deckId,
+                username: username
+            }) 
+            .done(function(data){
+                console.log('Editing existing card', data);
+                console.log('[Existing Card]');
+                console.log('Front: ', front);
+                console.log('Back: ', back);
+                console.log('cardId: ', cardId);
+                console.log('deckId', deckId);
+                console.log('username: ', username);
+                fn.setVisible('router-editor-view', 'disabled', self.elements.showDecks.id);
+            });
         }.bind(this));
 
         // add cards's save button
         this.elements.addCardSaveButton.addEventListener('click', function(){
+            
+            var self = this;
+            
             console.log('saving new card...')
+            var username = this.current.username;
+            var deckId = this.current.editorDeck.id;
             var front = this.elements.newCardFront.value;
             var back = this.elements.newCardBack.value;
-
-            // TODO: sanitize input and send to API via POST request
-            console.log('[New Card]');
-            console.log('Front: ', front);
-            console.log('Back: ', back);
+            
+            $.post(apiUrl + '/create/card', { 
+                front: front, 
+                back: back,
+                deckId: deckId,
+                username: username
+            }) 
+            .done(function(data){
+                console.log('Creating new card', data);
+                console.log('[New Card]');
+                console.log('Front: ', front);
+                console.log('Back: ', back);
+                console.log('deckId', deckId);
+                console.log('username: ', username);
+                fn.setVisible('router-editor-view', 'disabled', self.elements.showDecks.id);
+            });
         }.bind(this));
 
         // edit deck's cancel button
@@ -1031,3 +1088,17 @@ var Interface = (function(){
 // MAIN
 var flashcardsjs = {};
 flashcardsjs.interface = new Interface(); // create a new interface
+
+
+// TEST
+
+var test = function(){
+    $.post(apiUrl + '/create/deck', { 
+        stack: 'Testing Stack', 
+        deck: 'Testing Deck',
+        deckId: 7
+    }) 
+    .done(function(data){
+        console.log('data from post test', data);
+    });
+};

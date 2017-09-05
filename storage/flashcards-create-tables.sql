@@ -149,6 +149,20 @@ ON cards.deckid = decks.id
 WHERE users.username = "jeff"
 ORDER BY decks.id, cards.id;
 
+
+/* UPDATE EXISTING VALUES */
+
+/* UPDATE DECK */
+UPDATE decks 
+SET decks.stack = "stack", decks.title = "title"
+WHERE decks.id = "deckId"
+
+/* UPDATE CARD */
+
+UPDATE cards
+SET cards.front = "front", cards.back = "back"
+WHERE cards.id = "cardId"
+
 /* PASS VARIABLES TO EJS */
 -- <script>
 --     var cards = JSON.parse(<%-JSON.stringify(cards) %>);

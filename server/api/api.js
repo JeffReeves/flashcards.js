@@ -151,10 +151,10 @@ router.get('/cards/deckid/:deckid', function(req, res) {
     });
 });
 
-router.get('/create/user/:username', function(req, res){
+router.post('/create/user', function(req, res){
 
-    var username = req.params.username;
-    var password = 'default';
+    var username = req.body.username;
+    var password = req.body.password;
 
     var ultimateResults = [];
     var ultimateError = [];
@@ -230,6 +230,127 @@ router.get('/create/user/:username', function(req, res){
                 });
 
                 // res.send(ultimateResults);
+            }
+
+            if(error){
+                res.send(error);
+            }
+        });
+    });
+});
+
+
+router.post('/create/deck', function(req, res){
+
+    var username = req.body.username;
+    var stack = req.body.stack;
+    var title = req.body.title;
+    
+    // create a new deck for the user
+    var query = 'INSERT INTO decks (userid, title, stack) ' + 
+    'SELECT id, "' + title + '", "' + stack + '" ' +
+    'FROM users WHERE username = "' + username +'";'; 
+
+    db.getConnection(function(err, connection){
+
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
+
+            if(results){
+                res.send(results);
+            }
+
+            if(error){
+                res.send(error);
+            }
+        });
+    });
+});
+
+router.post('/create/card', function(req, res){
+    
+    var username = req.body.username;
+    var deckId = req.body.deckId;
+    var front = req.body.front;
+    var back = req.body.back;
+
+    // create a new card for the deck
+    var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +   
+    'INSERT INTO cards (deckid, front, back) ' +
+    'VALUES ("' + deckId + '", ' +
+    '"' + front + '", ' + 
+    '"' + back + '"' +
+    ');';
+
+    db.getConnection(function(err, connection){
+
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
+
+            if(results){
+                res.send(results);
+            }
+
+            if(error){
+                res.send(error);
+            }
+        });
+    });
+});
+
+
+router.post('/edit/deck', function(req, res){
+
+    var username = req.body.username;
+    var stack = req.body.stack;
+    var title = req.body.title;
+    var deckId = req.body.deckId;
+    
+    // edit the existing deck
+    var query = 'UPDATE decks ' +
+    'SET decks.stack = "' + stack + '", decks.title = "' + title + '" ' +
+    'WHERE decks.id = "' + deckId + '";';
+
+    db.getConnection(function(err, connection){
+
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
+
+            if(results){
+                res.send(results);
+            }
+
+            if(error){
+                res.send(error);
+            }
+        });
+    });
+});
+
+router.post('/edit/card', function(req, res){
+    
+    var username = req.body.username;
+    var cardId = req.body.cardId;
+    var deckId = req.body.deckId;
+    var front = req.body.front;
+    var back = req.body.back;
+
+    // create a new card for the deck
+    var query = 'UPDATE cards ' +
+    'SET cards.front = "' + front + '", cards.back = "' + back + '" ' +
+    'WHERE cards.id = "' + cardId + '";';
+
+    db.getConnection(function(err, connection){
+
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
+
+            if(results){
+                res.send(results);
             }
 
             if(error){
