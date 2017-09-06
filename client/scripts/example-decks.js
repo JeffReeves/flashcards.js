@@ -1,4 +1,4 @@
-var decks = [
+export let exampleDecks = [
     { 
         id: 0,
         title: 'CH1 - Command Line',

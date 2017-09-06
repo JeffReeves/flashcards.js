@@ -2,6 +2,10 @@ import { User } from './classes/user.js';
 import { Deck } from './classes/deck.js';
 import { Card } from './classes/card.js';
 
-import { exampleDecks } from './example-decks.js';
+export class FlashcardsDataService {
 
-console.log(exampleDecks);
+    constructor() {
+        this.decks = [];
+        this.cards = [];
+    }
+}
