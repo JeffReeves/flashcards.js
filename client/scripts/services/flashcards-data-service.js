@@ -6,15 +6,21 @@ export class FlashcardsDataService {
 
     constructor() {
         this.users = [];
+        this.stacks = [];
         this.decks = [];
         this.cards = [];
     }
 
-    loadData(users, decks, cards) {
+    loadData(users, stacks, decks, cards) {
 
         // users
         for(let data of users) {
             this.users.push(data);
+        }
+
+        // stacks
+        for(let data of stacks) {
+            this.stacks.push(data);
         }
 
         // decks
