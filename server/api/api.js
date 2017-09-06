@@ -38,40 +38,70 @@ router.get('/userexists/:username', function(req, res) {
 // get a user by username
 router.get('/user/:username', function(req, res) {
     
-        var username = req.params.username;
-    
-        // select all users by username
-        var query = 'SELECT users.id, users.username ' +
-                    'FROM users ' +
-                    'WHERE users.username = "' + username + '"LIMIT 1 ';
-    
-        db.getConnection(function(err, connection){
-    
-            connection.query(query, function(error, results, fields) {
-    
-                connection.release();
-    
-                if(results){
-                    res.send(results[0]);
-                }
-    
-                if(error){
-                    res.send(error);
-                }
-            });
+    var username = req.params.username;
+
+    // select all users by username
+    var query = 'SELECT users.id, users.username ' +
+                'FROM users ' +
+                'WHERE users.username = "' + username + '"LIMIT 1 ';
+
+    db.getConnection(function(err, connection){
+
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
+
+            if(results){
+                res.send(results);
+            }
+
+            if(error){
+                res.send(error);
+            }
         });
     });
+});
 
-router.get('/decks/userid/:id', function(req, res) {
+
+router.get('/stacks/userid/:id', function(req, res) {
 
     var userId = req.params.id;
 
     // select all decks for the username
-    var query = 'SELECT decks.id, decks.title, decks.stack ' +
-                'FROM decks ' +
+    var query = 'SELECT stacks.id, stacks.name, stacks.userid ' +
+                'FROM stacks ' +
                 'INNER JOIN users ' +
-                'ON decks.userid=users.id ' +
+                'ON stacks.userid=users.id ' +
                 'WHERE users.id = "' + userId + '" ' +
+                'ORDER BY stacks.id;';
+
+    db.getConnection(function(err, connection){
+
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
+
+            if(results){
+                res.send(results);
+            }
+
+            if(error){
+                res.send(error);
+            }
+        });
+    });
+});
+
+router.get('/decks/stackid/:id', function(req, res) {
+
+    var stackId = req.params.id;
+
+    // select all decks for the username
+    var query = 'SELECT decks.id, decks.title, decks.stackid ' +
+                'FROM decks ' +
+                'INNER JOIN stacks ' +
+                'ON decks.stackid=stacks.id ' +
+                'WHERE stacks.id = "' + stackId + '" ' +
                 'ORDER BY decks.id;';
 
     db.getConnection(function(err, connection){
@@ -91,20 +121,18 @@ router.get('/decks/userid/:id', function(req, res) {
     });
 });
 
-router.get('/cards/userid/:userid', function(req, res) {
+router.get('/cards/deckid/:id', function(req, res) {
 
-    var userid = req.params.userid;
+    var deckId = req.params.id;
 
     // select all cards for a user
     var query = 'SELECT ' +
-            'cards.front, cards.back, cards.id, cards.deckid ' +
-            'FROM users ' +
+            'cards.id, cards.front, cards.back, cards.status, cards.deckid ' +
+            'FROM cards ' +
             'INNER JOIN decks ' +
-            'ON decks.userid = users.id ' +
-            'INNER JOIN cards ' +
-            'ON cards.deckid = decks.id ' +
-            'WHERE users.id = "' + userid + '" ' +
-            'ORDER BY decks.id, cards.id;';
+            'ON cards.deckid=decks.id ' +
+            'WHERE decks.id = "' + deckId + '" ' +
+            'ORDER BY cards.id;';
 
     db.getConnection(function(err, connection){
 
@@ -123,33 +151,6 @@ router.get('/cards/userid/:userid', function(req, res) {
     });
 });
 
-
-router.get('/cards/deckid/:deckid', function(req, res) {
-
-    var deckid = req.params.deckid;
-
-    // select all cards for a deck by id
-    var query = 'SELECT cards.id, cards.front, cards.back, cards.status ' +
-                'FROM cards INNER JOIN decks ON cards.deckid=decks.id ' +
-                'WHERE decks.id = ' + deckid + ' ' +
-                'ORDER BY cards.id';
-
-    db.getConnection(function(err, connection){
-
-        connection.query(query, function(error, results, fields) {
-
-            connection.release();
-
-            if(results){
-                res.send(results);
-            }
-
-            if(error){
-                res.send(error);
-            }
-        });
-    });
-});
 
 router.post('/create/user', function(req, res){
 

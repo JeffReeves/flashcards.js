@@ -1,0 +1,48 @@
+MariaDB [flashcardsjs]> select * from users;
++----------+----------+----+
+| username | password | id |
++----------+----------+----+
+| jeff     | aoeui    |  1 |
++----------+----------+----+
+1 row in set (0.00 sec)
+
+
+MariaDB [flashcardsjs]> select * from stacks;                                   
++----+--------+--------+
+| id | name   | userid |
++----+--------+--------+
+|  1 | Linux+ |      1 |
+|  2 | Excel  |      1 |
++----+--------+--------+
+2 rows in set (0.00 sec)
+
+
+MariaDB [flashcardsjs]> select * from decks;
++---------+------------------------+----+
+| stackid | title                  | id |
++---------+------------------------+----+
+|       1 | CH1 - Command Line     |  1 |
+|       1 | CH2 - Package Managers |  2 |
+|       1 | CH2 - Libraries        |  3 |
+|       1 | CH2 - Processes        |  4 |
+|       2 | Excel Basics           |  5 |
++---------+------------------------+----+
+5 rows in set (0.00 sec)
+
+
+MariaDB [flashcardsjs]> select * from cards limit 1;
++--------+---------------------------------------------+-----------------+----+--------+
+| deckid | front                                       | back            | id | status |
++--------+---------------------------------------------+-----------------+----+--------+
+|      1 | Where is the file that stores bash history? | ~/.bash_history |  1 | NULL   |
++--------+---------------------------------------------+-----------------+----+--------+
+1 row in set (0.00 sec)
+
+
+----
+
+FlashcardsDataService {users: Array(1), stacks: Array(1), decks: Array(2), cards: Array(5)}
+cards: (5) [Array(196), Array(166), Array(38), Array(128), Array(20)]
+decks: (2) [Array(4), Array(1)]
+stacks: [Array(2)]
+users: [Array(1)]
