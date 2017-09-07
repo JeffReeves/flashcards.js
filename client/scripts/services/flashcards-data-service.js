@@ -22,10 +22,13 @@ export class FlashcardsDataService {
         this.user.stacks = stacks;
 
         // decks 
+        // should be replaced by a for loop to get the decks for each stack
         this.user.stacks[0].decks = decks1; // deck 1
         this.user.stacks[1].decks = decks2; // deck 2
 
         // cards
+        // should be replaced by a for loop to get cards for each deck,
+        //     inside a for loop of each stack
         this.user.stacks[0].decks[0].cards = cards1; // stack 1
         this.user.stacks[0].decks[1].cards = cards2;
         this.user.stacks[0].decks[2].cards = cards3;

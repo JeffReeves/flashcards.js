@@ -25,7 +25,7 @@ router.get('/userexists/:username', function(req, res) {
                 if(results){
                     // returns [{"userexists":1}] if true
                     // returns [{"userexists":0}] if false
-                    res.send(results);
+                    res.send(results[0]); // sending just the object
                 }
     
                 if(error){
@@ -52,7 +52,7 @@ router.get('/user/:username', function(req, res) {
             connection.release();
 
             if(results){
-                res.send(results);
+                res.send(results[0]); // sending just the object
             }
 
             if(error){
