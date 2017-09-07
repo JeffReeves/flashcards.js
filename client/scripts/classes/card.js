@@ -1,8 +1,8 @@
 export class Card {
     
-    constructor(id, deckId, front, back){
-        this.id = id;
+    constructor(deckId, id, front, back){
         this.deckId = deckId;
+        this.id = id;
         this.front = front;
         this.back = back;
     }
