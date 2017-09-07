@@ -7,15 +7,26 @@ import { Card } from './classes/card.js';
 // services 
 import { FlashcardsDataService } from './services/flashcards-data-service.js';
 
-// data
-import { exampleUsers } from './example-data.js';
-import { exampleStacks } from './example-data.js';
-import { exampleDecks } from './example-data.js';
-import { exampleCards } from './example-data.js';
+// data (hardcoded example for now)
+import { user } from './example-data.js';
+import { stacks } from './example-data.js';
+import { decks1 } from './example-data.js';
+import { decks2 } from './example-data.js';
+import { cards1 } from './example-data.js';
+import { cards2 } from './example-data.js';
+import { cards3 } from './example-data.js';
+import { cards4 } from './example-data.js';
+import { cards5 } from './example-data.js';
+
+import { exampleDataSorted } from './example-data-presorted.js';
 
 // start data service
 let dataService = new FlashcardsDataService();
-//dataService.loadData(exampleUsers, exampleStacks, exampleDecks, exampleCards);
-dataService.loadData2(exampleUsers, exampleStacks, exampleDecks, exampleCards);
+let dataService2 = new FlashcardsDataService();
 
-console.log(dataService);
+// load the data into the dataService object
+dataService.loadData(user, stacks, decks1, decks2, cards1, cards2, cards3, cards4, cards5);
+dataService2.loadDataPreformatted(exampleDataSorted);
+
+console.log('dataService', dataService);
+console.log('dataService2', dataService2);

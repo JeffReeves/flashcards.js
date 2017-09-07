@@ -1,14 +1,16 @@
+export let exampleDataSorted = {}
+
 // https://alchemist.digital/flashcards/api/user/jeff
-export let user = { id: 1, username: "jeff" };
+exampleDataSorted.user = { id: 1, username: "jeff" };
 
 // https://alchemist.digital/flashcards/api/stacks/userid/1
-export let stacks = [
+exampleDataSorted.user.stacks = [
     { id: 1, name: "Linux+", userid: 1 },
     { id: 2, name: "Excel", userid: 1 }
 ];
 
 // https://alchemist.digital/flashcards/api/decks/stackid/1
-export let decks1 = [
+exampleDataSorted.user.stacks[0].decks = [
     { id: 1, title: "CH1 - Command Line", stackid: 1 },
     { id: 2, title: "CH2 - Package Managers", stackid: 1 },
     { id: 3, title: "CH2 - Libraries", stackid: 1 },
@@ -16,12 +18,12 @@ export let decks1 = [
 ];
 
 // https://alchemist.digital/flashcards/api/decks/stackid/2
-export let decks2 = [
+exampleDataSorted.user.stacks[1].decks = [
     { id: 5, title: "Excel Basics", stackid: 2 }
 ];
 
 // https://alchemist.digital/flashcards/api/cards/deckid/1
-export let cards1 = [
+exampleDataSorted.user.stacks[0].decks[0].cards = [
     { id: 1, front: "Where is the file that stores bash history?", back: "~/.bash_history", status: null, deckid: 1 },
     { id: 2, front: "Which command can concatenate files together and send the resulting combination to STDOUT (1)?", back: "cat \n\nEx. cat first.txt second.txt > combined.txt", status: null, deckid: 1 },
     { id: 3, front: "Which command directly modifies a file's content and sends the changes to STDOUT (0)?", back: "sed", status: null, deckid: 1 },
@@ -221,7 +223,7 @@ export let cards1 = [
 ];
 
 // https://alchemist.digital/flashcards/api/cards/deckid/2
-export let cards2 = [
+exampleDataSorted.user.stacks[0].decks[1].cards = [
     { id: 4, front: "Before upgrading a package with dpkg, what may need to be done first? and what is the command?", back: "The old package may need to be removed first.\n\n# dpkg -r <package-name>", status: null, deckid: 2 },
     { id: 5, front: "Binary packages typically contain what type of content?", back: "Subdirectories that mimic the layout of the Linux root directory (i.e. /, /etc, /usr, etc.).", status: null, deckid: 2 },
     { id: 6, front: "Debian package tools combine and compile source packages to create what?", back: "Debian binary packages", status: null, deckid: 2 },
@@ -391,7 +393,7 @@ export let cards2 = [
 ];
 
 // https://alchemist.digital/flashcards/api/cards/deckid/3
-export let cards3 = [
+exampleDataSorted.user.stacks[0].decks[2].cards = [
     { id: 7, front: "How can binary program files locate libraries?", back: "Either by name alone (ex. libc.so.6) or by providing a complete path (ex. /lib/libc.so.6).\n\nNote: a library path (containing directories to search through) must be configured to use names alone.", status: null, deckid: 3 },
     { id: 8, front: "How can the LD_LIBRARY_PATH environment variable be set?", back: "export LD_LIBRARY_PATH=<path1>:<pathN>", status: null, deckid: 3 },
     { id: 9, front: "If all dependencies are met for a program but it still fails to load due to missing dependencies, what can be done?", back: "Use the ldd command on the libraries shown when running ldd on the program. Sometimes these libraries have dependencies that may be missing.", status: null, deckid: 3 },
@@ -433,7 +435,7 @@ export let cards3 = [
 ];
 
 // https://alchemist.digital/flashcards/api/cards/deckid/4
-export let cards4 = [
+exampleDataSorted.user.stacks[0].decks[3].cards = [
     { id: 10, front: "Because many shells include their own internal version of the kill command, what must be done to ensure the external kill command is being used?", back: "Call it with a full path\n\ni.e. /bin/kill", status: null, deckid: 4 },
     { id: 11, front: "By default, ps displays which processes? and how wide is the output?", back: "ps displays only processes that were run from its own terminal (options -A, -e, and x can overwrite this).\n\nThe output is limited to being 80 characters wide and is truncated beyond that length (options -w and w can ovewrite this).", status: null, deckid: 4 },
     { id: 12, front: "By default, top sorts entries by what? and how often does it update?", back: "CPU use\n\nEvery five (5) seconds", status: null, deckid: 4 },
@@ -565,7 +567,7 @@ export let cards4 = [
 ];
 
 // https://alchemist.digital/flashcards/api/cards/deckid/5
-export let cards5 = [
+exampleDataSorted.user.stacks[1].decks[0].cards = [
     { id: 529, front: "How would you sum a column from A1 to A4 into A5?", back: "Put =SUM(A1:A4) in A5", status: null, deckid: 5 },
     { id: 530, front: "How would you sum a column from C4 to C9 into C1, if the value is over 20?", back: "Put =SUMIF(C4:C9,\">20\") into C1", status: null, deckid: 5 },
     { id: 531, front: "How do you \"fill down\" a column with a mouse?", back: "Move to the lower-right corner of a cell until it becomes a cross, then drag down across cells.", status: null, deckid: 5 },
