@@ -3,20 +3,33 @@ import { Stack } from '../classes/stack.js';
 import { Deck } from '../classes/deck.js';
 import { Card } from '../classes/card.js';
 
+import { DataError } from './data-error.js';
+
 export class FlashcardsDataService {
 
-    constructor() {
+    constructor(){
         this.user = {};
+        this.errors = [];
     }
 
-    loadData(user, stacks, decks1, decks2, cards1, cards2, cards3, cards4, cards5) {
+    loadData(user, stacks, decks1, decks2, cards1, cards2, cards3, cards4, cards5){
         
         // hardcoded data for now
         // eventually this data will be pulled from nested 
         //    asynchronous get requests that return promises
 
         // user
-        this.user = this.loadUser(user);
+        if(this.validateUser(user)){
+            if(user){
+                this.user = this.loadUser(user);
+            }
+            else {
+                this.errors.push(new DataError('No user', user));
+            }
+        }
+        else {
+            this.errors.push(new DataError('Invalid user', user));
+        }
 
         // stacks 
         this.user.stacks = this.loadStacks(stacks);
@@ -35,14 +48,43 @@ export class FlashcardsDataService {
         this.user.stacks[0].decks[3].cards = this.loadCards(cards4);
         
         this.user.stacks[1].decks[0].cards = this.loadCards(cards5); // stack 2
-
     }
 
-    loadUser(user) {
-        return new User(user.id, user.username, user.password)
+    validateUser(user){
+        let isErrorFree = true;
+        let requiredProperties = 'id username'.split(' ');
+        // make sure each proprty is present
+        for(let property of requiredProperties){
+            if(!user[property]){
+                this.errors.push(new DataError(`Invalid property ${property}`, user));
+                isErrorFree = false;
+            }
+        }
+        // check id for valid value
+        if(Number.isNaN(Number.parseInt(user.id))) {
+            this.errors.push(new DataError(`invalid value for user id`, user));
+            isErrorFree = false;
+        }
+        // check username for valid value
+        if(typeof(user.username) !== 'string'){
+            this.errors.push(new DataError(`invalid value for username`, user));
+            isErrorFree = false;
+        }
+
+        return isErrorFree;
     }
 
-    loadStacks(stacks) {
+    loadUser(user){
+        try {
+            return new User(user.id, user.username, user.password)
+        }
+        catch(e){
+            this.errors.push(new DataError('[ERROR] Unable to create user'));
+        }
+        return null;
+    }
+
+    loadStacks(stacks){
         var s = [];
         for(let stack of stacks){
             s.push(new Stack(stack.userid, stack.id, stack.name));
@@ -50,7 +92,7 @@ export class FlashcardsDataService {
         return s;
     }
 
-    loadDecks(decks) {
+    loadDecks(decks){
         var d = [];
         for(let deck of decks){
             d.push(new Deck(deck.stackid, deck.id, deck.title));
@@ -58,7 +100,7 @@ export class FlashcardsDataService {
         return d;
     }
 
-    loadCards(cards) {
+    loadCards(cards){
         var c = [];
         for(let card of cards){
             c.push(new Card(card.deckid, card.id, card.front, card.back, card.status));
@@ -66,7 +108,7 @@ export class FlashcardsDataService {
         return c;
     }
 
-    loadDataPreformatted(user) {
+    loadDataPreformatted(user){
         
         // data preformatted from API
 
