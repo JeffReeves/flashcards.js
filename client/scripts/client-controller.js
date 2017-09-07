@@ -3,7 +3,7 @@
 'use strict';
 
 // UPDATES NEEDED:
-// - fully clone the users.decks into the interface.current.decks, 
+// - fully clone the users.decks into the UI.current.decks, 
 //     to prevent the pop method from actually removing the users.decks.cards.
 
 
@@ -23,13 +23,71 @@ if(window.location.origin.indexOf(productionDomain) === -1){
 
 var User = (function(){
 
-    function User(username){
-        this.username = username;
+    function User(user){
         this.id = 0;
+        this.username = 'anonymous';
+        this.stacks = [];
+    }
+
+    return User;
+}());
+
+
+//--[ STACK ]------------------------------------------------------------------
+
+var Stack = (function(){
+    
+    function Stack(obj){
+        this.userId = obj.userid;
+        this.id = obj.id;
+        this.name = obj.name;
         this.decks = [];
     }
 
-    User.prototype.getUserId = function(){
+    return Stack;
+}());
+
+
+//--[ DECK ]-------------------------------------------------------------------
+
+var Deck = (function(){
+    
+    function Deck(obj){
+        this.stackId = obj.stackid;
+        this.id = obj.id;
+        this.title = obj.title;
+        this.cards = [];
+    }
+
+    return Deck;
+}());
+
+
+//--[ CARD ]-------------------------------------------------------------------
+
+var Card = (function(){
+
+    function Card(obj){
+        this.deckId = obj.deckid;
+        this.id = obj.id;
+        this.front = obj.front;
+        this.back = obj.back;
+        this.status = obj.status;
+    }
+
+    return Card;
+}());
+
+
+//--[ DATA ]-------------------------------------------------------------------
+
+var Data = (function(){
+
+    function Data(){
+        this.user = {};
+    }
+
+    Data.prototype.getUserId = function(){
         return fn.getJSON(apiUrl + 'users/' + this.username)
         .then(function(user){
             console.log("Success!", user);
@@ -40,7 +98,7 @@ var User = (function(){
         });
     }
 
-    User.prototype.getDecks = function(){
+    Data.prototype.getDecks = function(){
         return this.getUserId()
         .then(function(user){
             return fn.getJSON(apiUrl + 'decks/userid/' + user.id)
@@ -55,7 +113,7 @@ var User = (function(){
 
     }
 
-    User.prototype.getCards = function(deckId){
+    Data.prototype.getCards = function(deckId){
         return this.getDecks()
         .then(function(decks){
             var promises = [];
@@ -84,38 +142,8 @@ var User = (function(){
         });
     }
 
-    return User;
+    return Data;
 }());
-
-//--[ DECK ]-------------------------------------------------------------------
-
-var Deck = (function(){
-    
-    function Deck(obj){
-        this.title = obj.title;
-        this.id = obj.id || null;
-        this.stack = obj.stack;
-        this.cards = [];
-    }
-
-    return Deck;
-}());
-
-
-//--[ CARD ]-------------------------------------------------------------------
-
-var Card = (function(){
-
-    function Card(obj){
-        this.front = obj.front;
-        this.back = obj.back;
-        this.id = obj.id || null;
-        this.status = obj.status || null;
-    }
-
-    return Card;
-}());
-
 
 //--[ MODAL ]------------------------------------------------------------------
 
@@ -193,11 +221,11 @@ var Modal = (function(){
 }());
 
 
-//--[ INTERFACE ]--------------------------------------------------------------
+//--[ UI ]---------------------------------------------------------------------
 
-var Interface = (function(){
+var UI = (function(){
     
-    function Interface(){
+    function UI(){
 
         // currently held values (decks, cards, users, etc.)
         this.current = {};
@@ -305,7 +333,7 @@ var Interface = (function(){
         };
     }
 
-    Interface.prototype.getUsersCards = function(username){
+    UI.prototype.getUsersCards = function(username){
             
         var self = this;
 
@@ -358,14 +386,14 @@ var Interface = (function(){
                 // we now have all decks and cards for the user
                 console.log('got everything we need:', self);
 
-                // tell the interface that a user logged in
-                flashcardsjs.interface.userLogin(self);
+                // tell the UI that a user logged in
+                flashcardsjs.UI.userLogin(self);
             })
         });
     }
 
     // occurs after a user has logged in
-    Interface.prototype.userLogin = function(user){
+    UI.prototype.userLogin = function(user){
     
         // user details
         this.current.username = user.username;
@@ -389,53 +417,53 @@ var Interface = (function(){
         //this.setupEditor();
     }
 
-    Interface.prototype.logIn = function(){
+    UI.prototype.logIn = function(){
 
         var self = flashcardsjs;
 
         // open the login modal
-        self.interface.elements.modal.open();
+        self.UI.elements.modal.open();
     }
 
-    Interface.prototype.logOut = function(){
+    UI.prototype.logOut = function(){
         var self = flashcardsjs;
 
         // remove user from current end destroy user object
         self.user = undefined;
         
         // remove all current values 
-        self.interface.clearCurrent();
+        self.UI.clearCurrent();
 
         // reset progress
-        self.interface.resetProgress();
+        self.UI.resetProgress();
 
         // set the front and back of the cards
-        self.interface.setFront('Please log in');
-        self.interface.setBack('');
+        self.UI.setFront('Please log in');
+        self.UI.setBack('');
 
         // set the dropdown menu back to empty
-        self.interface.elements.cardDeckSelect.innerHTML = '<optgroup label="Deck Group"> ' +
+        self.UI.elements.cardDeckSelect.innerHTML = '<optgroup label="Deck Group"> ' +
             '<option>Decks Will Appear Here</option>' +
             '</optgroup>';
 
         // show the login menu item
-        fn.removeClass(self.interface.elements.menuLogin, 'disabled');
+        fn.removeClass(self.UI.elements.menuLogin, 'disabled');
         
         // hide the card view, editor view, and logout menu items
-        fn.addClass(self.interface.elements.menuCardView, 'disabled');
-        fn.addClass(self.interface.elements.menuEditView, 'disabled');
-        fn.addClass(self.interface.elements.menuLogout, 'disabled');
+        fn.addClass(self.UI.elements.menuCardView, 'disabled');
+        fn.addClass(self.UI.elements.menuEditView, 'disabled');
+        fn.addClass(self.UI.elements.menuLogout, 'disabled');
 
         // move to card view
-        fn.setVisible('router-view', 'disabled', self.interface.elements.cardView.id);
+        fn.setVisible('router-view', 'disabled', self.UI.elements.cardView.id);
 
         // re-open the login modal
-        self.interface.elements.modal.open();
+        self.UI.elements.modal.open();
     }
 
-    Interface.prototype.getButtonValue = function(){
+    UI.prototype.getButtonValue = function(){
         
-        var self = flashcardsjs.interface;
+        var self = flashcardsjs.UI;
 
         // get the id of the button
         var buttonId = this.id;
@@ -461,13 +489,13 @@ var Interface = (function(){
         }
     }
 
-    Interface.prototype.enableCardButtons = function(){
+    UI.prototype.enableCardButtons = function(){
         this.elements.correctButton.addEventListener('click', this.getButtonValue);
         this.elements.incorrectButton.addEventListener('click', this.getButtonValue);
         this.elements.skipButton.addEventListener('click', this.getButtonValue);
     }
 
-    Interface.prototype.setInputDirty = function(elements){
+    UI.prototype.setInputDirty = function(elements){
 
         // untouched classes "mui--is-empty mui--is-untouched mui--is-pristine"
         // touched classes "mui--is-touched mui--is-dirty mui--is-not-empty"
@@ -483,18 +511,18 @@ var Interface = (function(){
         }
     }
 
-    Interface.prototype.flipCard = function(){
-        var self = flashcardsjs.interface;
+    UI.prototype.flipCard = function(){
+        var self = flashcardsjs.UI;
         fn.addClass(self.elements.flashcard, 'flipped');
     }
 
-    Interface.prototype.flipCardBack = function(){
-        var self = flashcardsjs.interface;
+    UI.prototype.flipCardBack = function(){
+        var self = flashcardsjs.UI;
         fn.removeClass(self.elements.flashcard, 'flipped');
     }
 
     // enables and disables card flipping
-    Interface.prototype.enableEventListeners = function(){
+    UI.prototype.enableEventListeners = function(){
         
         // mouse enter and leave events to flip card
         this.elements.flashcardContainer.addEventListener('mouseenter', this.flipCard);
@@ -784,7 +812,7 @@ var Interface = (function(){
         this.enableCardButtons();
     }
 
-    Interface.prototype.resetProgress = function(){
+    UI.prototype.resetProgress = function(){
 
         // reset the width to 0
         this.elements.correctProgress.style.width = '0%';
@@ -798,7 +826,7 @@ var Interface = (function(){
     }
 
     // updates the progress bar
-    Interface.prototype.updateProgress = function(button){
+    UI.prototype.updateProgress = function(button){
 
         // get current card's status
         var status = this.current.card.status;
@@ -869,7 +897,7 @@ var Interface = (function(){
             (this.current.skipped / this.current.totalCards) * 100 + '%';
     };
 
-    Interface.prototype.addOptions = function(options){
+    UI.prototype.addOptions = function(options){
     // options = [{stack: '', decks: [{id: 0, title: ''}]}]
 
         // remove existing dropdown elements
@@ -922,7 +950,7 @@ var Interface = (function(){
         }       
     }
 
-    Interface.prototype.setupDeckSelection = function(){
+    UI.prototype.setupDeckSelection = function(){
 
         var decks = this.current.decks;  
         var stackNames = [];
@@ -986,14 +1014,14 @@ var Interface = (function(){
         }.bind(this));
     }
 
-    Interface.prototype.setupFindCardAutoComplete = function(){
+    UI.prototype.setupFindCardAutoComplete = function(){
         var self = this;
         $('#editor-card-input').autoComplete({
             minChars: 2,
             cache: false,
             source: function(term, suggest){
                 term = term.toLowerCase();
-                var choices = flashcardsjs.interface.current.editorDeck.cards;
+                var choices = flashcardsjs.UI.current.editorDeck.cards;
                 var suggestions = [];
                 for(var i = 0; i < choices.length; i++){
                     if(choices[i].front.toLowerCase().indexOf(term) !== -1){
@@ -1009,7 +1037,7 @@ var Interface = (function(){
         });
     }
 
-    Interface.prototype.selectEditorDeck = function(deckId){
+    UI.prototype.selectEditorDeck = function(deckId){
         // set the editor decks and cards after the user logs in
 
         if(deckId){
@@ -1032,7 +1060,7 @@ var Interface = (function(){
 
     // set the current deck to the one selected in the dropdown
     // or default to the first one available
-    Interface.prototype.selectCardViewDeck = function(deckId){
+    UI.prototype.selectCardViewDeck = function(deckId){
 
         if(deckId){
 
@@ -1058,15 +1086,15 @@ var Interface = (function(){
         this.getNewCard()
     }
 
-    Interface.prototype.setFront = function(text){
+    UI.prototype.setFront = function(text){
         this.elements.frontText.innerText = text;
     }
 
-    Interface.prototype.setBack = function(text){
+    UI.prototype.setBack = function(text){
         this.elements.backText.innerText = text;
     }
 
-    Interface.prototype.getNewCard = function(){
+    UI.prototype.getNewCard = function(){
         
         if(this.current.cards.length > 0){
 
@@ -1092,21 +1120,21 @@ var Interface = (function(){
         }
     }
 
-    return Interface;
+    return UI;
 }());
 
 
 /*==[ MAIN ]=================================================================*/
 
 var flashcardsjs = {};
-flashcardsjs.interface = new Interface(); // create a new interface
-flashcardsjs.interface.elements.modal.open(); // open the login modal
+flashcardsjs.UI = new UI(); // create a new user interface
+flashcardsjs.UI.elements.modal.open(); // open the login modal
 
 // set the method for flipping cards
-flashcardsjs.interface.enableEventListeners();
+flashcardsjs.UI.enableEventListeners();
 
 // enable the autocomplete option on the find card input field
-//flashcardsjs.interface.setupFindCardAutoComplete();
+//flashcardsjs.UI.setupFindCardAutoComplete();
 
        
 
