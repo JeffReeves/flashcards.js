@@ -200,20 +200,20 @@ var Modal = (function(){
         'onclose': function(){} 
     };
     
-    function Modal(data){
+    function Modal(dataInstance){
         this.username = '';
         this.password = '';
         this.elements = {};
-        this.data = {};
+        this.dataInstance = {};
         
-        this.setData(data);
+        this.setData(dataInstance);
         this.getElements();
         this.setEventListeners();
     }
 
-    Modal.prototype.setData = function(data){
-        if(data){
-            this.data = data;
+    Modal.prototype.setData = function(dataInstance){
+        if(dataInstance){
+            this.dataInstance = dataInstance;
         }
     }
 
@@ -241,11 +241,11 @@ var Modal = (function(){
 
             if(username){
                 // check if user exists 
-                this.data.doesUserExist(username)
+                this.dataInstance.doesUserExist(username)
                 .then(function(exists){
                     
                     if(exists === true){
-                        this.data.user = new User(username);
+                        this.dataInstance.user = new User(username);
                     }
 
                     // close the modal
