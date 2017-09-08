@@ -13,9 +13,9 @@
 
 var User = (function(){
 
-    function User(user){
+    function User(username){
         this.id = 0;
-        this.username = 'anonymous';
+        this.username = username || 'anonymous';
         this.stacks = [];
     }
 
@@ -76,7 +76,6 @@ var Data = (function(){
     function Data(){
         this.api = {};
         this.user = {};
-        this.user.exists = false;
 
         this.setApiUrl();
     }
@@ -119,12 +118,16 @@ var Data = (function(){
     }
 
     Data.prototype.doesUserExist = function(username){
+        var that = this; 
         return fn.getJSON(this.api.active.exists + username)
         .then(function(data){
-            console.log("Success!", data.userexists);
-            return data.userexists;
+            if(data.userexists === 1){
+                return true;
+            }
+            else {
+                return false;
+            }
         }, function(error){
-            console.error("Failed!", data);
             return error;
         });
     }
@@ -197,14 +200,21 @@ var Modal = (function(){
         'onclose': function(){} 
     };
     
-    function Modal(user){
+    function Modal(data){
         this.username = '';
         this.password = '';
         this.elements = {};
-        this.user = {};
+        this.data = {};
         
+        this.setData(data);
         this.getElements();
         this.setEventListeners();
+    }
+
+    Modal.prototype.setData = function(data){
+        if(data){
+            this.data = data;
+        }
     }
 
     Modal.prototype.getElements = function(){
@@ -220,42 +230,27 @@ var Modal = (function(){
 
     Modal.prototype.setEventListeners = function(){
 
-        this.elements.button.login.addEventListener('click', function(){
+        // click login button
+        this.elements.button.login.addEventListener('click', function(e){
             
             event.preventDefault();
-            var self = this;
 
             // get the username and password
             var username = this.elements.input.username.value;
             var password = this.elements.input.password.value;
 
             if(username){
-
-                // check if the user exists
-                $.getJSON(apiUrl + 'userexists/' + username)
-                .done(function(data){
-                    // returns [{"userexists":1}] if true
-                    // returns [{"userexists":0}] if false
-                    var userExists = data[0].userexists;
-
-                    if(userExists){
-
-                        flashcardsjs.user = new User(username);
-                    }
-                    else {
-                        // create a new user
-                        $.post(apiUrl + '/create/user', { 
-                            username: username,
-                            password: password
-                        }) 
-                        .done(function(data){
-                            flashcardsjs.user = new User(username);
-                        });
+                // check if user exists 
+                this.data.doesUserExist(username)
+                .then(function(exists){
+                    
+                    if(exists === true){
+                        this.data.user = new User(username);
                     }
 
                     // close the modal
-                    self.close();
-                });
+                    this.close();
+                }.bind(this));
             }
         }.bind(this));
     }
@@ -276,7 +271,10 @@ var Modal = (function(){
 
 var UI = (function(){
     
-    function UI(){
+    function UI(data){
+
+        // copy data from instantiated Data class 
+        this.data = data || {};
 
         // currently held values (decks, cards, users, etc.)
         this.current = {};
@@ -1177,19 +1175,14 @@ var UI = (function(){
 
 /*==[ MAIN ]=================================================================*/
 
+// create a single window object to hold the entire app instance
 var flashcardsjs = {};
-//flashcardsjs.UI = new UI(); // create a new user interface
-//flashcardsjs.UI.elements.modal.open(); // open the login modal
-
-// set the method for flipping cards
-//flashcardsjs.UI.enableEventListeners();
-
-// enable the autocomplete option on the find card input field
-//flashcardsjs.UI.setupFindCardAutoComplete();
-
-       
+// create data
+flashcardsjs.data = new Data();
+// pass data to modal
+flashcardsjs.modal = new Modal(flashcardsjs.data);
+// open modal
+flashcardsjs.modal.open();
 
 
 /*==[ TEST ]=================================================================*/
-
-flashcardsjs.data = new Data();
