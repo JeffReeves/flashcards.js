@@ -3,8 +3,8 @@
 'use strict';
 
 // UPDATES NEEDED:
-// - fully clone the users.decks into the UI.current.decks, 
-//     to prevent the pop method from actually removing the users.decks.cards.
+// - rewrite all classes to ensure readability and ease of extensibility
+// - refactor all logic for UI class when all classes have been updated 
 
 
 /*==[ OBJECTS ]==============================================================*/
@@ -118,7 +118,6 @@ var Data = (function(){
     }
 
     Data.prototype.doesUserExist = function(username){
-        var that = this; 
         return fn.getJSON(this.api.active.exists + username)
         .then(function(data){
             if(data.userexists === 1){
@@ -132,59 +131,105 @@ var Data = (function(){
         });
     }
 
-    Data.prototype.getUserId = function(){
-        return fn.getJSON(apiUrl + 'users/' + this.username)
+    Data.prototype.getUserId = function(username){
+        return fn.getJSON(this.api.active.user + username)
         .then(function(user){
-            console.log("Success!", user);
             return user;
         }, function(error){
-            console.error("Failed!", error);
             return error;
         });
     }
 
-    Data.prototype.getDecks = function(){
-        return this.getUserId()
-        .then(function(user){
-            return fn.getJSON(apiUrl + 'decks/userid/' + user.id)
-            .then(function(decks){
-                console.log("Success!", decks);
-                return decks;
-            }, function(error){
-                console.error("Failed!", error);
-                return error;
-            });
+    Data.prototype.getStacks = function(user){
+        return fn.getJSON(this.api.active.stacks + user.id)
+        .then(function(stacks){
+            return stacks;
+        }, function(error){
+            return error;
         });
-
     }
 
-    Data.prototype.getCards = function(deckId){
-        return this.getDecks()
+    Data.prototype.getDecks = function(stack){
+        return fn.getJSON(this.api.active.decks + stack.id)
         .then(function(decks){
-            var promises = [];
-            for(var i = decks.length; i--;){
-                promises.push(
-                    fn.getJSON(apiUrl + 'cards/deckid/' + decks[i].id)
-                );
-            }
-            return { 
-                promises: promises, 
-                decks: decks 
-            };
-        })
-        .then(function(data){
-            console.log('promises:', data.promises);
-            console.log('decks:', data.decks);
-            for(var i = data.promises.length; i--;){
-                data.promises[i].then(function(cards){
-                    console.log('Success!', cards);
-                    return cards;
-                }, function(error){
-                    console.error("Failed!", error);
-                    return error;
-                });
-            }
+            return decks;
+        }, function(error){
+            return error;
         });
+    }
+
+    Data.prototype.getCards = function(deck){
+        return fn.getJSON(this.api.active.cards + deck.id)
+        .then(function(cards){
+            return cards;
+        }, function(error){
+            return error;
+        });
+    }
+
+    Data.prototype.getAllCards = function(username){
+        return this.getUserId(username)
+        .then(function(user){
+            // assign the user id
+            this.user.id = user.id;
+            // create an empty stacks array
+            this.user.stacks = [];
+            return this.user;
+        }.bind(this))
+        .then(function(user){
+            // get the stacks for this user
+            return this.getStacks(user);
+        }.bind(this))
+        .then(function(stacks){
+            var deckPromises = [];
+            // for each result in the stacks array
+            for(var i = 0; i < stacks.length; i++){
+                var stack = stacks[i];
+                // push it into the user's stacks
+                this.user.stacks.push(stack);
+                // create an empty decks array on each stack
+                this.user.stacks[i].decks = [];
+                // and build an array of promises to get the decks of each stack
+                deckPromises.push(this.getDecks(stack))
+            }
+            return Promise.all(deckPromises);
+        }.bind(this))
+        .then(function(stacks){
+            var cardPromises = [];
+            for(var i = 0; i < stacks.length; i++){
+                var stack = stacks[i]
+                for(var j = 0; j < stack.length; j++){
+                    var deck = stack[j];
+
+                    this.user.stacks[i].decks.push(deck);
+                    this.user.stacks[i].decks[j].cards = [];
+
+                    cardPromises.push(this.getCards(deck));
+                }
+            }
+
+            return Promise.all(cardPromises);
+        }.bind(this))
+        .then(function(decks){
+
+            for(var k = 0; k < decks.length; k++){
+                var cards = decks[k];
+                var deckId = cards[0].deckid;
+
+                for(var i = 0; i < this.user.stacks.length; i++){
+                    for(var j = 0; j < this.user.stacks[i].decks.length; j++){
+    
+                        // if the deck id matches 
+                        if(this.user.stacks[i].decks[j].id === deckId){
+                            this.user.stacks[i].decks[j].cards = cards;
+                        }
+                    }
+                }
+            }
+
+            console.log('[DEBUG] Got all cards for user', this.user);
+            return true;
+        }.bind(this));
     }
 
     return Data;
@@ -244,8 +289,16 @@ var Modal = (function(){
                 this.dataInstance.doesUserExist(username)
                 .then(function(exists){
                     
+                    // if the user exists
                     if(exists === true){
+                        // instantiate a new user from the username entered
                         this.dataInstance.user = new User(username);
+
+                        // get the user's cards
+                        this.dataInstance.getAllCards(username)
+                        .then(function(data){
+                            console.log('finished', data);
+                        });
                     }
 
                     // close the modal
