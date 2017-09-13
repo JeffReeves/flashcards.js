@@ -172,8 +172,6 @@ var Data = (function(){
         .then(function(user){
             // assign the user id
             this.user.id = user.id;
-            // create an empty stacks array
-            this.user.stacks = [];
             return this.user;
         }.bind(this))
         .then(function(user){
@@ -186,9 +184,7 @@ var Data = (function(){
             for(var i = 0; i < stacks.length; i++){
                 var stack = stacks[i];
                 // push it into the user's stacks
-                this.user.stacks.push(stack);
-                // create an empty decks array on each stack
-                this.user.stacks[i].decks = [];
+                this.user.stacks.push(new Stack(stack));
                 // and build an array of promises to get the decks of each stack
                 deckPromises.push(this.getDecks(stack))
             }
@@ -201,8 +197,7 @@ var Data = (function(){
                 for(var j = 0; j < stack.length; j++){
                     var deck = stack[j];
 
-                    this.user.stacks[i].decks.push(deck);
-                    this.user.stacks[i].decks[j].cards = [];
+                    this.user.stacks[i].decks.push(new Deck(deck));
 
                     cardPromises.push(this.getCards(deck));
                 }
@@ -211,7 +206,7 @@ var Data = (function(){
             return Promise.all(cardPromises);
         }.bind(this))
         .then(function(decks){
-
+            var abort = false;
             for(var k = 0; k < decks.length; k++){
                 var cards = decks[k];
                 var deckId = cards[0].deckid;
@@ -219,9 +214,15 @@ var Data = (function(){
                 for(var i = 0; i < this.user.stacks.length; i++){
                     for(var j = 0; j < this.user.stacks[i].decks.length; j++){
     
+                        console.log('stack ' + i, 'deck ' + j);
                         // if the deck id matches 
                         if(this.user.stacks[i].decks[j].id === deckId){
-                            this.user.stacks[i].decks[j].cards = cards;
+                            console.log('found match');
+                            for(var l = 0; l < cards.length; l++){
+                                var card = cards[l];
+                                this.user.stacks[i].decks[j].cards.push(new Card(card));
+                            }
+                            break;
                         }
                     }
                 }
