@@ -213,11 +213,8 @@ var Data = (function(){
 
                 for(var i = 0; i < this.user.stacks.length; i++){
                     for(var j = 0; j < this.user.stacks[i].decks.length; j++){
-    
-                        console.log('stack ' + i, 'deck ' + j);
                         // if the deck id matches 
                         if(this.user.stacks[i].decks[j].id === deckId){
-                            console.log('found match');
                             for(var l = 0; l < cards.length; l++){
                                 var card = cards[l];
                                 this.user.stacks[i].decks[j].cards.push(new Card(card));
@@ -297,13 +294,11 @@ var Modal = (function(){
 
                         // get the user's cards
                         this.dataInstance.getAllCards(username)
-                        .then(function(data){
-                            console.log('finished', data);
-                        });
+                        .then(function(){
+                            // close the modal
+                            this.close();;
+                        }.bind(this));
                     }
-
-                    // close the modal
-                    this.close();
                 }.bind(this));
             }
         }.bind(this));
