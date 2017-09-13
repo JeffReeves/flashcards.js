@@ -52,14 +52,14 @@
     
     <main>
         <!-- CARD VIEW -->
-        <section id="cardView" class="router-view">
+        <section id="card-view" class="router-view">
             <div class="mui-select" id="card-decks">
                 <select name="card-deck-select" id="card-deck-select">
-                    <optgroup label="Deck Group">
-                    <option>Decks Will Appear Here</option>
+                    <optgroup label="No Stacks Found">
+                    <option>Please create a new Stack and Deck</option>
                     </optgroup>
                 </select>
-                <label>Deck</label>
+                <label id="stack-label">No Stacks Found</label>
             </div>
 
             <div id="progress-bar" class="mui--z1">
@@ -88,7 +88,7 @@
         </section>
 
         <!-- EDITOR VIEW -->
-        <section id="editorView" class="router-view disabled">
+        <section id="editor-view" class="router-view disabled">
 
             <!-- MAIN EDITOR VIEW -->
             <div id="show-decks" class="router-editor-view">

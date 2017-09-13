@@ -299,6 +299,9 @@ var Modal = (function(){
                             this.close();;
                         }.bind(this));
                     }
+                    else {
+                        console.log('[DEBUG] User does not exist. Need to create user.');
+                    }
                 }.bind(this));
             }
         }.bind(this));
@@ -347,10 +350,11 @@ var UI = (function(){
             modal: new Modal(),
 
         //--[ card view ]--------------------------------------------------
-            cardView: document.getElementById('cardView'),
+            cardView: document.getElementById('card-view'),
         
             // dropdown to select decks
             cardDeckSelect: document.getElementById('card-deck-select'),
+            stackLabel: document.getElementById('stack-label'),
 
             // progress bar
             progressBar: document.getElementById('progress-bar'),
@@ -373,7 +377,7 @@ var UI = (function(){
 
         //--[ editor view ]------------------------------------------------
 
-            editorView: document.getElementById('editorView'),
+            editorView: document.getElementById('editor-view'),
             showDecks: document.getElementById('show-decks'),
 
             // dropdown select

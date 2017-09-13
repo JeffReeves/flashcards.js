@@ -111,7 +111,7 @@ textarea {
             "router";
     }
 
-        #cardView {
+        #card-view {
             grid-area: router;
             display: grid;
             grid-template-columns: 1fr 3fr 1fr;
@@ -280,7 +280,7 @@ textarea {
                     grid-area: skip;
                 }
 
-    #editorView {
+    #editor-view {
         grid-area: router;
         display: grid;
         grid-template-columns: 1fr 10fr 1fr;
