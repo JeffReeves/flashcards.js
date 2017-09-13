@@ -263,12 +263,12 @@ var Modal = (function(){
     Modal.prototype.getElements = function(){
 
         // hardcoded values for now 
-        this.elements.modal = document.getElementById('loginModal');
+        this.elements.modal = document.getElementById('login-modal');
         this.elements.button = {};
-        this.elements.button.login = document.getElementById('loginButton');
+        this.elements.button.login = document.getElementById('login-button');
         this.elements.input = {};
-        this.elements.input.username = document.getElementById('loginUsername');
-        this.elements.input.password = document.getElementById('loginPassword');
+        this.elements.input.username = document.getElementById('login-username');
+        this.elements.input.password = document.getElementById('login-password');
     }
 
     Modal.prototype.setEventListeners = function(){
@@ -289,6 +289,7 @@ var Modal = (function(){
                     
                     // if the user exists
                     if(exists === true){
+                        console.log('this test', this);
                         // instantiate a new user from the username entered
                         this.dataInstance.user = new User(username);
 
@@ -296,7 +297,7 @@ var Modal = (function(){
                         this.dataInstance.getAllCards(username)
                         .then(function(){
                             // close the modal
-                            this.close();;
+                            this.close();
                         }.bind(this));
                     }
                     else {
@@ -323,175 +324,194 @@ var Modal = (function(){
 
 var UI = (function(){
     
-    function UI(data){
-
-        // copy data from instantiated Data class 
-        this.data = data || {};
-
-        // currently held values (decks, cards, users, etc.)
-        this.current = {};
+    function UI(dataInstance){
 
         // all page elements
-        this.elements = {
+        this.elements = {};
+        this.dataInstance = {};
 
+        this.getElements();
+        this.setData(dataInstance);
+    }
+
+    UI.prototype.setData = function(dataInstance){
+        if(dataInstance){
+            this.dataInstance = dataInstance;
+        }
+    }
+
+    UI.prototype.getElements = function(){
+        
+        // hardcoded values for now 
         //--[ shared ]-----------------------------------------------------
 
-            // controls 
-            dropdownMenu: document.getElementById('dropdown-menu'),
-            
-            // menu options
-            menuLogin: document.getElementById('menu-login'),
-            menuCardView: document.getElementById('menu-card-view'),
-            menuEditView: document.getElementById('menu-edit-view'),
-            menuLogout: document.getElementById('menu-logout'),
+        this.elements.header = {
 
-        //--[ modal ]------------------------------------------------------
+            menu: {
 
-            modal: new Modal(),
+                container: document.getElementById('dropdown-menu'),
 
-        //--[ card view ]--------------------------------------------------
-            cardView: document.getElementById('card-view'),
-        
-            // dropdown to select decks
-            cardDeckSelect: document.getElementById('card-deck-select'),
-            stackLabel: document.getElementById('stack-label'),
+                option: {
+                    login: document.getElementById('menu-login'),
+                    viewer: document.getElementById('menu-viewer'),
+                    editor: document.getElementById('menu-editor'),
+                    logout: document.getElementById('menu-logout')
+                }
+            }
+        };
 
-            // progress bar
-            progressBar: document.getElementById('progress-bar'),
-            correctProgress: document.getElementById('correct-progress'),
-            incorrectProgress: document.getElementById('incorrect-progress'),
-            skippedProgress: document.getElementById('skipped-progress'),
+        //--[ viewer ]-----------------------------------------------------
 
-            // flashcards
-            flashcardContainer: document.getElementById('flashcard-container'),
-            flashcard: document.getElementById('flashcard'),
-            front: document.getElementById('front'),
-            back: document.getElementById('back'),
-            frontText: front.getElementsByTagName('p')[0],
-            backText: back.getElementsByTagName('p')[0],
+        this.elements.viewer = {
 
-            // buttons
-            correctButton: document.getElementById('correct'),
-            incorrectButton: document.getElementById('incorrect'),
-            skipButton: document.getElementById('skip'),
+            view: document.getElementById('viewer'),
+
+            dropdown: {
+                select: document.getElementById('card-deck-select'),
+                label: document.getElementById('stack-label'),
+            },
+
+            progressbar: {
+                container: document.getElementById('progress-bar'),
+                correct: document.getElementById('correct-progress'),
+                incorrect: document.getElementById('incorrect-progress'),
+                skipped: document.getElementById('skipped-progress'),
+            },
+
+            flashcard: {
+                container: document.getElementById('flashcard-container'),
+                card: document.getElementById('flashcard'),
+                front: document.getElementById('front'),
+                back: document.getElementById('back'),
+                text: {
+                    front: document.getElementById('front-text'),
+                    back: document.getElementById('back-text')
+                }
+            },
+
+            button: {
+                correct: document.getElementById('correct-button'),
+                incorrect: document.getElementById('incorrect-button'),
+                skip: document.getElementById('skip-button'),
+            }
+        };
 
         //--[ editor view ]------------------------------------------------
 
-            editorView: document.getElementById('editor-view'),
-            showDecks: document.getElementById('show-decks'),
+        this.elements.editor = {
 
-            // dropdown select
-            editorDeckSelect: document.getElementById('editor-deck-select'),     
-            
-            // deck edit / add buttons
-            editorDeckEditButton: document.getElementById('editor-deck-edit-button'),
-            editorDeckAddButton: document.getElementById('editor-deck-add-button'),
+            view: document.getElementById('editor-view'),
+            decks: {},
+            cards: {}
 
-            // card input field
-            editorCardInput: document.getElementById('editor-card-input'),
-            editorCardSelectAll: document.getElementById('editor-card-select-all'),
+        };
 
-            // card buttons
-            editorCardEditButton: document.getElementById('editor-card-edit-button'),
-            editorCardAddButton: document.getElementById('editor-card-add-button'),
+        //--[ show deck view ]---------------------------------------------
+
+        this.elements.editor.decks.show = {
+
+            view: document.getElementById('show-decks'),
+
+            dropdown: {
+                select: document.getElementById('editor-deck-select')
+            },
+
+            input: {
+                card: document.getElementById('editor-card-input')
+            },
+
+            button: {
+                edit: {
+                    deck: document.getElementById('editor-deck-edit-button'),
+                    card: document.getElementById('editor-card-edit-button')
+                },
+                
+                add: {
+                    deck: document.getElementById('editor-deck-add-button'),
+                    card: document.getElementById('editor-card-add-button')
+                },
+
+                selectAll: document.getElementById('editor-card-select-all'),
+            }
+        };
 
         //--[ edit deck view ]---------------------------------------------
 
-            editDeck: document.getElementById('edit-deck'),
-            editDeckForm: document.getElementById('edit-deck-form'),
-            editDeckStack: document.getElementById('edit-deck-stack'),
-            editDeckTitle: document.getElementById('edit-deck-title'),
-            editDeckSaveButton: document.getElementById('edit-deck-save-button'),
-            editDeckCancelButton: document.getElementById('edit-deck-cancel-button'),
-            editDeckDeleteButton: document.getElementById('edit-deck-delete-button'),
+
+        this.elements.editor.decks.edit = {
+
+            view: document.getElementById('edit-deck'),
+
+            form: document.getElementById('edit-deck-form'),
+
+            input: {
+                stack: document.getElementById('edit-deck-stack'),
+                title: document.getElementById('edit-deck-title')
+            },
+
+            button: {
+                save: document.getElementById('edit-deck-save-button'),
+                cancel: document.getElementById('edit-deck-cancel-button'),
+                delete: document.getElementById('edit-deck-delete-button')
+            }
+        }; 
 
         //--[ add deck view ]----------------------------------------------
 
-            addDeck: document.getElementById('add-deck'),
-            addDeckForm: document.getElementById('add-deck-form'),
-            newDeckStack: document.getElementById('new-deck-stack'),
-            newDeckTitle: document.getElementById('new-deck-title'),
-            addDeckSaveButton: document.getElementById('add-deck-save-button'),
-            addDeckCancelButton: document.getElementById('add-deck-cancel-button'),
-        
+        this.elements.editor.decks.add = {
+
+            view: document.getElementById('add-deck'),
+            
+            form: document.getElementById('add-deck-form'),
+
+            input: {
+                stack: document.getElementById('new-deck-stack'),
+                title: document.getElementById('new-deck-title')
+            },   
+
+            button: {
+                save: document.getElementById('add-deck-save-button'),
+                cancel: document.getElementById('add-deck-cancel-button')
+            }
+        }; 
+    
         //--[ edit card view ]---------------------------------------------
 
-            editCard: document.getElementById('edit-card'),
-            editCardForm: document.getElementById('edit-card-form'),
-            editCardFront: document.getElementById('edit-card-front'),
-            editCardBack: document.getElementById('edit-card-back'),
-            editCardSaveButton: document.getElementById('edit-card-save-button'),
-            editCardCancelButton: document.getElementById('edit-card-cancel-button'),
-            editCardDeleteButton: document.getElementById('edit-card-delete-button'),
+        this.elements.editor.cards.edit = {
             
+            view: document.getElementById('edit-card'),
+            
+            form: document.getElementById('edit-card-form'),
+
+            input: {
+                front: document.getElementById('edit-card-front'),
+                back: document.getElementById('edit-card-back')
+            },
+
+            button: {
+                save: document.getElementById('edit-card-save-button'),
+                cancel: document.getElementById('edit-card-cancel-button'),
+                delete: document.getElementById('edit-card-delete-button')
+            }
+        }; 
+        
         //--[ add card view ]----------------------------------------------
 
-            addCard: document.getElementById('add-card'),
-            addCardForm: document.getElementById('add-card-form'),
-            newCardFront: document.getElementById('new-card-front'),
-            newCardBack: document.getElementById('new-card-back'),
-            addCardSaveButton: document.getElementById('add-card-save-button'),
-            addCardCancelButton: document.getElementById('add-card-cancel-button')
-        };
-    }
-
-    UI.prototype.getUsersCards = function(username){
+        this.elements.editor.cards.add = {
+            view: document.getElementById('add-card'),
             
-        var self = this;
+            form: document.getElementById('add-card-form'),
 
-        $.getJSON(apiUrl + 'users/' + username)
-        .then(function(userData){
-            var user =  userData[0];
-            self.id =   user.id;
-            return $.getJSON(apiUrl + 'decks/userid/' + user.id);
-        })
-        .then(function(deckData) {
-            var decks = deckData;
-            var requests = [];
-            var numRequests = 0;
-            // iterate through all decks
-            for(var i = 0; i < decks.length; i++){
-                var deck = deckData[i];
-                var request = $.getJSON(apiUrl + 'cards/deckid/' + deck.id);
-                requests.push(request);
-                numRequests++;
+            input: {
+                front: document.getElementById('new-card-front'),
+                back: document.getElementById('new-card-back')
+            },    
 
-                self.decks.push(new Deck(deck));
+            button: {
+                save: document.getElementById('add-card-save-button'),
+                cancel: document.getElementById('add-card-cancel-button')
             }
-
-            // iterate through the list of getJSON requests for cards
-            $.when.apply($, requests)
-            .done(function(){
-                var data = arguments;
-                for(var i = 0; i < data.length; i++){
-
-                    if(Array.isArray(data[i])){
-                        var cards = [];
-
-                        // if only one card exists
-                        if(data[i][0].length === undefined){
-                            // add it to an array to be parsed
-                            cards.push(data[i][0]);
-                        }
-                        else {
-                            // otherwise set the array to the existing array of cards
-                            cards = data[i][0];
-                        }
-
-                        for(var j = 0; j < cards.length; j++){
-                            var card = cards[j];
-                            self.decks[i].cards.push(new Card(card));
-                        }
-                    }
-                }
-
-                // we now have all decks and cards for the user
-                console.log('got everything we need:', self);
-
-                // tell the UI that a user logged in
-                flashcardsjs.UI.userLogin(self);
-            })
-        });
+        };
     }
 
     // occurs after a user has logged in
@@ -1234,6 +1254,8 @@ var flashcardsjs = {};
 flashcardsjs.data = new Data();
 // pass data to modal
 flashcardsjs.modal = new Modal(flashcardsjs.data);
+// create UI 
+flashcardsjs.UI = new UI(flashcardsjs.data);
 // open modal
 flashcardsjs.modal.open();
 

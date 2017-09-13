@@ -111,7 +111,7 @@ textarea {
             "router";
     }
 
-        #card-view {
+        #viewer {
             grid-area: router;
             display: grid;
             grid-template-columns: 1fr 3fr 1fr;
@@ -268,19 +268,19 @@ textarea {
                     ". . correct incorrect . skip";
             }
 
-                #correct {
+                #correct-button {
                     grid-area: correct;
                 }
 
-                #incorrect {
+                #incorrect-button {
                     grid-area: incorrect;
                 }
 
-                #skip {
+                #skip-button {
                     grid-area: skip;
                 }
 
-    #editor-view {
+    #editor {
         grid-area: router;
         display: grid;
         grid-template-columns: 1fr 10fr 1fr;
@@ -439,11 +439,11 @@ textarea {
 
     /* OVERLAY MODAL */
 
-    #loginModalContainer {
+    #login-modal-container {
         display: none;
     }
 
-        #loginModal {
+        #login-modal {
             display: grid;
             grid-template-columns: 1fr ;
             grid-template-rows: 1fr;
@@ -455,7 +455,7 @@ textarea {
             background-color: #F2F2F2;
         }
 
-            #loginForm {
+            #login-form {
                 grid-area: login-form;
                 display: grid;
                 grid-template-columns: 1fr;
