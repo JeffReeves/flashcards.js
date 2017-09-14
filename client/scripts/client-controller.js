@@ -5,7 +5,7 @@
 // UPDATES NEEDED:
 // - rewrite all classes to ensure readability and ease of extensibility
 // - refactor all logic for UI class when all classes have been updated 
-
+// - update modal to create user if the input user does not exist
 
 /*==[ OBJECTS ]==============================================================*/
 
@@ -76,6 +76,7 @@ var Data = (function(){
     function Data(){
         this.api = {};
         this.user = {};
+        this.current = {};
 
         this.setApiUrl();
     }
@@ -230,6 +231,26 @@ var Data = (function(){
         }.bind(this));
     }
 
+    // clones the stacks to the current property
+    Data.prototype.setCurrent = function(deckId){
+        for(var i = 0; i < this.user.stacks.length; i++){
+            for(var j = 0; j < this.user.stacks[i].decks.length; j++){
+                if(this.user.stacks[i].decks[j].id === deckId){
+                    this.current.stack = JSON.parse(JSON.stringify(this.user.stacks[i]));
+                    this.current.deck = JSON.parse(JSON.stringify(this.user.stacks[i].decks[j]));
+                    this.current.cards = JSON.parse(JSON.stringify(this.user.stacks[i].decks[j].cards));
+                    this.current.cards.total = this.current.deck.cards.length;
+                    this.current.cards.correct = 0;
+                    this.current.cards.incorrect = 0;
+                    this.current.cards.skipped = 0;
+                    delete this.current.stack.decks;
+                    delete this.current.deck.cards;
+                    return;
+                }
+            }
+        }
+    }
+
     return Data;
 }());
 
@@ -243,20 +264,22 @@ var Modal = (function(){
         'onclose': function(){} 
     };
     
-    function Modal(dataInstance){
+    function Modal(UI){
         this.username = '';
         this.password = '';
         this.elements = {};
+        this.UI = {};
         this.dataInstance = {};
         
-        this.setData(dataInstance);
+        this.setInstance(UI);
         this.getElements();
         this.setEventListeners();
     }
 
-    Modal.prototype.setData = function(dataInstance){
-        if(dataInstance){
-            this.dataInstance = dataInstance;
+    Modal.prototype.setInstance = function(UI){
+        if(UI){
+            this.UI = UI;
+            this.dataInstance = UI.dataInstance;
         }
     }
 
@@ -289,7 +312,6 @@ var Modal = (function(){
                     
                     // if the user exists
                     if(exists === true){
-                        console.log('this test', this);
                         // instantiate a new user from the username entered
                         this.dataInstance.user = new User(username);
 
@@ -298,6 +320,7 @@ var Modal = (function(){
                         .then(function(){
                             // close the modal
                             this.close();
+                            this.UI.login();
                         }.bind(this));
                     }
                     else {
@@ -326,12 +349,12 @@ var UI = (function(){
     
     function UI(dataInstance){
 
-        // all page elements
         this.elements = {};
         this.dataInstance = {};
 
-        this.getElements();
         this.setData(dataInstance);
+        this.getElements();
+        this.elements.modal.open();
     }
 
     UI.prototype.setData = function(dataInstance){
@@ -343,6 +366,10 @@ var UI = (function(){
     UI.prototype.getElements = function(){
         
         // hardcoded values for now 
+        //--[ modal ]------------------------------------------------------
+
+        this.elements.modal = new Modal(this);
+
         //--[ shared ]-----------------------------------------------------
 
         this.elements.header = {
@@ -515,22 +542,16 @@ var UI = (function(){
     }
 
     // occurs after a user has logged in
-    UI.prototype.userLogin = function(user){
-    
-        // user details
-        this.current.username = user.username;
-        this.current.userId = user.id;
+    UI.prototype.login = function(){
 
-        // deck details
-        this.current.decks = user.decks;
-        this.current.editorDecks = user.decks;
-
+        console.log('[DEBUG] UI.login');
+        
         // hide the login menu item
-        fn.addClass(this.elements.menuLogin, 'disabled');
+        fn.addClass(this.elements.header.menu.option.login, 'disabled');
 
         // show the editor view and logout menu items
-        fn.removeClass(this.elements.menuEditView, 'disabled');
-        fn.removeClass(this.elements.menuLogout, 'disabled');
+        fn.removeClass(this.elements.header.menu.option.editor, 'disabled');
+        fn.removeClass(this.elements.header.menu.option.logout, 'disabled');
 
         // initialize the deck selection dropdown and event handlers 
         this.setupDeckSelection();
@@ -539,13 +560,177 @@ var UI = (function(){
         //this.setupEditor();
     }
 
-    UI.prototype.logIn = function(){
+    UI.prototype.updateStackLabel = function(deckId){
 
-        var self = flashcardsjs;
+        console.log('[DEBUG] UI.updateStackLabel');
 
-        // open the login modal
-        self.UI.elements.modal.open();
+        this.elements.viewer.dropdown.label.innerHTML = this.dataInstance.current.stack.name;
+
+        // replaced by above line
+        // var select = this.elements.viewer.dropdown.select;
+        // var options = select.getElementsByTagName('option');
+        // // iterate over all options
+        // for(var i = 0; i < options.length; i++){
+        //     var option = options[i];
+        //     var value = Number(option.value);
+        //     // if the option value matches the deckId selected
+        //     if(deckId === value){
+        //         // set the dropdown's label to the stack's name
+        //         var optgroup = option.parentElement.label;
+        //         this.elements.viewer.dropdown.label.innerHTML = optgroup;
+        //         break;
+        //     }
+        // }
     }
+
+    UI.prototype.setViewerDeck = function(){
+
+        console.log('[DEBUG] UI.setViewDeck');
+
+        // get the active deck's ID
+        var deckId = Number(this.elements.viewer.dropdown.select.value);
+
+        // set the current stack and deck
+        this.dataInstance.setCurrent(deckId);
+
+        // update stack label 
+        this.updateStackLabel(deckId);
+
+        // reset progress bar
+        this.resetProgress();  
+    }
+
+    UI.prototype.setupDeckSelection = function(){
+
+        console.log('[DEBUG] UI.setupDeckSelection');
+        
+        // add the options to the drop-down
+        this.addOptions();
+
+        // set a default deck for the card view
+        this.setViewerDeck();
+
+        // set the default deck for editor view
+        //this.selectEditorDeck();
+
+        // create an onchange event to switch selected card view deck
+        this.elements.viewer.dropdown.select.addEventListener('change', function(){
+
+            console.log('[DEBUG] viewer.dropdown.select clicked');
+            this.setViewerDeck();
+
+        }.bind(this));
+    }
+
+    UI.prototype.addOptions = function(){
+
+        console.log('[DEBUG] UI.addOptions');
+
+        // remove existing dropdown elements
+        this.elements.viewer.dropdown.select.innerHTML = '';
+
+        // stacks
+        var stacks = this.dataInstance.user.stacks;
+        for(var i = 0; i < stacks.length; i++){
+
+            // add option group for stacks
+            var optionGroup = document.createElement('optgroup');
+            optionGroup.label = stacks[i].name;
+
+            for(var j = 0; j < stacks[i].decks.length; j++){
+
+                // add option for each deck
+                var option = document.createElement('option');
+                option.setAttribute('value', stacks[i].decks[j].id);
+                option.text = stacks[i].decks[j].title;
+
+                // append it to the select dropdown
+                optionGroup.appendChild(option);
+            }
+
+            // append it to the card view select dropdown
+            this.elements.viewer.dropdown.select.appendChild(optionGroup);
+        }
+
+        // // editor deck select options
+        // this.elements.editorDeckSelect.innerHTML = '';
+
+        // for(var i = 0; i < options.length; i++){
+            
+        //     // add option group for deck groups
+        //     var optionGroup = document.createElement('optgroup');
+        //     optionGroup.label = options[i].stack;
+
+        //     for(var j = 0; j < options[i].decks.length; j++){
+
+        //         // add option for each deck
+        //         var option = document.createElement('option');
+        //         option.setAttribute('value', options[i].decks[j].id);
+        //         option.text = options[i].decks[j].title;
+
+        //         // append it to the select dropdown
+        //         optionGroup.appendChild(option);
+        //     }
+
+        //     // append it to the card view select dropdown
+        //     this.elements.editorDeckSelect.appendChild(optionGroup);
+        // }       
+    }
+
+    UI.prototype.resetProgress = function(){
+
+        console.log('[DEBUG] UI.resetProgress');
+
+        // reset the width to 0
+        this.elements.viewer.progressbar.correct.style.width = '0%';
+        this.elements.viewer.progressbar.incorrect.style.width = '0%';
+        this.elements.viewer.progressbar.skipped.style.width = '0%';
+
+        // reset the current values to 0
+        this.dataInstance.current.cards.correct = 0;
+        this.dataInstance.current.cards.incorrect = 0;
+        this.dataInstance.current.cards.skipped = 0;
+    }
+
+    UI.prototype.enableCardButtons = function(){
+
+        this.elements.viewer.button.correct.addEventListener('click', function(){
+            this.getButtonValue(this);
+        }.bind(this));
+
+        this.elements.viewer.button.incorrect.addEventListener('click', function(){
+            this.getButtonValue(this);
+        }.bind(this));
+
+        this.elements.viewer.button.skip.addEventListener('click', function(){
+            this.getButtonValue(this);
+        }.bind(this));
+    }
+
+    UI.prototype.getButtonValue = function(self){
+
+            console.log('self in getButtonValue', self);
+    
+            if(self.dataInstance.card.status !== undefined){
+    
+                // update progress
+                self.updateProgress(buttonId);
+    
+                if(buttonId === 'incorrect' || buttonId === 'skip'){
+    
+                    // move card to back of deck
+                    self.current.cards.unshift(self.current.card);
+                }
+    
+                self.getNewCard(); 
+            }    
+            else {
+    
+                // TODO: ran out of cards, restart the deck
+                //self.selectCardViewDeck(self.current.deck.id);
+                //self.resetProgress();
+            }
+        };
 
     UI.prototype.logOut = function(){
         var self = flashcardsjs;
@@ -581,40 +766,6 @@ var UI = (function(){
 
         // re-open the login modal
         self.UI.elements.modal.open();
-    }
-
-    UI.prototype.getButtonValue = function(){
-        
-        var self = flashcardsjs.UI;
-
-        // get the id of the button
-        var buttonId = this.id;
-
-        if(self.current.card.status !== undefined){
-
-            // update progress
-            self.updateProgress(buttonId);
-
-            if(buttonId === 'incorrect' || buttonId === 'skip'){
-
-                // move card to back of deck
-                self.current.cards.unshift(self.current.card);
-            }
-
-            self.getNewCard(); 
-        }    
-        else {
-
-            // TODO: ran out of cards, restart the deck
-            //self.selectCardViewDeck(self.current.deck.id);
-            //self.resetProgress();
-        }
-    }
-
-    UI.prototype.enableCardButtons = function(){
-        this.elements.correctButton.addEventListener('click', this.getButtonValue);
-        this.elements.incorrectButton.addEventListener('click', this.getButtonValue);
-        this.elements.skipButton.addEventListener('click', this.getButtonValue);
     }
 
     UI.prototype.setInputDirty = function(elements){
@@ -934,19 +1085,6 @@ var UI = (function(){
         this.enableCardButtons();
     }
 
-    UI.prototype.resetProgress = function(){
-
-        // reset the width to 0
-        this.elements.correctProgress.style.width = '0%';
-        this.elements.incorrectProgress.style.width = '0%';
-        this.elements.skippedProgress.style.width = '0%';
-
-        // reset the current values to 0
-        this.current.correct = 0;
-        this.current.incorrect = 0;
-        this.current.skipped = 0;
-    }
-
     // updates the progress bar
     UI.prototype.updateProgress = function(button){
 
@@ -1018,123 +1156,6 @@ var UI = (function(){
         this.elements.skippedProgress.style.width = 
             (this.current.skipped / this.current.totalCards) * 100 + '%';
     };
-
-    UI.prototype.addOptions = function(options){
-    // options = [{stack: '', decks: [{id: 0, title: ''}]}]
-
-        // remove existing dropdown elements
-        this.elements.cardDeckSelect.innerHTML = '';
-
-        // card deck select options
-        for(var i = 0; i < options.length; i++){
-
-            // add option group for deck groups
-            var optionGroup = document.createElement('optgroup');
-            optionGroup.label = options[i].stack;
-
-            for(var j = 0; j < options[i].decks.length; j++){
-
-                // add option for each deck
-                var option = document.createElement('option');
-                option.setAttribute('value', options[i].decks[j].id);
-                option.text = options[i].decks[j].title;
-
-                // append it to the select dropdown
-                optionGroup.appendChild(option);
-            }
-
-            // append it to the card view select dropdown
-            this.elements.cardDeckSelect.appendChild(optionGroup);
-        }
-
-        // editor deck select options
-        this.elements.editorDeckSelect.innerHTML = '';
-
-        for(var i = 0; i < options.length; i++){
-            
-            // add option group for deck groups
-            var optionGroup = document.createElement('optgroup');
-            optionGroup.label = options[i].stack;
-
-            for(var j = 0; j < options[i].decks.length; j++){
-
-                // add option for each deck
-                var option = document.createElement('option');
-                option.setAttribute('value', options[i].decks[j].id);
-                option.text = options[i].decks[j].title;
-
-                // append it to the select dropdown
-                optionGroup.appendChild(option);
-            }
-
-            // append it to the card view select dropdown
-            this.elements.editorDeckSelect.appendChild(optionGroup);
-        }       
-    }
-
-    UI.prototype.setupDeckSelection = function(){
-
-        var decks = this.current.decks;  
-        var stackNames = [];
-        var options = []; 
-
-        // iterate through each deck
-        for(var i = 0; i < decks.length; i++){
-
-            // add the group to the list if it's not there already
-            if(stackNames.indexOf(decks[i].stack) === -1){
-                stackNames.push(decks[i].stack);
-            }
-        }
-
-        // iterate through each group on the group list
-        for(var i = 0; i < stackNames.length; i++){
-
-            var stacks = [];
-
-            // and each deck
-            for(var j = 0; j < decks.length; j++){
-
-                var deck = {
-                    id: 0,
-                    title: ''
-                };
-
-                if(stackNames[i] === decks[j].stack){
-                    deck.id = decks[j].id;
-                    deck.title = decks[j].title;
-
-                    stacks.push(deck);
-                }
-            }
-
-            // add the name and titles to the options list
-            options.push({
-                stack: stackNames[i],
-                decks: stacks
-            });
-        }
-
-        // add the options to the drop-down
-        this.addOptions(options);
-
-        // set a default deck for the card view
-        this.selectCardViewDeck();
-
-        // set the default deck for editor view
-        this.selectEditorDeck();
-
-        // create an onchange event to switch selected card view deck
-        this.elements.cardDeckSelect.addEventListener('change', function(){
-            
-            var deckId = Number(this.elements.cardDeckSelect.value);
-            this.selectCardViewDeck(deckId);
-
-            // reset progress bar
-            this.resetProgress();
-
-        }.bind(this));
-    }
 
     UI.prototype.setupFindCardAutoComplete = function(){
         var self = this;
@@ -1252,12 +1273,9 @@ var UI = (function(){
 var flashcardsjs = {};
 // create data
 flashcardsjs.data = new Data();
-// pass data to modal
-flashcardsjs.modal = new Modal(flashcardsjs.data);
 // create UI 
 flashcardsjs.UI = new UI(flashcardsjs.data);
-// open modal
-flashcardsjs.modal.open();
+
 
 
 /*==[ TEST ]=================================================================*/
