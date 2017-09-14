@@ -239,10 +239,14 @@ var Data = (function(){
                     this.current.stack = JSON.parse(JSON.stringify(this.user.stacks[i]));
                     this.current.deck = JSON.parse(JSON.stringify(this.user.stacks[i].decks[j]));
                     this.current.cards = JSON.parse(JSON.stringify(this.user.stacks[i].decks[j].cards));
-                    this.current.cards.total = this.current.deck.cards.length;
-                    this.current.cards.correct = 0;
-                    this.current.cards.incorrect = 0;
-                    this.current.cards.skipped = 0;
+                    // shuffle the card order
+                    this.current.cards = fn.shuffleArray(this.current.cards);
+                    this.current.card = {};
+                    //this.current.card = this.current.cards.pop();
+                    this.current.total = this.current.deck.cards.length;
+                    this.current.correct = 0;
+                    this.current.incorrect = 0;
+                    this.current.skipped = 0;
                     delete this.current.stack.decks;
                     delete this.current.deck.cards;
                     return;
@@ -556,31 +560,19 @@ var UI = (function(){
         // initialize the deck selection dropdown and event handlers 
         this.setupDeckSelection();
 
+        // enable card flipping
+        this.enableCardFlipping();
+
+        // enable card buttons
+        this.enableCardButtons();
+
         // add items to the editor view
         //this.setupEditor();
     }
 
     UI.prototype.updateStackLabel = function(deckId){
-
         console.log('[DEBUG] UI.updateStackLabel');
-
         this.elements.viewer.dropdown.label.innerHTML = this.dataInstance.current.stack.name;
-
-        // replaced by above line
-        // var select = this.elements.viewer.dropdown.select;
-        // var options = select.getElementsByTagName('option');
-        // // iterate over all options
-        // for(var i = 0; i < options.length; i++){
-        //     var option = options[i];
-        //     var value = Number(option.value);
-        //     // if the option value matches the deckId selected
-        //     if(deckId === value){
-        //         // set the dropdown's label to the stack's name
-        //         var optgroup = option.parentElement.label;
-        //         this.elements.viewer.dropdown.label.innerHTML = optgroup;
-        //         break;
-        //     }
-        // }
     }
 
     UI.prototype.setViewerDeck = function(){
@@ -598,6 +590,9 @@ var UI = (function(){
 
         // reset progress bar
         this.resetProgress();  
+
+        // load new card
+        this.getNewCard(); 
     }
 
     UI.prototype.setupDeckSelection = function(){
@@ -652,29 +647,9 @@ var UI = (function(){
             this.elements.viewer.dropdown.select.appendChild(optionGroup);
         }
 
-        // // editor deck select options
-        // this.elements.editorDeckSelect.innerHTML = '';
-
-        // for(var i = 0; i < options.length; i++){
-            
-        //     // add option group for deck groups
-        //     var optionGroup = document.createElement('optgroup');
-        //     optionGroup.label = options[i].stack;
-
-        //     for(var j = 0; j < options[i].decks.length; j++){
-
-        //         // add option for each deck
-        //         var option = document.createElement('option');
-        //         option.setAttribute('value', options[i].decks[j].id);
-        //         option.text = options[i].decks[j].title;
-
-        //         // append it to the select dropdown
-        //         optionGroup.appendChild(option);
-        //     }
-
-        //     // append it to the card view select dropdown
-        //     this.elements.editorDeckSelect.appendChild(optionGroup);
-        // }       
+        // clone the same option to the editor deck select
+        var copyViewerSelect = this.elements.viewer.dropdown.select.innerHTML;
+        this.elements.editor.decks.show.dropdown.select.innerHTML = copyViewerSelect;   
     }
 
     UI.prototype.resetProgress = function(){
@@ -687,124 +662,202 @@ var UI = (function(){
         this.elements.viewer.progressbar.skipped.style.width = '0%';
 
         // reset the current values to 0
-        this.dataInstance.current.cards.correct = 0;
-        this.dataInstance.current.cards.incorrect = 0;
-        this.dataInstance.current.cards.skipped = 0;
+        this.dataInstance.current.correct = 0;
+        this.dataInstance.current.incorrect = 0;
+        this.dataInstance.current.skipped = 0;
+    }
+
+    // updates the progress bar
+    UI.prototype.updateProgress = function(option){
+
+        console.log('[DEBUG] UI.updateProgress');
+
+        // make changes based on button
+        switch(option){
+
+            case 'correct':
+                if(this.dataInstance.current.card.status === 'incorrect'){
+                    this.dataInstance.current.incorrect--;
+                    this.dataInstance.current.correct++;
+                    this.dataInstance.current.card.status = 'correct';
+                }
+                else if(this.dataInstance.current.card.status === 'skipped'){
+                    this.dataInstance.current.skipped--;
+                    this.dataInstance.current.correct++;
+                    this.dataInstance.current.card.status = 'correct';
+                }
+                else if(this.dataInstance.current.card.status === null){
+                    this.dataInstance.current.correct++;
+                    this.dataInstance.current.card.status = 'correct';
+                }
+                break;
+
+            case 'incorrect':
+                if(this.dataInstance.current.card.status === 'skipped'){
+                    this.dataInstance.current.skipped--;
+                    this.dataInstance.current.incorrect++;
+                    this.dataInstance.current.card.status = 'incorrect';
+                }
+                else if(this.dataInstance.current.card.status === 'correct'){
+                    this.dataInstance.current.correct--;
+                    this.dataInstance.current.incorrect++;
+                    this.dataInstance.current.card.status = 'incorrect';
+                }
+                else if(this.dataInstance.current.card.status === null){
+                    this.dataInstance.current.incorrect++;
+                    this.dataInstance.current.card.status = 'incorrect';
+                }
+                break;
+
+            case 'skipped':
+                if(this.dataInstance.current.card.status === 'incorrect'){
+                    this.dataInstance.current.incorrect--;
+                    this.dataInstance.current.skipped++;
+                    this.dataInstance.current.card.status = 'skipped';
+                }
+                else if(this.dataInstance.current.card.status === 'correct'){
+                    this.dataInstance.current.correct--;
+                    this.dataInstance.current.skipped++;
+                    this.dataInstance.current.card.status = 'skipped';
+                }
+                else if(this.dataInstance.current.card.status === null){
+                    this.dataInstance.current.skipped++;
+                    this.dataInstance.current.card.status = 'skipped';
+                }
+                break;
+        }
+
+        // set the width equal to the percentage of correct/incorrect/skipped 
+        this.elements.viewer.progressbar.correct.style.width = 
+            (this.dataInstance.current.correct / this.dataInstance.current.total) * 100 + '%';
+
+        this.elements.viewer.progressbar.incorrect.style.width = 
+            (this.dataInstance.current.incorrect / this.dataInstance.current.total) * 100 + '%';
+
+        this.elements.viewer.progressbar.skipped.style.width = 
+            (this.dataInstance.current.skipped / this.dataInstance.current.total) * 100 + '%';
+    }
+
+    UI.prototype.flipCard = function(){
+        console.log('[DEBUG] UI.flipCard');
+        fn.addClass(this.elements.viewer.flashcard.card, 'flipped');
+    }
+
+    UI.prototype.flipCardBack = function(){
+        console.log('[DEBUG] UI.flipCardBack');
+        fn.removeClass(this.elements.viewer.flashcard.card, 'flipped');
+    }
+
+    UI.prototype.enableCardFlipping = function(){
+
+        console.log('[DEBUG] UI.enableCardFlipping');
+
+        // mouse enter and leave events to flip card
+        this.elements.viewer.flashcard.container.addEventListener('mouseenter', function(){
+            this.flipCard();
+        }.bind(this));
+
+        this.elements.viewer.flashcard.container.addEventListener('mouseleave', function(){
+            this.flipCardBack();
+        }.bind(this));
+
+        // helps mobile users since they can't enter or leave with a mouse
+        this.elements.viewer.flashcard.front.addEventListener('click', function(){
+            this.flipCard();
+        }.bind(this));
+
+        this.elements.viewer.flashcard.back.addEventListener('click', function(){
+            this.flipCardBack();
+        }.bind(this))
+        
     }
 
     UI.prototype.enableCardButtons = function(){
 
+        console.log('[DEBUG] UI.enableCardButtons');
+        
         this.elements.viewer.button.correct.addEventListener('click', function(){
-            this.getButtonValue(this);
+            this.getButtonValue('correct');
         }.bind(this));
 
         this.elements.viewer.button.incorrect.addEventListener('click', function(){
-            this.getButtonValue(this);
+            this.getButtonValue('incorrect');
         }.bind(this));
 
         this.elements.viewer.button.skip.addEventListener('click', function(){
-            this.getButtonValue(this);
+            this.getButtonValue('skipped');
         }.bind(this));
     }
 
-    UI.prototype.getButtonValue = function(self){
+    UI.prototype.getButtonValue = function(option){
 
-            console.log('self in getButtonValue', self);
-    
-            if(self.dataInstance.card.status !== undefined){
-    
-                // update progress
-                self.updateProgress(buttonId);
-    
-                if(buttonId === 'incorrect' || buttonId === 'skip'){
-    
-                    // move card to back of deck
-                    self.current.cards.unshift(self.current.card);
-                }
-    
-                self.getNewCard(); 
-            }    
-            else {
-    
-                // TODO: ran out of cards, restart the deck
-                //self.selectCardViewDeck(self.current.deck.id);
-                //self.resetProgress();
+        console.log('[DEBUG] UI.getButtonValue');
+        var current = this.dataInstance.current;
+        console.log('current.card.status', this.dataInstance.current.card.status);
+
+        if(current.card.status !== undefined){
+
+            console.log('option selected', option);
+
+            // update progress
+            this.updateProgress(option);
+
+            if(option === 'incorrect' || option === 'skipped'){
+
+                // move card to back of deck
+                current.cards.unshift(current.card);
             }
-        };
 
-    UI.prototype.logOut = function(){
-        var self = flashcardsjs;
+            this.getNewCard(); 
+        }    
+        else {
 
-        // remove user from current end destroy user object
-        self.user = undefined;
-        
-        // remove all current values 
-        self.UI.clearCurrent();
-
-        // reset progress
-        self.UI.resetProgress();
-
-        // set the front and back of the cards
-        self.UI.setFront('Please log in');
-        self.UI.setBack('');
-
-        // set the dropdown menu back to empty
-        self.UI.elements.cardDeckSelect.innerHTML = '<optgroup label="Deck Group"> ' +
-            '<option>Decks Will Appear Here</option>' +
-            '</optgroup>';
-
-        // show the login menu item
-        fn.removeClass(self.UI.elements.menuLogin, 'disabled');
-        
-        // hide the card view, editor view, and logout menu items
-        fn.addClass(self.UI.elements.menuCardView, 'disabled');
-        fn.addClass(self.UI.elements.menuEditView, 'disabled');
-        fn.addClass(self.UI.elements.menuLogout, 'disabled');
-
-        // move to card view
-        fn.setVisible('router-view', 'disabled', self.UI.elements.cardView.id);
-
-        // re-open the login modal
-        self.UI.elements.modal.open();
-    }
-
-    UI.prototype.setInputDirty = function(elements){
-
-        // untouched classes "mui--is-empty mui--is-untouched mui--is-pristine"
-        // touched classes "mui--is-touched mui--is-dirty mui--is-not-empty"
-
-        for(var i = elements.length; i--;){
-            fn.removeClass(elements[i], 'mui--is-empty');
-            fn.removeClass(elements[i], 'mui--is-untouched');
-            fn.removeClass(elements[i], 'mui--is-pristine');
-
-            fn.addClass(elements[i], 'mui--is-touched');
-            fn.addClass(elements[i], 'mui--is-dirty');
-            fn.addClass(elements[i], 'mui--is-not-empty');
+            // ran out of cards, restart the deck
+            this.setViewerDeck();
         }
     }
 
-    UI.prototype.flipCard = function(){
-        var self = flashcardsjs.UI;
-        fn.addClass(self.elements.flashcard, 'flipped');
+    UI.prototype.setFront = function(text){
+        console.log('[DEBUG] UI.setFront', text);
+        this.elements.viewer.flashcard.text.front.innerText = text;
     }
 
-    UI.prototype.flipCardBack = function(){
-        var self = flashcardsjs.UI;
-        fn.removeClass(self.elements.flashcard, 'flipped');
+    UI.prototype.setBack = function(text){
+        console.log('[DEBUG] UI.setBack', text);
+        this.elements.viewer.flashcard.text.back.innerText = text;
+    }
+
+    UI.prototype.getNewCard = function(){
+
+        console.log('[DEBUG] UI.getNewCard');
+
+        if(this.dataInstance.current.cards.length > 0){
+
+            // pop a card off of the deck 
+            this.dataInstance.current.card = this.dataInstance.current.cards.pop();
+
+            // set the text on the card
+            this.setFront(this.dataInstance.current.card.front);
+
+            // set the back to blank and wait 500 ms to set the back text
+            // this prevents the user from seeing it ahead of time on card changes
+            this.setBack('');
+
+            setTimeout(function(){
+                this.setBack(this.dataInstance.current.card.back);
+            }.bind(this), 500); // equal to transition time in style.css
+        }
+        else {
+            this.dataInstance.current.card = {};
+            this.dataInstance.current.cards = [];
+            this.setFront('Congratulations! You\'ve finished the deck!');
+            this.setBack('You didn\'t believe me did you? =P');           
+        }
     }
 
     // enables and disables card flipping
     UI.prototype.enableEventListeners = function(){
         
-        // mouse enter and leave events to flip card
-        this.elements.flashcardContainer.addEventListener('mouseenter', this.flipCard);
-        this.elements.flashcardContainer.addEventListener('mouseleave', this.flipCardBack);
-
-        // helps mobile users since they can't enter or leave with a mouse
-        this.elements.front.addEventListener('click', this.flipCard);
-        this.elements.back.addEventListener('click', this.flipCardBack);
-
         // ROUTES
         this.elements.menuCardView.addEventListener('click', function(){
             fn.setVisible('router-view', 'disabled', this.elements.cardView.id);
@@ -1085,77 +1138,57 @@ var UI = (function(){
         this.enableCardButtons();
     }
 
-    // updates the progress bar
-    UI.prototype.updateProgress = function(button){
+    UI.prototype.logOut = function(){
+        var self = flashcardsjs;
 
-        // get current card's status
-        var status = this.current.card.status;
+        // remove user from current end destroy user object
+        self.user = undefined;
+        
+        // remove all current values 
+        self.UI.clearCurrent();
 
-        // make changes based on button
-        switch(button){
+        // reset progress
+        self.UI.resetProgress();
 
-            case 'correct':
-                if(status === 'incorrect'){
-                    this.current.incorrect--;
-                    this.current.correct++;
-                    this.current.card.status = 'correct';
-                }
-                else if(status === 'skipped'){
-                    this.current.skipped--;
-                    this.current.correct++;
-                    this.current.card.status = 'correct';
-                }
-                else if(status === null){
-                    this.current.correct++;
-                    this.current.card.status = 'correct';
-                }
-                break;
+        // set the front and back of the cards
+        self.UI.setFront('Please log in');
+        self.UI.setBack('');
 
-            case 'incorrect':
-                if(status === 'skipped'){
-                    this.current.skipped--;
-                    this.current.incorrect++;
-                    this.current.card.status = 'incorrect';
-                }
-                else if(status === 'correct'){
-                    this.current.correct--;
-                    this.current.incorrect++;
-                    this.current.card.status = 'incorrect';
-                }
-                else if(status === null){
-                    this.current.incorrect++;
-                    this.current.card.status = 'incorrect';
-                }
-                break;
+        // set the dropdown menu back to empty
+        self.UI.elements.cardDeckSelect.innerHTML = '<optgroup label="Deck Group"> ' +
+            '<option>Decks Will Appear Here</option>' +
+            '</optgroup>';
 
-            case 'skip':
-                if(status === 'incorrect'){
-                    this.current.incorrect--;
-                    this.current.skipped++;
-                    this.current.card.status = 'skipped';
-                }
-                else if(status === 'correct'){
-                    this.current.correct--;
-                    this.current.skipped++;
-                    this.current.card.status = 'skipped';
-                }
-                else if(status === null){
-                    this.current.skipped++;
-                    this.current.card.status = 'skipped';
-                }
-                break;
+        // show the login menu item
+        fn.removeClass(self.UI.elements.menuLogin, 'disabled');
+        
+        // hide the card view, editor view, and logout menu items
+        fn.addClass(self.UI.elements.menuCardView, 'disabled');
+        fn.addClass(self.UI.elements.menuEditView, 'disabled');
+        fn.addClass(self.UI.elements.menuLogout, 'disabled');
+
+        // move to card view
+        fn.setVisible('router-view', 'disabled', self.UI.elements.cardView.id);
+
+        // re-open the login modal
+        self.UI.elements.modal.open();
+    }
+
+    UI.prototype.setInputDirty = function(elements){
+
+        // untouched classes "mui--is-empty mui--is-untouched mui--is-pristine"
+        // touched classes "mui--is-touched mui--is-dirty mui--is-not-empty"
+
+        for(var i = elements.length; i--;){
+            fn.removeClass(elements[i], 'mui--is-empty');
+            fn.removeClass(elements[i], 'mui--is-untouched');
+            fn.removeClass(elements[i], 'mui--is-pristine');
+
+            fn.addClass(elements[i], 'mui--is-touched');
+            fn.addClass(elements[i], 'mui--is-dirty');
+            fn.addClass(elements[i], 'mui--is-not-empty');
         }
-
-        // set the width equal to the percentage of correct/incorrect/skipped 
-        this.elements.correctProgress.style.width = 
-            (this.current.correct / this.current.totalCards) * 100 + '%';
-
-        this.elements.incorrectProgress.style.width = 
-            (this.current.incorrect / this.current.totalCards) * 100 + '%';
-
-        this.elements.skippedProgress.style.width = 
-            (this.current.skipped / this.current.totalCards) * 100 + '%';
-    };
+    }
 
     UI.prototype.setupFindCardAutoComplete = function(){
         var self = this;
@@ -1199,68 +1232,6 @@ var UI = (function(){
         }
 
         this.current.editorCards = this.current.editorDeck.cards;
-    }
-
-    // set the current deck to the one selected in the dropdown
-    // or default to the first one available
-    UI.prototype.selectCardViewDeck = function(deckId){
-
-        if(deckId){
-
-            // iterate through all current decks
-            for(var i = 0; i < this.current.decks.length; i++){
-                
-                // if the selected deck matches 
-                if(this.current.decks[i].id === deckId){
-                    this.current.deck = this.current.decks[i];
-                }
-            }
-        }
-        else {
-            this.current.deck = this.current.decks[0];
-        }
-
-        this.current.cards = this.current.deck.cards;
-        // shuffle cards so their order can't be memorized easily
-        this.current.cards = fn.shuffleArray(this.current.cards);
-        this.current.totalCards = this.current.cards.length;
-
-        // select a new card off the top
-        this.getNewCard()
-    }
-
-    UI.prototype.setFront = function(text){
-        this.elements.frontText.innerText = text;
-    }
-
-    UI.prototype.setBack = function(text){
-        this.elements.backText.innerText = text;
-    }
-
-    UI.prototype.getNewCard = function(){
-        
-        if(this.current.cards.length > 0){
-
-            // pop a card off of the deck 
-            this.current.card = this.current.cards.pop();
-
-            // set the text on the card
-            this.setFront(this.current.card.front);
-
-            // set the back to blank and wait 500 ms to set the back text
-            // this prevents the user from seeing it ahead of time on card changes
-            this.setBack('');
-
-            setTimeout(function(){
-                this.setBack(this.current.card.back);
-            }.bind(this), 500); // equal to transition time in style.css
-        }
-        else {
-            this.current.card = {};
-            this.current.cards = [];
-            this.setFront('Congratulations! You\'ve finished the deck!');
-            this.setBack('You didn\'t believe me did you? =P');           
-        }
     }
 
     return UI;
