@@ -6,6 +6,7 @@
 // - rewrite all classes to ensure readability and ease of extensibility
 // - refactor all logic for UI class when all classes have been updated 
 // - update modal to create user if the input user does not exist
+// - enable event listeners for login and logout menu options
 
 /*==[ OBJECTS ]==============================================================*/
 
@@ -375,7 +376,7 @@ var UI = (function(){
         this.elements.modal = new Modal(this);
 
         //--[ shared ]-----------------------------------------------------
-
+        
         this.elements.header = {
 
             menu: {
@@ -431,7 +432,7 @@ var UI = (function(){
 
         this.elements.editor = {
 
-            view: document.getElementById('editor-view'),
+            view: document.getElementById('editor'),
             decks: {},
             cards: {}
 
@@ -565,6 +566,9 @@ var UI = (function(){
 
         // enable card buttons
         this.enableCardButtons();
+
+        // enable routes 
+        this.enableRoutes();
 
         // add items to the editor view
         //this.setupEditor();
@@ -855,19 +859,29 @@ var UI = (function(){
         }
     }
 
-    // enables and disables card flipping
-    UI.prototype.enableEventListeners = function(){
-        
-        // ROUTES
-        this.elements.menuCardView.addEventListener('click', function(){
-            fn.setVisible('router-view', 'disabled', this.elements.cardView.id);
-            fn.setVisible('router-menu', 'disabled', this.elements.menuEditView.id);
+    UI.prototype.enableRoutes = function(){
+
+        console.log('[DEBUG] UI.enableRoutes');
+
+        this.elements.header.menu.option.viewer.addEventListener('click', function(){
+
+            console.log('[DEBUG] selected viewer');
+
+            fn.setVisible('router-view', 'disabled', this.elements.viewer.view.id);
+            fn.setVisible('router-menu', 'disabled', this.elements.header.menu.option.editor.id);
         }.bind(this));
 
-        this.elements.menuEditView.addEventListener('click', function(){
-            fn.setVisible('router-view', 'disabled', this.elements.editorView.id);
-            fn.setVisible('router-menu', 'disabled', this.elements.menuCardView.id);
+        this.elements.header.menu.option.editor.addEventListener('click', function(){
+
+            console.log('[DEBUG] selected editor');
+
+            fn.setVisible('router-view', 'disabled', this.elements.editor.view.id);
+            fn.setVisible('router-menu', 'disabled', this.elements.header.menu.option.viewer.id);
         }.bind(this));
+    }
+
+    // old event listeners method, needs to be stripped out
+    UI.prototype.enableEventListeners = function(){
 
         // login / logout
         this.elements.menuLogin.addEventListener('click', this.logIn);
