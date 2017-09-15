@@ -69,6 +69,11 @@ var fn = {
     },
         
     addClass: function(_element, _class){
+
+        // get the element by ID if a string was passed
+        if(typeof(_element) === 'string'){
+            _element = document.getElementById(_element);
+        }
         
         // append class if not already present
         if(_element.className.indexOf(_class) === -1){
@@ -80,12 +85,22 @@ var fn = {
     },
 
     removeClass: function(_element, _class){
+
+        // get the element by ID if a string was passed
+        if(typeof(_element) === 'string'){
+            _element = document.getElementById(_element);
+        }
         
         // remove the class and trim any whitespace
         _element.className = _element.className.replace(_class, '').trim();
     },
 
     toggleClass: function(_element, _class){
+
+        // get the element by ID if a string was passed
+        if(typeof(_element) === 'string'){
+            _element = document.getElementById(_element);
+        }
         
         // append class if not already present
         if(_element.className.indexOf(_class) === -1){
