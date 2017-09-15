@@ -6,8 +6,7 @@
 // - rewrite all classes to ensure readability and ease of extensibility
 // - refactor all logic for UI class when all classes have been updated 
 // - update modal to create user if the input user does not exist
-// - clear event listeners on logout, so flipcard doesn't occur 2+ times after signing back in
-// - fix bug with 'undefined' for back of card after logging out and back in
+// - continue to finish all necessary eventlisteners and their handlers for the editor view
 
 /*==[ OBJECTS ]==============================================================*/
 
@@ -382,6 +381,38 @@ var UI = (function(){
         this.handlers.skipped = function(){
             this.getButtonValue('skipped');
         }.bind(this);
+
+        this.handlers.flip = function(){
+            this.flipCard();
+        }.bind(this);
+
+        this.handlers.flipBack = function(){
+            this.flipCardBack();
+        }.bind(this);
+
+        this.handlers.login = function(){
+            this.elements.modal.open();
+        }.bind(this);
+
+        this.handlers.logout = function(){
+            this.logout();
+        }.bind(this);
+
+        this.handlers.changeViewToViewer = function(){
+            this.changeViewToViewer();
+        }.bind(this);
+
+        this.handlers.changeViewToEditor = function(){
+            this.changeViewToEditor();
+        }.bind(this);
+
+        this.handlers.setViewerDeck = function(){
+            this.setViewerDeck();
+        }.bind(this);
+
+        this.handlers.setEditorDeck = function(){
+            this.setEditorDeck();
+        }.bind(this);
     }
 
     UI.prototype.setData = function(dataInstance){
@@ -461,7 +492,7 @@ var UI = (function(){
         };
 
         //--[ show deck view ]---------------------------------------------
-
+        
         this.elements.editor.decks.show = {
 
             view: document.getElementById('show-decks'),
@@ -584,6 +615,9 @@ var UI = (function(){
         // initialize the deck selection dropdown and event handlers 
         this.setupDeckSelection();
 
+        // enable onchange event for deck selection 
+        this.enableDeckSelection();
+
         // enable card flipping
         this.enableCardFlipping();
 
@@ -622,6 +656,10 @@ var UI = (function(){
             '<option>Decks Will Appear Here</option>' +
             '</optgroup>';
 
+        // set the stack name to default 
+        this.elements.viewer.dropdown.label.innerHTML = 'No Stacks Found';
+        this.elements.editor.decks.show.dropdown.label.innerHTML = 'No Stacks Found';
+
         // show the login menu item
         fn.removeClass(this.elements.header.menu.option.login, 'disabled');
         
@@ -632,6 +670,9 @@ var UI = (function(){
 
         // move to card view
         fn.setVisible('router-view', 'disabled', this.elements.viewer.view.id);
+
+        // removes event listeners for onchange to deck selection
+        this.disableDeckSelection();
 
         // removes event listeners for flipping cards
         this.disableCardFlipping();
@@ -710,22 +751,18 @@ var UI = (function(){
 
         // set the default deck for editor view
         //this.selectEditorDeck();
+    }
 
-        // create an onchange event to switch selected card view deck
-        this.elements.viewer.dropdown.select.addEventListener('change', function(){
+    UI.prototype.enableDeckSelection = function(){
+        console.log('[DEBUG] UI.enableDeckSelection');
+        this.elements.viewer.dropdown.select.addEventListener('change', this.handlers.setViewerDeck);
+        this.elements.editor.decks.show.dropdown.select.addEventListener('change', this.handlers.setEditorDeck);
+    }
 
-            console.log('[DEBUG] viewer.dropdown.select clicked');
-            this.setViewerDeck();
-
-        }.bind(this));
-
-        // create an onchange event to switch selected card view deck
-        this.elements.editor.decks.show.dropdown.select.addEventListener('change', function(){
-    
-            console.log('[DEBUG] editor.dropdown.select clicked');
-            this.setEditorDeck();
-
-        }.bind(this));
+    UI.prototype.disableDeckSelection = function(){
+        console.log('[DEBUG] UI.disableDeckSelection');
+        this.elements.viewer.dropdown.select.removeEventListener('change', this.handlers.setViewerDeck);
+        this.elements.editor.decks.show.dropdown.select.removeEventListener('change', this.handlers.setEditorDeck);
     }
 
     UI.prototype.addOptions = function(){
@@ -851,56 +888,45 @@ var UI = (function(){
 
     UI.prototype.flipCard = function(){
         console.log('[DEBUG] UI.flipCard');
-        // need to do it this way to be able to remove event listener
-        fn.addClass('flashcard', 'flipped');
-        //fn.addClass(this.elements.viewer.flashcard.card, 'flipped');
+        fn.addClass(this.elements.viewer.flashcard.card, 'flipped');
     }
 
     UI.prototype.flipCardBack = function(){
         console.log('[DEBUG] UI.flipCardBack');
-        fn.removeClass('flashcard', 'flipped');
-        //fn.removeClass(this.elements.viewer.flashcard.card, 'flipped');
+        fn.removeClass(this.elements.viewer.flashcard.card, 'flipped');
     }
 
     UI.prototype.disableCardFlipping = function(){
         console.log('[DEBUG] UI.disableCardFlipping');
         // mouse enter and leave events to flip card
-        this.elements.viewer.flashcard.container.removeEventListener('mouseenter', this.flipCard);
-        this.elements.viewer.flashcard.container.removeEventListener('mouseleave', this.flipCardBack);
-        this.elements.viewer.flashcard.front.removeEventListener('click', this.flipCard);
-        this.elements.viewer.flashcard.back.removeEventListener('click', this.flipCardBack);
+        this.elements.viewer.flashcard.container.removeEventListener('mouseenter', this.handlers.flip);
+        this.elements.viewer.flashcard.container.removeEventListener('mouseleave', this.handlers.flipBack);
+        this.elements.viewer.flashcard.front.removeEventListener('click', this.handlers.flip);
+        this.elements.viewer.flashcard.back.removeEventListener('click', this.handlers.flipBack);
     }
 
     UI.prototype.enableCardFlipping = function(){
-
         console.log('[DEBUG] UI.enableCardFlipping');
-
         // mouse enter and leave events to flip card
-        this.elements.viewer.flashcard.container.addEventListener('mouseenter', this.flipCard);
-        this.elements.viewer.flashcard.container.addEventListener('mouseleave', this.flipCardBack);
-
+        this.elements.viewer.flashcard.container.addEventListener('mouseenter', this.handlers.flip);
+        this.elements.viewer.flashcard.container.addEventListener('mouseleave', this.handlers.flipBack);
         // helps mobile users since they can't enter or leave with a mouse
-        this.elements.viewer.flashcard.front.addEventListener('click', this.flipCard);
-        this.elements.viewer.flashcard.back.addEventListener('click', this.flipCardBack);
+        this.elements.viewer.flashcard.front.addEventListener('click', this.handlers.flip);
+        this.elements.viewer.flashcard.back.addEventListener('click', this.handlers.flipBack);
     }
 
     UI.prototype.enableCardButtons = function(){
-
         console.log('[DEBUG] UI.enableCardButtons');
-
         this.elements.viewer.button.correct.addEventListener('click', this.handlers.correct);
         this.elements.viewer.button.incorrect.addEventListener('click', this.handlers.incorrect);
         this.elements.viewer.button.skip.addEventListener('click', this.handlers.skipped);
     }
 
     UI.prototype.disableCardButtons = function(){
-
         console.log('[DEBUG] UI.disableCardButtons');
-
         this.elements.viewer.button.correct.removeEventListener('click', this.handlers.correct);
         this.elements.viewer.button.incorrect.removeEventListener('click', this.handlers.incorrect);
         this.elements.viewer.button.skip.removeEventListener('click', this.handlers.skipped);
-
     }
 
     UI.prototype.getButtonValue = function(option){
@@ -955,7 +981,7 @@ var UI = (function(){
 
             // set the back to blank and wait 500 ms to set the back text
             // this prevents the user from seeing it ahead of time on card changes
-            this.setBack('');
+            this.setBack('(loading...)');
 
             setTimeout(function(){
                 this.setBack(this.dataInstance.current.card.back);
@@ -971,44 +997,31 @@ var UI = (function(){
     
     UI.prototype.changeViewToViewer = function(){
         console.log('[DEBUG] selected viewer');
-        // using hardcoded ID values to be able to remove event listener
-        fn.setVisible('router-view', 'disabled', 'viewer');
-        fn.setVisible('router-menu', 'disabled', 'menu-editor');
-        //fn.setVisible('router-view', 'disabled', this.elements.viewer.view.id);
-        //fn.setVisible('router-menu', 'disabled', this.elements.header.menu.option.editor.id);
-        
+        fn.setVisible('router-view', 'disabled', this.elements.viewer.view.id);
+        fn.setVisible('router-menu', 'disabled', this.elements.header.menu.option.editor.id);
     }
 
     UI.prototype.changeViewToEditor = function(){
         console.log('[DEBUG] selected editor');
-        fn.setVisible('router-view', 'disabled', 'editor');
-        fn.setVisible('router-menu', 'disabled', 'menu-viewer');
-        //fn.setVisible('router-view', 'disabled', this.elements.editor.view.id);
-        //fn.setVisible('router-menu', 'disabled', this.elements.header.menu.option.viewer.id);
+        fn.setVisible('router-view', 'disabled', this.elements.editor.view.id);
+        fn.setVisible('router-menu', 'disabled', this.elements.header.menu.option.viewer.id);
     }
 
     UI.prototype.disableRoutes = function(){
-        
         console.log('[DEBUG] UI.disableRoutes');
-        this.elements.header.menu.option.viewer.removeEventListener('click', this.changeViewToViewer);
-        this.elements.header.menu.option.editor.removeEventListener('click', this.changeViewToEditor);
+        this.elements.header.menu.option.viewer.removeEventListener('click', this.handlers.changeViewToViewer);
+        this.elements.header.menu.option.editor.removeEventListener('click', this.handlers.changeViewToEditor);
     }
 
     UI.prototype.enableRoutes = function(){
-
         console.log('[DEBUG] UI.enableRoutes');
-        this.elements.header.menu.option.viewer.addEventListener('click', this.changeViewToViewer);
-        this.elements.header.menu.option.editor.addEventListener('click', this.changeViewToEditor);
+        this.elements.header.menu.option.viewer.addEventListener('click', this.handlers.changeViewToViewer);
+        this.elements.header.menu.option.editor.addEventListener('click', this.handlers.changeViewToEditor);
     }
 
     UI.prototype.enableLoginLogout = function(){
-        this.elements.header.menu.option.login.addEventListener('click', function(){
-            this.elements.modal.open();
-        }.bind(this));
-
-        this.elements.header.menu.option.logout.addEventListener('click', function(){
-            this.logout();
-        }.bind(this));
+        this.elements.header.menu.option.login.addEventListener('click', this.handlers.login);
+        this.elements.header.menu.option.logout.addEventListener('click', this.handlers.logout);
     }
 
     // old event listeners method, needs to be stripped out
