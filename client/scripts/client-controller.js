@@ -6,6 +6,8 @@
 // - rewrite all classes to ensure readability and ease of extensibility
 // - refactor all logic for UI class when all classes have been updated 
 // - update modal to create user if the input user does not exist
+// - clear event listeners on logout, so flipcard doesn't occur 2+ times after signing back in
+// - fix bug with 'undefined' for back of card after logging out and back in
 
 /*==[ OBJECTS ]==============================================================*/
 
@@ -271,12 +273,19 @@ var Modal = (function(){
         this.username = '';
         this.password = '';
         this.elements = {};
+        this.handlers = {};
         this.UI = {};
         this.dataInstance = {};
         
+        this.setHandlers();
         this.setInstance(UI);
         this.getElements();
-        this.setEventListeners();
+    }
+
+    Modal.prototype.setHandlers = function(){
+        this.handlers.login = function(){
+            this.login();
+        }.bind(this);
     }
 
     Modal.prototype.setInstance = function(UI){
@@ -297,48 +306,46 @@ var Modal = (function(){
         this.elements.input.password = document.getElementById('login-password');
     }
 
-    Modal.prototype.setEventListeners = function(){
+    Modal.prototype.login = function(){
 
-        // click login button
-        this.elements.button.login.addEventListener('click', function(e){
-            
-            event.preventDefault();
+        event.preventDefault();
+        
+        // get the username and password
+        var username = this.elements.input.username.value;
+        var password = this.elements.input.password.value;
 
-            // get the username and password
-            var username = this.elements.input.username.value;
-            var password = this.elements.input.password.value;
+        if(username){
+            // check if user exists 
+            this.dataInstance.doesUserExist(username)
+            .then(function(exists){
+                
+                // if the user exists
+                if(exists === true){
+                    // instantiate a new user from the username entered
+                    this.dataInstance.user = new User(username);
 
-            if(username){
-                // check if user exists 
-                this.dataInstance.doesUserExist(username)
-                .then(function(exists){
-                    
-                    // if the user exists
-                    if(exists === true){
-                        // instantiate a new user from the username entered
-                        this.dataInstance.user = new User(username);
-
-                        // get the user's cards
-                        this.dataInstance.getAllCards(username)
-                        .then(function(){
-                            // close the modal
-                            this.close();
-                            this.UI.login();
-                        }.bind(this));
-                    }
-                    else {
-                        console.log('[DEBUG] User does not exist. Need to create user.');
-                    }
-                }.bind(this));
-            }
-        }.bind(this));
+                    // get the user's cards
+                    this.dataInstance.getAllCards(username)
+                    .then(function(){
+                        // close the modal
+                        this.close();
+                        this.UI.login();
+                    }.bind(this));
+                }
+                else {
+                    console.log('[DEBUG] User does not exist. Need to create user.');
+                }
+            }.bind(this));
+        }
     }
 
     Modal.prototype.open = function(){
+        this.elements.button.login.addEventListener('click', this.handlers.login);        
         mui.overlay('on', _options, this.elements.modal);
     }
 
     Modal.prototype.close = function(){
+        this.elements.button.login.removeEventListener('click', this.handlers.login);                
         mui.overlay('off');
     }
     
@@ -353,11 +360,28 @@ var UI = (function(){
     function UI(dataInstance){
 
         this.elements = {};
+        this.handlers = {};
         this.dataInstance = {};
 
+        this.setHandlers();
         this.setData(dataInstance);
         this.getElements();
         this.elements.modal.open();
+    }
+
+    UI.prototype.setHandlers = function(){
+
+        this.handlers.correct = function(){
+            this.getButtonValue('correct');
+        }.bind(this);
+
+        this.handlers.incorrect = function(){
+            this.getButtonValue('incorrect');
+        }.bind(this);
+
+        this.handlers.skipped = function(){
+            this.getButtonValue('skipped');
+        }.bind(this);
     }
 
     UI.prototype.setData = function(dataInstance){
@@ -609,6 +633,15 @@ var UI = (function(){
         // move to card view
         fn.setVisible('router-view', 'disabled', this.elements.viewer.view.id);
 
+        // removes event listeners for flipping cards
+        this.disableCardFlipping();
+
+        // removes event listeners for route menu options
+        this.disableRoutes();
+
+        // disables card buttons 
+        this.disableCardButtons();
+
         // re-open the login modal
         this.elements.modal.open();
     }
@@ -818,12 +851,24 @@ var UI = (function(){
 
     UI.prototype.flipCard = function(){
         console.log('[DEBUG] UI.flipCard');
-        fn.addClass(this.elements.viewer.flashcard.card, 'flipped');
+        // need to do it this way to be able to remove event listener
+        fn.addClass('flashcard', 'flipped');
+        //fn.addClass(this.elements.viewer.flashcard.card, 'flipped');
     }
 
     UI.prototype.flipCardBack = function(){
         console.log('[DEBUG] UI.flipCardBack');
-        fn.removeClass(this.elements.viewer.flashcard.card, 'flipped');
+        fn.removeClass('flashcard', 'flipped');
+        //fn.removeClass(this.elements.viewer.flashcard.card, 'flipped');
+    }
+
+    UI.prototype.disableCardFlipping = function(){
+        console.log('[DEBUG] UI.disableCardFlipping');
+        // mouse enter and leave events to flip card
+        this.elements.viewer.flashcard.container.removeEventListener('mouseenter', this.flipCard);
+        this.elements.viewer.flashcard.container.removeEventListener('mouseleave', this.flipCardBack);
+        this.elements.viewer.flashcard.front.removeEventListener('click', this.flipCard);
+        this.elements.viewer.flashcard.back.removeEventListener('click', this.flipCardBack);
     }
 
     UI.prototype.enableCardFlipping = function(){
@@ -831,40 +876,31 @@ var UI = (function(){
         console.log('[DEBUG] UI.enableCardFlipping');
 
         // mouse enter and leave events to flip card
-        this.elements.viewer.flashcard.container.addEventListener('mouseenter', function(){
-            this.flipCard();
-        }.bind(this));
-
-        this.elements.viewer.flashcard.container.addEventListener('mouseleave', function(){
-            this.flipCardBack();
-        }.bind(this));
+        this.elements.viewer.flashcard.container.addEventListener('mouseenter', this.flipCard);
+        this.elements.viewer.flashcard.container.addEventListener('mouseleave', this.flipCardBack);
 
         // helps mobile users since they can't enter or leave with a mouse
-        this.elements.viewer.flashcard.front.addEventListener('click', function(){
-            this.flipCard();
-        }.bind(this));
-
-        this.elements.viewer.flashcard.back.addEventListener('click', function(){
-            this.flipCardBack();
-        }.bind(this))
-        
+        this.elements.viewer.flashcard.front.addEventListener('click', this.flipCard);
+        this.elements.viewer.flashcard.back.addEventListener('click', this.flipCardBack);
     }
 
     UI.prototype.enableCardButtons = function(){
 
         console.log('[DEBUG] UI.enableCardButtons');
-        
-        this.elements.viewer.button.correct.addEventListener('click', function(){
-            this.getButtonValue('correct');
-        }.bind(this));
 
-        this.elements.viewer.button.incorrect.addEventListener('click', function(){
-            this.getButtonValue('incorrect');
-        }.bind(this));
+        this.elements.viewer.button.correct.addEventListener('click', this.handlers.correct);
+        this.elements.viewer.button.incorrect.addEventListener('click', this.handlers.incorrect);
+        this.elements.viewer.button.skip.addEventListener('click', this.handlers.skipped);
+    }
 
-        this.elements.viewer.button.skip.addEventListener('click', function(){
-            this.getButtonValue('skipped');
-        }.bind(this));
+    UI.prototype.disableCardButtons = function(){
+
+        console.log('[DEBUG] UI.disableCardButtons');
+
+        this.elements.viewer.button.correct.removeEventListener('click', this.handlers.correct);
+        this.elements.viewer.button.incorrect.removeEventListener('click', this.handlers.incorrect);
+        this.elements.viewer.button.skip.removeEventListener('click', this.handlers.skipped);
+
     }
 
     UI.prototype.getButtonValue = function(option){
@@ -932,26 +968,37 @@ var UI = (function(){
             this.setBack('You didn\'t believe me did you? =P');           
         }
     }
+    
+    UI.prototype.changeViewToViewer = function(){
+        console.log('[DEBUG] selected viewer');
+        // using hardcoded ID values to be able to remove event listener
+        fn.setVisible('router-view', 'disabled', 'viewer');
+        fn.setVisible('router-menu', 'disabled', 'menu-editor');
+        //fn.setVisible('router-view', 'disabled', this.elements.viewer.view.id);
+        //fn.setVisible('router-menu', 'disabled', this.elements.header.menu.option.editor.id);
+        
+    }
+
+    UI.prototype.changeViewToEditor = function(){
+        console.log('[DEBUG] selected editor');
+        fn.setVisible('router-view', 'disabled', 'editor');
+        fn.setVisible('router-menu', 'disabled', 'menu-viewer');
+        //fn.setVisible('router-view', 'disabled', this.elements.editor.view.id);
+        //fn.setVisible('router-menu', 'disabled', this.elements.header.menu.option.viewer.id);
+    }
+
+    UI.prototype.disableRoutes = function(){
+        
+        console.log('[DEBUG] UI.disableRoutes');
+        this.elements.header.menu.option.viewer.removeEventListener('click', this.changeViewToViewer);
+        this.elements.header.menu.option.editor.removeEventListener('click', this.changeViewToEditor);
+    }
 
     UI.prototype.enableRoutes = function(){
 
         console.log('[DEBUG] UI.enableRoutes');
-
-        this.elements.header.menu.option.viewer.addEventListener('click', function(){
-
-            console.log('[DEBUG] selected viewer');
-
-            fn.setVisible('router-view', 'disabled', this.elements.viewer.view.id);
-            fn.setVisible('router-menu', 'disabled', this.elements.header.menu.option.editor.id);
-        }.bind(this));
-
-        this.elements.header.menu.option.editor.addEventListener('click', function(){
-
-            console.log('[DEBUG] selected editor');
-
-            fn.setVisible('router-view', 'disabled', this.elements.editor.view.id);
-            fn.setVisible('router-menu', 'disabled', this.elements.header.menu.option.viewer.id);
-        }.bind(this));
+        this.elements.header.menu.option.viewer.addEventListener('click', this.changeViewToViewer);
+        this.elements.header.menu.option.editor.addEventListener('click', this.changeViewToEditor);
     }
 
     UI.prototype.enableLoginLogout = function(){
