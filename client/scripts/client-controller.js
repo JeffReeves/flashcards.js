@@ -6,7 +6,6 @@
 // - rewrite all classes to ensure readability and ease of extensibility
 // - refactor all logic for UI class when all classes have been updated 
 // - update modal to create user if the input user does not exist
-// - enable event listeners for login and logout menu options
 
 /*==[ OBJECTS ]==============================================================*/
 
@@ -570,8 +569,48 @@ var UI = (function(){
         // enable routes 
         this.enableRoutes();
 
+        // enable login and logout buttons
+        this.enableLoginLogout();
+
         // add items to the editor view
         //this.setupEditor();
+    }
+
+    UI.prototype.logout = function(){
+
+        console.log('[DEBUG] UI.logout');
+        
+        // remove user from current end destroy user object
+        this.dataInstance.user = undefined;
+
+        // reset progress
+        this.resetProgress();
+        
+        // remove all current values 
+        //this.clearCurrent();
+
+        // set the front and back of the cards
+        this.setFront('Please log in');
+        this.setBack('');
+
+        // set the dropdown menu back to empty
+        this.elements.viewer.dropdown.select.innerHTML = '<optgroup label="Deck Group"> ' +
+            '<option>Decks Will Appear Here</option>' +
+            '</optgroup>';
+
+        // show the login menu item
+        fn.removeClass(this.elements.header.menu.option.login, 'disabled');
+        
+        // hide the card view, editor view, and logout menu items
+        fn.addClass(this.elements.header.menu.option.viewer, 'disabled');
+        fn.addClass(this.elements.header.menu.option.editor, 'disabled');
+        fn.addClass(this.elements.header.menu.option.logout, 'disabled');
+
+        // move to card view
+        fn.setVisible('router-view', 'disabled', this.elements.viewer.view.id);
+
+        // re-open the login modal
+        this.elements.modal.open();
     }
 
     UI.prototype.updateViewerStackLabel = function(){
@@ -915,12 +954,19 @@ var UI = (function(){
         }.bind(this));
     }
 
+    UI.prototype.enableLoginLogout = function(){
+        this.elements.header.menu.option.login.addEventListener('click', function(){
+            this.elements.modal.open();
+        }.bind(this));
+
+        this.elements.header.menu.option.logout.addEventListener('click', function(){
+            this.logout();
+        }.bind(this));
+    }
+
     // old event listeners method, needs to be stripped out
     UI.prototype.enableEventListeners = function(){
 
-        // login / logout
-        this.elements.menuLogin.addEventListener('click', this.logIn);
-        this.elements.menuLogout.addEventListener('click', this.logOut);
 
         // deck selection dropdown
         this.elements.editorDeckSelect.addEventListener('change', function(){
@@ -1185,42 +1231,6 @@ var UI = (function(){
 
         // add events for button presses
         this.enableCardButtons();
-    }
-
-    UI.prototype.logOut = function(){
-        var self = flashcardsjs;
-
-        // remove user from current end destroy user object
-        self.user = undefined;
-        
-        // remove all current values 
-        self.UI.clearCurrent();
-
-        // reset progress
-        self.UI.resetProgress();
-
-        // set the front and back of the cards
-        self.UI.setFront('Please log in');
-        self.UI.setBack('');
-
-        // set the dropdown menu back to empty
-        self.UI.elements.cardDeckSelect.innerHTML = '<optgroup label="Deck Group"> ' +
-            '<option>Decks Will Appear Here</option>' +
-            '</optgroup>';
-
-        // show the login menu item
-        fn.removeClass(self.UI.elements.menuLogin, 'disabled');
-        
-        // hide the card view, editor view, and logout menu items
-        fn.addClass(self.UI.elements.menuCardView, 'disabled');
-        fn.addClass(self.UI.elements.menuEditView, 'disabled');
-        fn.addClass(self.UI.elements.menuLogout, 'disabled');
-
-        // move to card view
-        fn.setVisible('router-view', 'disabled', self.UI.elements.cardView.id);
-
-        // re-open the login modal
-        self.UI.elements.modal.open();
     }
 
     UI.prototype.setInputDirty = function(elements){
