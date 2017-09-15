@@ -243,7 +243,6 @@ var Data = (function(){
                     // shuffle the card order
                     this.current.cards = fn.shuffleArray(this.current.cards);
                     this.current.card = {};
-                    //this.current.card = this.current.cards.pop();
                     this.current.total = this.current.deck.cards.length;
                     this.current.correct = 0;
                     this.current.incorrect = 0;
@@ -445,7 +444,8 @@ var UI = (function(){
             view: document.getElementById('show-decks'),
 
             dropdown: {
-                select: document.getElementById('editor-deck-select')
+                select: document.getElementById('editor-deck-select'),
+                label: document.getElementById('editor-stack-label')
             },
 
             input: {
@@ -574,9 +574,24 @@ var UI = (function(){
         //this.setupEditor();
     }
 
-    UI.prototype.updateStackLabel = function(deckId){
-        console.log('[DEBUG] UI.updateStackLabel');
+    UI.prototype.updateViewerStackLabel = function(){
+        console.log('[DEBUG] UI.updateViewerStackLabel');
         this.elements.viewer.dropdown.label.innerHTML = this.dataInstance.current.stack.name;
+    }
+
+    UI.prototype.updateEditorStackLabel = function(deckId){
+        console.log('[DEBUG] UI.updateEditorStackLabel');
+        var select = this.elements.editor.decks.show.dropdown.select;
+        var options = select.getElementsByTagName('option');
+        var optgroup;
+        for(var i = options.length; i--;){
+            var option = options[i];
+            if(option.value == deckId){
+                optgroup = option.parentElement.label;
+                this.elements.editor.decks.show.dropdown.label.innerHTML = optgroup;
+                break;
+            }
+        }
     }
 
     UI.prototype.setViewerDeck = function(){
@@ -590,7 +605,7 @@ var UI = (function(){
         this.dataInstance.setCurrent(deckId);
 
         // update stack label 
-        this.updateStackLabel(deckId);
+        this.updateViewerStackLabel();
 
         // reset progress bar
         this.resetProgress();  
@@ -599,15 +614,27 @@ var UI = (function(){
         this.getNewCard(); 
     }
 
+    UI.prototype.setEditorDeck = function(){
+
+        console.log('[DEBUG] UI.setEditorDeck');
+
+        // get the active deck's ID
+        var deckId = Number(this.elements.editor.decks.show.dropdown.select.value);
+
+        // update stack label 
+        this.updateEditorStackLabel(deckId);
+    }
+
     UI.prototype.setupDeckSelection = function(){
 
         console.log('[DEBUG] UI.setupDeckSelection');
         
-        // add the options to the drop-down
+        // add the options to the viewer and editor drop-downs
         this.addOptions();
 
         // set a default deck for the card view
         this.setViewerDeck();
+        this.setEditorDeck();
 
         // set the default deck for editor view
         //this.selectEditorDeck();
@@ -617,6 +644,14 @@ var UI = (function(){
 
             console.log('[DEBUG] viewer.dropdown.select clicked');
             this.setViewerDeck();
+
+        }.bind(this));
+
+        // create an onchange event to switch selected card view deck
+        this.elements.editor.decks.show.dropdown.select.addEventListener('change', function(){
+    
+            console.log('[DEBUG] editor.dropdown.select clicked');
+            this.setEditorDeck();
 
         }.bind(this));
     }
