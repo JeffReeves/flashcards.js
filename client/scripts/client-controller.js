@@ -744,6 +744,9 @@ var UI = (function(){
         var select = this.elements.editor.decks.show.dropdown.select;
         var deckId = Number(select.value);
         this.dataInstance.setEditorCurrent(deckId);
+
+        // clear value in card edit input field 
+        this.elements.editor.decks.show.input.card.value = '';
     }
 
     UI.prototype.updateEditorStackLabel = function(deckId){
