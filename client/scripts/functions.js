@@ -122,7 +122,7 @@ var fn = {
         var _elements = document.getElementsByClassName(_sharedClass);
     
         // reverse iterate through all elements (fastest method)
-        for (i = _elements.length; i--;) {
+        for(var i = _elements.length; i--;){
     
             // if the desired id is found
             if(_elements[i].id === _id){
