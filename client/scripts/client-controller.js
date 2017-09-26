@@ -6,9 +6,10 @@
 // - rewrite all classes to ensure readability and ease of extensibility
 // - refactor all logic for UI class when all classes have been updated 
 // - update modal to create user if the input user does not exist
-// - continue to finish all necessary eventlisteners and their handlers for the editor view
 // - only try to load current cards if the user has any stacks or decks
 // - update autocomplete so that it doesn't choke on double-quoted strings
+// - get editor save buttons working
+// - updated functions.js to use fetch instead of XMLHttpRequest
 
 /*==[ OBJECTS ]==============================================================*/
 
@@ -105,6 +106,8 @@ var Data = (function(){
 
         // active
         this.api.active = {};
+        this.api.active.get = {};
+        this.api.active.post = {};
         
         // set active URL based on window location
         if(window.location.origin.indexOf(this.api.development.domain) === -1){
@@ -115,15 +118,18 @@ var Data = (function(){
         }
 
         // active API sub-paths
-        this.api.active.exists = this.api.active.url + 'userexists/';
-        this.api.active.user = this.api.active.url + 'user/';
-        this.api.active.stacks = this.api.active.url + 'stacks/userid/';
-        this.api.active.decks = this.api.active.url + 'decks/stackid/';
-        this.api.active.cards = this.api.active.url + 'cards/deckid/';
+        this.api.active.get.exists = this.api.active.url + 'userexists/';
+        this.api.active.get.user = this.api.active.url + 'user/';
+        this.api.active.get.stacks = this.api.active.url + 'stacks/userid/';
+        this.api.active.get.decks = this.api.active.url + 'decks/stackid/';
+        this.api.active.get.cards = this.api.active.url + 'cards/deckid/';
+
+
+        this.api.active.post.deck = this.api.active.url + 'create/deck/';
     }
 
     Data.prototype.doesUserExist = function(username){
-        return fn.getJSON(this.api.active.exists + username)
+        return fn.getJSON(this.api.active.get.exists + username)
         .then(function(data){
             if(data.userexists === 1){
                 return true;
@@ -137,7 +143,7 @@ var Data = (function(){
     }
 
     Data.prototype.getUserId = function(username){
-        return fn.getJSON(this.api.active.user + username)
+        return fn.getJSON(this.api.active.get.user + username)
         .then(function(user){
             return user;
         }, function(error){
@@ -146,7 +152,7 @@ var Data = (function(){
     }
 
     Data.prototype.getStacks = function(user){
-        return fn.getJSON(this.api.active.stacks + user.id)
+        return fn.getJSON(this.api.active.get.stacks + user.id)
         .then(function(stacks){
             return stacks;
         }, function(error){
@@ -155,7 +161,7 @@ var Data = (function(){
     }
 
     Data.prototype.getDecks = function(stack){
-        return fn.getJSON(this.api.active.decks + stack.id)
+        return fn.getJSON(this.api.active.get.decks + stack.id)
         .then(function(decks){
             return decks;
         }, function(error){
@@ -164,7 +170,7 @@ var Data = (function(){
     }
 
     Data.prototype.getCards = function(deck){
-        return fn.getJSON(this.api.active.cards + deck.id)
+        return fn.getJSON(this.api.active.get.cards + deck.id)
         .then(function(cards){
             return cards;
         }, function(error){
@@ -273,6 +279,15 @@ var Data = (function(){
             }
         }
     }
+
+    // Data.prototype.setStacks = function(user){
+    //     return fn.getJSON(this.api.active.post.deck)
+    //     .then(function(stacks){
+    //         return stacks;
+    //     }, function(error){
+    //         return error;
+    //     });
+    // }
 
     return Data;
 }());
@@ -458,6 +473,23 @@ var UI = (function(){
         this.handlers.editorCardSelectAll = function(){
             this.editorCardSelectAll();
         }.bind(this);
+
+        this.handlers.editorEditDeckSave = function(){
+            this.editorEditDeckSave();
+        }.bind(this);
+
+        this.handlers.editorAddDeckSave = function(){
+            this.editorAddDeckSave();
+        }.bind(this);
+
+        this.handlers.editorEditCardSave = function(){
+            this.editorEditCardSave();
+        }.bind(this);
+
+        this.handlers.editorAddCardSave = function(){
+            this.editorAddCardSave();
+        }.bind(this);
+        
     }
 
     UI.prototype.setData = function(dataInstance){
@@ -587,7 +619,7 @@ var UI = (function(){
         }; 
 
         //--[ add deck view ]----------------------------------------------
-
+        
         this.elements.editor.decks.add = {
 
             view: document.getElementById('add-deck'),
@@ -1186,7 +1218,18 @@ var UI = (function(){
         this.elements.editor.decks.add.button.cancel.addEventListener('click', this.handlers.cancelEdit);
         this.elements.editor.cards.edit.button.cancel.addEventListener('click', this.handlers.cancelEdit);
         this.elements.editor.cards.add.button.cancel.addEventListener('click', this.handlers.cancelEdit);
-        
+       
+        // save buttons
+        this.elements.editor.decks.edit.button.save.addEventListener('click', this.handlers.editorEditDeckSave);
+        this.elements.editor.decks.add.button.save.addEventListener('click', this.handlers.editorAddDeckSave);
+        this.elements.editor.cards.edit.button.save.addEventListener('click', this.handlers.editorEditCardSave);
+        this.elements.editor.cards.add.button.save.addEventListener('click', this.handlers.editorAddCardSave);
+
+        // delete buttons
+        // this.elements.editor.decks.edit.button.delete.addEventListener('click', this.handlers.editorEditDeckDelete);
+        // this.elements.editor.decks.add.button.delete.addEventListener('click', this.handlers.editorAddDeckDelete);
+        // this.elements.editor.cards.edit.button.delete.addEventListener('click', this.handlers.editorEditCardDelete);
+        // this.elements.editor.cards.add.button.delete.addEventListener('click', this.handlers.editorAddCardDelete);
     }
 
     UI.prototype.disableEditorButtons = function(){
@@ -1205,6 +1248,18 @@ var UI = (function(){
         this.elements.editor.decks.add.button.cancel.removeEventListener('click', this.handlers.cancelEdit);
         this.elements.editor.cards.edit.button.cancel.removeEventListener('click', this.handlers.cancelEdit);
         this.elements.editor.cards.add.button.cancel.removeEventListener('click', this.handlers.cancelEdit);
+
+        // save buttons
+        this.elements.editor.decks.edit.button.save.removeEventListener('click', this.handlers.editorEditDeckSave);
+        this.elements.editor.decks.add.button.save.removeEventListener('click', this.handlers.editorAddDeckSave);
+        this.elements.editor.cards.edit.button.save.removeEventListener('click', this.handlers.editorEditCardSave);
+        this.elements.editor.cards.add.button.save.removeEventListener('click', this.handlers.editorAddCardSave);
+
+        // delete buttons
+        // this.elements.editor.decks.edit.button.delete.removeEventListener('click', this.handlers.editorEditDeckDelete);
+        // this.elements.editor.decks.add.button.delete.removeEventListener('click', this.handlers.editorAddDeckDelete);
+        // this.elements.editor.cards.edit.button.delete.removeEventListener('click', this.handlers.editorEditCardDelete);
+        // this.elements.editor.cards.add.button.delete.removeEventListener('click', this.handlers.editorAddCardDelete);
     }
 
     UI.prototype.setInputDirty = function(elements){
@@ -1243,6 +1298,28 @@ var UI = (function(){
                 }
                 suggest(suggestions);
             }
+        });
+    }
+
+    UI.prototype.editorAddDeckSave = function(){
+
+        console.log('[DEBUG] UI.editorAddDeckSave');
+        
+        var stack = this.elements.editor.decks.add.input.stack.value;
+        var title = this.elements.editor.decks.add.input.title.value;
+        var username = this.dataInstance.user.username;
+
+        $.post(this.dataInstance.api.active.post.deck, { 
+            stack: stack, 
+            title: title,
+            username: username
+        }) 
+        .done(function(data){
+            console.log('Created new stack', data);
+            console.log('[New Stack/Deck]');
+            console.log('Stack: ', stack);
+            console.log('Title: ', title);
+            fn.setVisible('router-editor-view', 'disabled', this.elements.editor.decks.show.view.id);
         });
     }
 
