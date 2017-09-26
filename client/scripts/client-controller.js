@@ -220,17 +220,19 @@ var Data = (function(){
             var abort = false;
             for(var k = 0; k < decks.length; k++){
                 var cards = decks[k];
-                var deckId = cards[0].deckid;
-
-                for(var i = 0; i < this.user.stacks.length; i++){
-                    for(var j = 0; j < this.user.stacks[i].decks.length; j++){
-                        // if the deck id matches 
-                        if(this.user.stacks[i].decks[j].id === deckId){
-                            for(var l = 0; l < cards.length; l++){
-                                var card = cards[l];
-                                this.user.stacks[i].decks[j].cards.push(new Card(card));
+                if(cards[0]) {
+                    var deckId = cards[0].deckid;
+                    
+                    for(var i = 0; i < this.user.stacks.length; i++){
+                        for(var j = 0; j < this.user.stacks[i].decks.length; j++){
+                            // if the deck id matches 
+                            if(this.user.stacks[i].decks[j].id === deckId){
+                                for(var l = 0; l < cards.length; l++){
+                                    var card = cards[l];
+                                    this.user.stacks[i].decks[j].cards.push(new Card(card));
+                                }
+                                break;
                             }
-                            break;
                         }
                     }
                 }
@@ -1309,6 +1311,8 @@ var UI = (function(){
         var title = this.elements.editor.decks.add.input.title.value;
         var username = this.dataInstance.user.username;
 
+        var self = this;
+
         $.post(this.dataInstance.api.active.post.deck, { 
             stack: stack, 
             title: title,
@@ -1319,7 +1323,7 @@ var UI = (function(){
             console.log('[New Stack/Deck]');
             console.log('Stack: ', stack);
             console.log('Title: ', title);
-            fn.setVisible('router-editor-view', 'disabled', this.elements.editor.decks.show.view.id);
+            fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);
         });
     }
 
