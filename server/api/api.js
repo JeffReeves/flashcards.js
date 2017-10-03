@@ -240,13 +240,6 @@ router.post('/create/user', function(req, res){
     });
 });
 
-
-// this.api.active.post.edit.stack = this.api.active.url + 'edit/stack/';
-// this.api.active.post.edit.deck = this.api.active.url + 'edit/deck/';
-// this.api.active.post.edit.card = this.api.active.url + 'edit/card/';
-// this.api.active.post.add.deck = this.api.active.url + 'create/deck/';
-// this.api.active.post.add.card = this.api.active.url + 'create/card/';
-
 router.post('/edit/stack', function(req, res){
     
     var username = req.body.username;
@@ -406,17 +399,17 @@ router.post('/create/deck', function(req, res){
 router.post('/create/card', function(req, res){
     
     var username = req.body.username;
-    var deckId = req.body.deckId;
+    var stack = req.body.stack;
+    var deck = req.body.deck;
     var front = req.body.front;
     var back = req.body.back;
 
-    // create a new card for the deck
-    var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +   
-    'INSERT INTO cards (deckid, front, back) ' +
-    'VALUES ("' + deckId + '", ' +
-    '"' + front + '", ' + 
-    '"' + back + '"' +
-    ');';
+    // create a new card for a deck -> stack -> user
+    var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+    'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = "' + stack + '" AND userid = @userid); ' +
+    'SET @deckid = (SELECT id FROM decks WHERE decks.title = "' + deck + '" AND stackid = @stackid); ' +
+    'INSERT IGNORE INTO cards (deckid, front, back) ' + 
+    'VALUES (@deckid, "' + front + '", "' + back + '");';
 
     db.getConnection(function(err, connection){
 
