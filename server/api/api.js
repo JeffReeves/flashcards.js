@@ -8,70 +8,100 @@ var db = require('../database.js');
 // select exists(select * from users where users.username = "jeff" limit 1) as exists;
 router.get('/userexists/:username', function(req, res) {
     
-        var username = req.params.username;
-    
-        // select all users by username
-        var query = 'SELECT EXISTS(SELECT * ' +
-                    'FROM users ' +
-                    'WHERE users.username = "' + username + '"LIMIT 1) ' +
-                    'AS userexists';
-    
-        db.getConnection(function(err, connection){
-    
-            connection.query(query, function(error, results, fields) {
-    
-                connection.release();
-    
-                if(results){
-                    // returns [{"userexists":1}] if true
-                    // returns [{"userexists":0}] if false
-                    res.send(results);
-                }
-    
-                if(error){
-                    res.send(error);
-                }
-            });
+    var username = req.params.username;
+
+    // select all users by username
+    var query = 'SELECT EXISTS(SELECT * ' +
+                'FROM users ' +
+                'WHERE users.username = "' + username + '"LIMIT 1) ' +
+                'AS userexists';
+
+    db.getConnection(function(err, connection){
+
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
+
+            if(results){
+                // returns [{"userexists":1}] if true
+                // returns [{"userexists":0}] if false
+                res.send(results[0]);
+            }
+
+            if(error){
+                res.send(error);
+            }
         });
     });
+});
 
 // get a user by username
 router.get('/user/:username', function(req, res) {
     
-        var username = req.params.username;
-    
-        // select all users by username
-        var query = 'SELECT users.id, users.username ' +
-                    'FROM users ' +
-                    'WHERE users.username = "' + username + '"LIMIT 1 ';
-    
-        db.getConnection(function(err, connection){
-    
-            connection.query(query, function(error, results, fields) {
-    
-                connection.release();
-    
-                if(results){
-                    res.send(results[0]);
-                }
-    
-                if(error){
-                    res.send(error);
-                }
-            });
+    var username = req.params.username;
+
+    // select all users by username
+    var query = 'SELECT users.id, users.username ' +
+                'FROM users ' +
+                'WHERE users.username = "' + username + '"LIMIT 1 ';
+
+    db.getConnection(function(err, connection){
+
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
+
+            if(results){
+                res.send(results[0]);
+            }
+
+            if(error){
+                res.send(error);
+            }
         });
     });
+});
 
-router.get('/decks/userid/:id', function(req, res) {
+
+router.get('/stacks/userid/:id', function(req, res) {
 
     var userId = req.params.id;
 
     // select all decks for the username
-    var query = 'SELECT decks.id, decks.title, decks.stack ' +
-                'FROM decks ' +
+    var query = 'SELECT stacks.id, stacks.name, stacks.userid ' +
+                'FROM stacks ' +
                 'INNER JOIN users ' +
-                'ON decks.userid=users.id ' +
+                'ON stacks.userid=users.id ' +
                 'WHERE users.id = "' + userId + '" ' +
+                'ORDER BY stacks.id;';
+
+    db.getConnection(function(err, connection){
+
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
+
+            if(results){
+                res.send(results);
+            }
+
+            if(error){
+                res.send(error);
+            }
+        });
+    });
+});
+
+router.get('/decks/stackid/:id', function(req, res) {
+
+    var stackId = req.params.id;
+
+    // select all decks for the username
+    var query = 'SELECT decks.id, decks.title, decks.stackid ' +
+                'FROM decks ' +
+                'INNER JOIN stacks ' +
+                'ON decks.stackid=stacks.id ' +
+                'WHERE stacks.id = "' + stackId + '" ' +
                 'ORDER BY decks.id;';
 
     db.getConnection(function(err, connection){
@@ -91,20 +121,18 @@ router.get('/decks/userid/:id', function(req, res) {
     });
 });
 
-router.get('/cards/userid/:userid', function(req, res) {
+router.get('/cards/deckid/:id', function(req, res) {
 
-    var userid = req.params.userid;
+    var deckId = req.params.id;
 
     // select all cards for a user
     var query = 'SELECT ' +
-            'cards.front, cards.back, cards.id, cards.deckid ' +
-            'FROM users ' +
+            'cards.id, cards.front, cards.back, cards.status, cards.deckid ' +
+            'FROM cards ' +
             'INNER JOIN decks ' +
-            'ON decks.userid = users.id ' +
-            'INNER JOIN cards ' +
-            'ON cards.deckid = decks.id ' +
-            'WHERE users.id = "' + userid + '" ' +
-            'ORDER BY decks.id, cards.id;';
+            'ON cards.deckid=decks.id ' +
+            'WHERE decks.id = "' + deckId + '" ' +
+            'ORDER BY cards.id;';
 
     db.getConnection(function(err, connection){
 
@@ -123,33 +151,6 @@ router.get('/cards/userid/:userid', function(req, res) {
     });
 });
 
-
-router.get('/cards/deckid/:deckid', function(req, res) {
-
-    var deckid = req.params.deckid;
-
-    // select all cards for a deck by id
-    var query = 'SELECT cards.id, cards.front, cards.back, cards.status ' +
-                'FROM cards INNER JOIN decks ON cards.deckid=decks.id ' +
-                'WHERE decks.id = ' + deckid + ' ' +
-                'ORDER BY cards.id';
-
-    db.getConnection(function(err, connection){
-
-        connection.query(query, function(error, results, fields) {
-
-            connection.release();
-
-            if(results){
-                res.send(results);
-            }
-
-            if(error){
-                res.send(error);
-            }
-        });
-    });
-});
 
 router.post('/create/user', function(req, res){
 
@@ -240,16 +241,24 @@ router.post('/create/user', function(req, res){
 });
 
 
-router.post('/create/deck', function(req, res){
+// this.api.active.post.edit.stack = this.api.active.url + 'edit/stack/';
+// this.api.active.post.edit.deck = this.api.active.url + 'edit/deck/';
+// this.api.active.post.edit.card = this.api.active.url + 'edit/card/';
+// this.api.active.post.add.deck = this.api.active.url + 'create/deck/';
+// this.api.active.post.add.card = this.api.active.url + 'create/card/';
 
-    var username = req.body.username;
-    var stack = req.body.stack;
-    var title = req.body.title;
+router.post('/edit/stack', function(req, res){
     
-    // create a new deck for the user
-    var query = 'INSERT INTO decks (userid, title, stack) ' + 
-    'SELECT id, "' + title + '", "' + stack + '" ' +
-    'FROM users WHERE username = "' + username +'";'; 
+    var username = req.body.username;
+    var originalStack = req.body.originalStack;
+    var stack = req.body.stack;
+    
+    // edit the name of the existing stack for the user
+    var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+    'UPDATE stacks ' +
+    'SET stacks.name = "' + stack + '" ' +
+    'WHERE stacks.name = "' + originalStack + '" ' +
+    'AND stacks.userid = @userid;';    
 
     db.getConnection(function(err, connection){
 
@@ -259,6 +268,132 @@ router.post('/create/deck', function(req, res){
 
             if(results){
                 res.send(results);
+            }
+
+            if(error){
+                res.send(error);
+            }
+        });
+    });
+});
+
+router.post('/edit/deck', function(req, res){
+    
+    var username = req.body.username;
+    var originalStack = req.body.originalStack;
+    var originalTitle = req.body.originalTitle;
+    var title = req.body.title;
+    
+    // edit the name of the existing deck for the stack belonging to the user
+    var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+    'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = "' + originalStack + '" AND userid = @userid); ' +
+    'UPDATE decks ' + 
+    'SET decks.title = "' + title + '"' +
+    'WHERE decks.title = "' + originalTitle + '"' +
+    'AND decks.stackid = @stackid;';
+
+    db.getConnection(function(err, connection){
+
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
+
+            if(results){
+                res.send(results);
+            }
+
+            if(error){
+                res.send(error);
+            }
+        });
+    });
+});
+
+router.post('/edit/card', function(req, res){
+    
+    var username = req.body.username;
+    var stack = req.body.stack;
+    var deck = req.body.deck;
+    var originalFront = req.body.originalFront;
+    var originalBack = req.body.originalBack;
+    var front = req.body.front;
+    var back = req.body.back;
+
+    // create a new card for the deck
+    var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+    'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = "' + stack + '" AND userid = @userid); ' +
+    'SET @deckid = (SELECT id FROM decks WHERE decks.title = "' + deck + '" AND stackid = @stackid); ' +
+    'UPDATE cards ' + 
+    'SET cards.front = "' + front + '", cards.back = "' +  back + '" ' +
+    'WHERE cards.front = "' + originalFront + '"' +
+    'AND cards.deckid = @deckid;';
+
+    db.getConnection(function(err, connection){
+
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
+
+            if(results){
+                res.send(results);
+            }
+
+            if(error){
+                res.send(error);
+            }
+        });
+    });
+});
+    
+
+router.post('/create/deck', function(req, res){
+
+    // create a new stack if the current stack doesn't exist
+    // create a new deck if the stack doesn't already have a deck of the same name
+
+    var username = req.body.username;
+    var stack = req.body.stack;
+    var title = req.body.title;
+
+    var ultimateResults = [];
+
+    // create a new stack for the user
+    var query = 'INSERT IGNORE INTO stacks (userid, name) ' + 
+    'SELECT id, "' + stack + '" ' +
+    'FROM users WHERE username = "' + username +'";'; 
+
+    db.getConnection(function(err, connection){
+
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
+
+            if(results){
+                //res.send(results);
+                ultimateResults.push(results);
+
+                // create a new deck for the user
+                var query = 'INSERT IGNORE INTO decks (stackid, title) ' + 
+                'SELECT id, "' + title + '" ' +
+                'FROM stacks WHERE name = "' + stack +'";'; 
+
+                db.getConnection(function(err, connection){
+
+                    connection.query(query, function(error, results, fields) {
+
+                        connection.release();
+
+                        if(results){
+                            //res.send(results);
+                            ultimateResults.push(results);
+                            res.send(ultimateResults);
+                        }
+
+                        if(error){
+                            res.send(error);
+                        }
+                    });
+                });
             }
 
             if(error){
@@ -282,66 +417,6 @@ router.post('/create/card', function(req, res){
     '"' + front + '", ' + 
     '"' + back + '"' +
     ');';
-
-    db.getConnection(function(err, connection){
-
-        connection.query(query, function(error, results, fields) {
-
-            connection.release();
-
-            if(results){
-                res.send(results);
-            }
-
-            if(error){
-                res.send(error);
-            }
-        });
-    });
-});
-
-
-router.post('/edit/deck', function(req, res){
-
-    var username = req.body.username;
-    var stack = req.body.stack;
-    var title = req.body.title;
-    var deckId = req.body.deckId;
-    
-    // edit the existing deck
-    var query = 'UPDATE decks ' +
-    'SET decks.stack = "' + stack + '", decks.title = "' + title + '" ' +
-    'WHERE decks.id = "' + deckId + '";';
-
-    db.getConnection(function(err, connection){
-
-        connection.query(query, function(error, results, fields) {
-
-            connection.release();
-
-            if(results){
-                res.send(results);
-            }
-
-            if(error){
-                res.send(error);
-            }
-        });
-    });
-});
-
-router.post('/edit/card', function(req, res){
-    
-    var username = req.body.username;
-    var cardId = req.body.cardId;
-    var deckId = req.body.deckId;
-    var front = req.body.front;
-    var back = req.body.back;
-
-    // create a new card for the deck
-    var query = 'UPDATE cards ' +
-    'SET cards.front = "' + front + '", cards.back = "' + back + '" ' +
-    'WHERE cards.id = "' + cardId + '";';
 
     db.getConnection(function(err, connection){
 
