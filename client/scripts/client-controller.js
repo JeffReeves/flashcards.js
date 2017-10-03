@@ -3,14 +3,12 @@
 'use strict';
 
 // UPDATES NEEDED:
-// - rewrite all classes to ensure readability and ease of extensibility
-// - refactor all logic for UI class when all classes have been updated 
-// - update modal to create user if the input user does not exist
-// - only try to load current cards if the user has any stacks or decks
-// - update autocomplete so that it doesn't choke on double-quoted strings
-// - get editor save buttons working
-// - updated functions.js to use fetch instead of XMLHttpRequest
 // - refresh interface after adding/editing/deleting stacks/decks/cards
+// - update modal to create user if the input user does not exist
+// - update autocomplete so that it doesn't choke on double-quoted strings
+
+// FUTURE UPDATE IDEAS:
+// - updated functions.js to use fetch instead of XMLHttpRequest
 
 /*==[ OBJECTS ]==============================================================*/
 
@@ -1425,7 +1423,7 @@ var UI = (function(){
             });
         }
     }
-    
+
     UI.prototype.editorAddDeckSave = function(){
         
         console.log('[DEBUG] UI.editorAddDeckSave');
