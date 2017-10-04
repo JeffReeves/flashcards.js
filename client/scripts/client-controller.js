@@ -3,12 +3,18 @@
 'use strict';
 
 // UPDATES NEEDED:
-// - refresh interface after adding/editing/deleting stacks/decks/cards
+// - update UI to have an edit/add/delete stack view/buttons, independent of decks
 // - update modal to create user if the input user does not exist
 // - update autocomplete so that it doesn't choke on double-quoted strings
+// - remove default user "jeff" from login modal
+// - get password field working so you cannot login unless the password is correct
+// - move API from /flashcards/ to /flashcards/api
 
 // FUTURE UPDATE IDEAS:
 // - updated functions.js to use fetch instead of XMLHttpRequest
+// - use better authentication / security methods for logging in
+// - update refresh to select the dropdown item last selected before the refresh
+
 
 /*==[ OBJECTS ]==============================================================*/
 
@@ -109,6 +115,7 @@ var Data = (function(){
         this.api.active.post = {};
         this.api.active.post.edit = {};
         this.api.active.post.add = {};
+        this.api.active.post.delete = {};
         
         // set active URL based on window location
         if(window.location.origin.indexOf(this.api.development.domain) === -1){
@@ -119,19 +126,27 @@ var Data = (function(){
         }
 
         // active API sub-paths
-        // get
+        // GET
         this.api.active.get.exists = this.api.active.url + 'userexists/';
         this.api.active.get.user = this.api.active.url + 'user/';
         this.api.active.get.stacks = this.api.active.url + 'stacks/userid/';
         this.api.active.get.decks = this.api.active.url + 'decks/stackid/';
         this.api.active.get.cards = this.api.active.url + 'cards/deckid/';
 
-        // post
+        // POST
+        // edit
         this.api.active.post.edit.stack = this.api.active.url + 'edit/stack/';
         this.api.active.post.edit.deck = this.api.active.url + 'edit/deck/';
         this.api.active.post.edit.card = this.api.active.url + 'edit/card/';
+        
+        // create
         this.api.active.post.add.deck = this.api.active.url + 'create/deck/';
         this.api.active.post.add.card = this.api.active.url + 'create/card/';
+
+        // delete
+        this.api.active.post.delete.stack = this.api.active.url + 'delete/stack/';
+        this.api.active.post.delete.deck = this.api.active.url + 'delete/deck/';
+        this.api.active.post.delete.card = this.api.active.url + 'delete/card/';
     }
 
     Data.prototype.doesUserExist = function(username){
@@ -491,7 +506,14 @@ var UI = (function(){
         this.handlers.editorAddCardSave = function(){
             this.editorAddCardSave();
         }.bind(this);
-        
+
+        this.handlers.editorEditDeckDelete = function(){
+            this.editorEditDeckDelete();
+        }.bind(this);
+
+        this.handlers.editorEditCardDelete = function(){
+            this.editorEditCardDelete();
+        }.bind(this);
     }
 
     UI.prototype.setData = function(dataInstance){
@@ -730,7 +752,7 @@ var UI = (function(){
         this.setBack('');
 
         // set the dropdown menu back to empty
-        this.elements.viewer.dropdown.select.innerHTML = '<optgroup label="Deck Group"> ' +
+        this.elements.viewer.dropdown.select.innerHTML = '<optgroup label="Stack"> ' +
             '<option>Decks Will Appear Here</option>' +
             '</optgroup>';
 
@@ -766,6 +788,46 @@ var UI = (function(){
 
         // re-open the login modal
         this.elements.modal.open();
+    }
+
+    UI.prototype.refresh = function(){
+        
+        console.log('[DEBUG] UI.refresh');
+
+        // LOGOUT
+        
+        // set the front and back of the cards
+        this.setFront('Change detected. Refreshing cards...');
+        this.setBack('');
+
+        // set the dropdown menus back to empty
+        this.elements.viewer.dropdown.select.innerHTML = '<optgroup label="Stack"> ' +
+            '<option>Loading Decks...</option>' +
+            '</optgroup>';
+
+        this.elements.editor.decks.show.dropdown.select.innerHTML = '<optgroup label="Stack"> ' +
+            '<option>Loading Decks...</option>' +
+            '</optgroup>';
+
+        // set the stack name to default 
+        this.elements.viewer.dropdown.label.innerHTML = 'Loading Stacks...';
+        this.elements.editor.decks.show.dropdown.label.innerHTML = 'Loading Stacks...';
+
+        // remove all the user's cards 
+        this.dataInstance.user.stacks = [];
+        this.dataInstance.current = {};
+        this.dataInstance.current.editor = {};
+        
+        // LOGIN
+
+        // get the user's cards
+        this.dataInstance.getAllCards(this.dataInstance.user.username)
+        .then(function(){
+            
+            // initialize the deck selection dropdown and event handlers 
+            this.setupDeckSelection();
+        
+        }.bind(this));
     }
 
     UI.prototype.updateViewerStackLabel = function(){
@@ -1228,10 +1290,8 @@ var UI = (function(){
         this.elements.editor.cards.add.button.save.addEventListener('click', this.handlers.editorAddCardSave);
 
         // delete buttons
-        // this.elements.editor.decks.edit.button.delete.addEventListener('click', this.handlers.editorEditDeckDelete);
-        // this.elements.editor.decks.add.button.delete.addEventListener('click', this.handlers.editorAddDeckDelete);
-        // this.elements.editor.cards.edit.button.delete.addEventListener('click', this.handlers.editorEditCardDelete);
-        // this.elements.editor.cards.add.button.delete.addEventListener('click', this.handlers.editorAddCardDelete);
+        this.elements.editor.decks.edit.button.delete.addEventListener('click', this.handlers.editorEditDeckDelete);
+        this.elements.editor.cards.edit.button.delete.addEventListener('click', this.handlers.editorEditCardDelete);
     }
 
     UI.prototype.disableEditorButtons = function(){
@@ -1258,10 +1318,8 @@ var UI = (function(){
         this.elements.editor.cards.add.button.save.removeEventListener('click', this.handlers.editorAddCardSave);
 
         // delete buttons
-        // this.elements.editor.decks.edit.button.delete.removeEventListener('click', this.handlers.editorEditDeckDelete);
-        // this.elements.editor.decks.add.button.delete.removeEventListener('click', this.handlers.editorAddDeckDelete);
-        // this.elements.editor.cards.edit.button.delete.removeEventListener('click', this.handlers.editorEditCardDelete);
-        // this.elements.editor.cards.add.button.delete.removeEventListener('click', this.handlers.editorAddCardDelete);
+        this.elements.editor.decks.edit.button.delete.removeEventListener('click', this.handlers.editorEditDeckDelete);
+        this.elements.editor.cards.edit.button.delete.removeEventListener('click', this.handlers.editorEditCardDelete);
     }
 
     UI.prototype.setInputDirty = function(elements){
@@ -1350,6 +1408,8 @@ var UI = (function(){
                 .done(function(data){
                     console.log('[DEBUG] Edited Deck Title', data);
                     fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);
+                    // refresh UI to show changes
+                    self.refresh();
                 });
             }
 
@@ -1364,6 +1424,8 @@ var UI = (function(){
                 .done(function(data){
                     console.log('[DEBUG] Edited Stack Name', data);
                     fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);                
+                    // refresh UI to show changes
+                    self.refresh();
                 });
             }
         }
@@ -1420,6 +1482,9 @@ var UI = (function(){
                 console.log('front: ', front);
                 console.log('back: ', back);
                 fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);
+                
+                // refresh UI to show changes
+                self.refresh();
             });
         }
     }
@@ -1461,6 +1526,9 @@ var UI = (function(){
                 console.log('stack: ', stack);
                 console.log('title: ', title);
                 fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);
+                
+                // refresh UI to show changes
+                self.refresh();
             });
         }
     }
@@ -1506,8 +1574,80 @@ var UI = (function(){
                 console.log('front: ', front);
                 console.log('back: ', back);
                 fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);
+                
+                // refresh UI to show changes
+                self.refresh();
             });
         }
+    }
+
+    UI.prototype.editorEditDeckDelete = function(){
+        console.log('[DEBUG] UI.editorEditDeckDelete');
+
+        var username = this.dataInstance.user.username;
+        
+        // store the original values
+        var stack = this.dataInstance.current.editor.stack.name;
+        var title = this.dataInstance.current.editor.deck.title;
+        
+        var self = this;
+
+        // make sure there is a stack name and deck title provided
+        if(stack && title){
+
+            // post to delete the deck
+            $.post(this.dataInstance.api.active.post.delete.deck, { 
+                stack: stack,
+                title: title,
+                username: username
+            })
+            .done(function(data){
+                console.log('[DEBUG] Delete Deck', data);
+                fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);
+                
+                // refresh UI to show changes
+                self.refresh();
+            });
+        }
+    }
+
+    UI.prototype.editorEditCardDelete = function(){
+
+        console.log('[DEBUG] UI.editorEditCardDelete');
+
+        var username = this.dataInstance.user.username;
+        
+        // current stack and deck (so we know where to edit the card)
+        var stack = this.dataInstance.current.editor.stack.name;
+        var deck = this.dataInstance.current.editor.deck.title;
+
+        // current card's front and back
+        var front = this.dataInstance.current.editor.card.front;
+        var back = this.dataInstance.current.editor.card.back;
+
+        var self = this;
+
+        // make sure a front and back exist
+        if(front && back){
+            // delete the card
+            $.post(this.dataInstance.api.active.post.delete.card, { 
+                stack: stack,
+                deck: deck,
+                front: front, 
+                back: back,
+                username: username
+            }) 
+            .done(function(data){
+                console.log('[DEBUG] Deleted card', data);
+                console.log('[Deleted Card]');
+                console.log('front: ', front);
+                console.log('back: ', back);
+                fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);
+                
+                // refresh UI to show changes
+                self.refresh();
+            });
+        }   
     }
 
     return UI;

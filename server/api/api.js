@@ -428,4 +428,96 @@ router.post('/create/card', function(req, res){
     });
 });
 
+router.post('/delete/stack', function(req, res){
+    
+    var username = req.body.username;
+    var stack = req.body.stack;
+    
+    // edit the name of the existing stack for the user
+    var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+    'DELETE FROM stacks ' +
+    'WHERE stacks.name = "' + stack + '" ' +
+    'AND stacks.userid = @userid;';
+
+    db.getConnection(function(err, connection){
+
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
+
+            if(results){
+                res.send(results);
+            }
+
+            if(error){
+                res.send(error);
+            }
+        });
+    });
+});
+
+router.post('/delete/deck', function(req, res){
+    
+    var username = req.body.username;
+    var stack = req.body.stack;
+    var title = req.body.title;
+    
+    // edit the name of the existing deck for the stack belonging to the user
+    var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+    'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = "' + stack + '" AND userid = @userid); ' +
+    'DELETE FROM decks ' + 
+    'WHERE decks.title = "' + title + '"' +
+    'AND decks.stackid = @stackid;';
+
+    db.getConnection(function(err, connection){
+
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
+
+            if(results){
+                res.send(results);
+            }
+
+            if(error){
+                res.send(error);
+            }
+        });
+    });
+});
+
+router.post('/delete/card', function(req, res){
+    
+    var username = req.body.username;
+    var stack = req.body.stack;
+    var deck = req.body.deck;
+    var front = req.body.front;
+    var back = req.body.back;
+
+    // create a new card for the deck
+    var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+    'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = "' + stack + '" AND userid = @userid); ' +
+    'SET @deckid = (SELECT id FROM decks WHERE decks.title = "' + deck + '" AND stackid = @stackid); ' +
+    'DELETE FROM cards ' + 
+    'WHERE cards.front = "' + front + '"' +
+    'AND cards.deckid = @deckid;';
+
+    db.getConnection(function(err, connection){
+
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
+
+            if(results){
+                res.send(results);
+            }
+
+            if(error){
+                res.send(error);
+            }
+        });
+    });
+});
+    
+
 module.exports = router;
