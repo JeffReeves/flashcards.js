@@ -10,7 +10,12 @@
 // - get password field working so you cannot login unless the password is correct
 // - move API from /flashcards/ to /flashcards/api
 
+// BUGS FOUND:
+// - saving a change to both the stack name and deck name simultaneously breaks the UI
+
 // FUTURE UPDATE IDEAS:
+// - update post calls to use the current stack/deck/card id for changes rather 
+//      than digging down to them via MySQL queries
 // - updated functions.js to use fetch instead of XMLHttpRequest
 // - use better authentication / security methods for logging in
 // - update refresh to select the dropdown item last selected before the refresh
