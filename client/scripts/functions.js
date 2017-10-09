@@ -2,6 +2,42 @@
 
 var fn = {
 
+    // Courtesy of https://developers.google.com/web/fundamentals/getting-started/primers/promises
+    get: function(url){
+        // Return a new promise.
+        return new Promise(function(resolve, reject) {
+            // Do the usual XHR stuff
+            var req = new XMLHttpRequest();
+            req.open('GET', url);
+        
+            req.onload = function() {
+            // This is called even on 404 etc
+            // so check the status
+            if (req.status == 200) {
+                // Resolve the promise with the response text
+                resolve(req.response);
+            }
+            else {
+                // Otherwise reject with the status text
+                // which will hopefully be a meaningful error
+                reject(Error(req.statusText));
+            }
+            };
+        
+            // Handle network errors
+            req.onerror = function() {
+                reject(Error("Network Error"));
+            };
+        
+            // Make the request
+            req.send();
+        });
+    },
+
+    getJSON: function(url){
+        return this.get(url).then(JSON.parse);
+    },
+
     escapeJSONSpecialChars: function(jsonString) {
         
         return jsonString.replace(/\n/g, "\\n")
@@ -33,6 +69,11 @@ var fn = {
     },
         
     addClass: function(_element, _class){
+
+        // get the element by ID if a string was passed
+        if(typeof(_element) === 'string'){
+            _element = document.getElementById(_element);
+        }
         
         // append class if not already present
         if(_element.className.indexOf(_class) === -1){
@@ -44,12 +85,22 @@ var fn = {
     },
 
     removeClass: function(_element, _class){
+
+        // get the element by ID if a string was passed
+        if(typeof(_element) === 'string'){
+            _element = document.getElementById(_element);
+        }
         
         // remove the class and trim any whitespace
         _element.className = _element.className.replace(_class, '').trim();
     },
 
     toggleClass: function(_element, _class){
+
+        // get the element by ID if a string was passed
+        if(typeof(_element) === 'string'){
+            _element = document.getElementById(_element);
+        }
         
         // append class if not already present
         if(_element.className.indexOf(_class) === -1){
@@ -71,7 +122,7 @@ var fn = {
         var _elements = document.getElementsByClassName(_sharedClass);
     
         // reverse iterate through all elements (fastest method)
-        for (i = _elements.length; i--;) {
+        for(var i = _elements.length; i--;){
     
             // if the desired id is found
             if(_elements[i].id === _id){

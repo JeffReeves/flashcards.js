@@ -41,8 +41,8 @@
                     <button class="mui-btn mui-btn--menu" data-mui-toggle="dropdown"><i class="material-icons">menu</i></button>
                     <ul class="mui-dropdown__menu mui-dropdown__menu--right">
                         <li><a id="menu-login" class="">Login</a></li>
-                        <li><a id="menu-card-view" class="router-menu disabled">View Cards</a></li>
-                        <li><a id="menu-edit-view" class="router-menu disabled">Edit Decks</a></li>
+                        <li><a id="menu-viewer" class="router-menu disabled">View Cards</a></li>
+                        <li><a id="menu-editor" class="router-menu disabled">Edit Decks</a></li>
                         <li><a id="menu-logout" class="disabled">Log Out</a></li>
                     </ul>
                 </div>    
@@ -51,15 +51,15 @@
     </header>
     
     <main>
-        <!-- CARD VIEW -->
-        <section id="cardView" class="router-view">
+        <!-- CARD VIEWER -->
+        <section id="viewer" class="router-view">
             <div class="mui-select" id="card-decks">
                 <select name="card-deck-select" id="card-deck-select">
-                    <optgroup label="Deck Group">
-                    <option>Decks Will Appear Here</option>
+                    <optgroup label="No Stacks Found">
+                    <option>Please create a new Stack and Deck</option>
                     </optgroup>
                 </select>
-                <label>Deck</label>
+                <label id="stack-label">No Stacks Found</label>
             </div>
 
             <div id="progress-bar" class="mui--z1">
@@ -71,34 +71,34 @@
             <div id="flashcard-container">
                 <div id="flashcard" class="mui--z2">
                     <div id="front">
-                        <p>Please log in</p>
+                        <p id="front-text">Please log in</p>
                     </div>
 
                     <div id="back">
-                        <p></p>
+                        <p id="back-text">...or not</p>
                     </div>
                 </div>
             </div>
 
             <div id="buttons">
-                <button type="button" class="mui-btn mui-btn--fab mui-btn--correct" id="correct"><i class="material-icons">check</i></button>
-                <button type="button" class="mui-btn mui-btn--fab mui-btn--incorrect" id="incorrect"><i class="material-icons">close</i></button>
-                <button type="button" class="mui-btn mui-btn--fab mui-btn--skip" id="skip"><i class="material-icons">arrow_forward</i></button>
+                <button type="button" class="mui-btn mui-btn--fab mui-btn--correct" id="correct-button"><i class="material-icons">check</i></button>
+                <button type="button" class="mui-btn mui-btn--fab mui-btn--incorrect" id="incorrect-button"><i class="material-icons">close</i></button>
+                <button type="button" class="mui-btn mui-btn--fab mui-btn--skip" id="skip-button"><i class="material-icons">arrow_forward</i></button>
             </div>
         </section>
 
         <!-- EDITOR VIEW -->
-        <section id="editorView" class="router-view disabled">
+        <section id="editor" class="router-view disabled">
 
             <!-- MAIN EDITOR VIEW -->
             <div id="show-decks" class="router-editor-view">
                 <div id="editor-decks" class="mui-select">
                     <select name="editor-deck-select" id="editor-deck-select">
                         <optgroup label="Deck Group">
-                        <option>Decks Will Appear Here</option>
+                        <option>Please create a new Stack and Deck</option>
                         </optgroup>
                     </select>
-                    <label>Deck</label>
+                    <label id="editor-stack-label">No Stacks Found</label>
                 </div>
                 <div id="editor-deck-buttons">
                     <button class="mui-btn mui-btn--raised mui-btn--editor" id="editor-deck-edit-button"><i class="material-icons editor-icon">edit</i></button>
@@ -207,19 +207,19 @@
     </footer>
 
     <!-- LOGIN MODAL -->
-    <div id="loginModalContainer" style="display: none;">
-        <div id="loginModal">
-            <form class="mui-form" id="loginForm">
+    <div id="login-modal-container" style="display: none;">
+        <div id="login-modal">
+            <form class="mui-form" id="login-form">
                 <legend>Login / Register</legend>
                 <div class="mui-textfield mui-textfield--float-label">
-                    <input type="text" id="loginUsername" required value="jeff">
+                    <input type="text" id="login-username" required value="jeff">
                     <label>Username</label>
                 </div>
                 <div class="mui-textfield mui-textfield--float-label">
-                    <input type="password" id="loginPassword">
+                    <input type="password" id="login-password">
                     <label>Password</label>
                 </div>
-                <button type="submit" class="mui-btn mui-btn--raised" id="loginButton">Login</button>
+                <button type="submit" class="mui-btn mui-btn--raised" id="login-button">Login</button>
             </form>
         </div>
     </div>
