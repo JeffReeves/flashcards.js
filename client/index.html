@@ -113,7 +113,7 @@
                 </div>
                 <div id="editor-deck-buttons">
                     <button class="mui-btn mui-btn--raised mui-btn--editor" id="editor-deck-edit-button"><i class="material-icons editor-icon">edit</i></button>
-                    <button class="mui-btn mui-btn--raised mui-btn--editor" id="editor-deck-add-button"><i class="material-icons editor-icon">library_add</i></button>
+                    <button class="mui-btn mui-btn--raised mui-btn--editor" id="editor-deck-add-button"><i class="material-icons editor-icon">add_box</i></button>
                 </div>
 
                 <div id="editor-card" class="mui-textfield mui-textfield--float-label">
@@ -130,14 +130,37 @@
                 </div>
             </div>
 
+            <!-- EDIT STACK VIEW -->
+            <div id="edit-stack" class="router-editor-view disabled">
+                <form class="mui-form" id="edit-stack-form">
+                    <legend>Edit Stack</legend>
+                    <div class="mui-textfield mui-textfield--float-label">
+                        <input type="text" id="edit-stack-name">
+                        <label>Name</label>
+                    </div>
+                    <button type="button" class="mui-btn mui-btn--raised mui-btn--editor" id="edit-stack-save-button">Save</button>
+                    <button type="button" class="mui-btn mui-btn--raised mui-btn--editor" id="edit-stack-cancel-button">Cancel</button>
+                    <button type="button" class="mui-btn mui-btn--raised mui-btn--editor" id="edit-stack-delete-button">Delete</button>
+                </form>
+            </div>
+
+            <!-- ADD STACK VIEW -->
+            <div id="add-stack" class="router-editor-view disabled">
+                <form class="mui-form" id="add-stack-form">
+                    <legend>Add Stack</legend>
+                    <div class="mui-textfield mui-textfield--float-label">
+                        <input type="text" id="new-stack-name">
+                        <label>Name</label>
+                    </div>
+                    <button type="button" class="mui-btn mui-btn--raised mui-btn--editor" id="add-stack-save-button">Save</button>
+                    <button type="button" class="mui-btn mui-btn--raised mui-btn--editor" id="add-stack-cancel-button">Cancel</button>
+                </form>
+            </div>
+
             <!-- EDIT DECK VIEW -->
             <div id="edit-deck" class="router-editor-view disabled">
                 <form class="mui-form" id="edit-deck-form">
                     <legend>Edit Deck</legend>
-                    <div class="mui-textfield mui-textfield--float-label">
-                        <input type="text" id="edit-deck-stack">
-                        <label>Stack / Group</label>
-                    </div>
                     <div class="mui-textfield mui-textfield--float-label">
                         <input type="text" id="edit-deck-title">
                         <label>Title</label>
@@ -152,10 +175,6 @@
             <div id="add-deck" class="router-editor-view disabled">
                 <form class="mui-form" id="add-deck-form">
                     <legend>Add Deck</legend>
-                    <div class="mui-textfield mui-textfield--float-label">
-                        <input type="text" id="new-deck-stack">
-                        <label>Stack / Group</label>
-                    </div>
                     <div class="mui-textfield mui-textfield--float-label">
                         <input type="text" id="new-deck-title">
                         <label>Title</label>

@@ -486,8 +486,16 @@ var UI = (function(){
             this.setEditorDeck();
         }.bind(this);
 
+        this.handlers.editorEditStack = function(){
+            this.editorEditStack();
+        }.bind(this);
+
         this.handlers.editorEditDeck = function(){
             this.editorEditDeck();
+        }.bind(this);
+
+        this.handlers.editorAddStack = function(){
+            this.editorAddStack();
         }.bind(this);
 
         this.handlers.editorAddDeck = function(){
@@ -510,6 +518,14 @@ var UI = (function(){
             this.editorCardSelectAll();
         }.bind(this);
 
+        this.handlers.editorEditStackSave = function(){
+            this.editorEditStackSave();
+        }.bind(this);
+
+        this.handlers.editorAddStackSave = function(){
+            this.editorAddStackSave();
+        }.bind(this);
+
         this.handlers.editorEditDeckSave = function(){
             this.editorEditDeckSave();
         }.bind(this);
@@ -524,6 +540,10 @@ var UI = (function(){
 
         this.handlers.editorAddCardSave = function(){
             this.editorAddCardSave();
+        }.bind(this);
+
+        this.handlers.editorEditStackDelete = function(){
+            this.editorEditStackDelete();
         }.bind(this);
 
         this.handlers.editorEditDeckDelete = function(){
@@ -606,6 +626,7 @@ var UI = (function(){
         this.elements.editor = {
 
             view: document.getElementById('editor'),
+            stacks: {},
             decks: {},
             cards: {}
 
@@ -644,6 +665,43 @@ var UI = (function(){
                 selectAll: document.getElementById('editor-card-select-all'),
             }
         };
+
+        //--[ edit stack view ]--------------------------------------------
+        
+        this.elements.editor.stacks.edit = {
+            
+            view: document.getElementById('edit-stack'),
+
+            form: document.getElementById('edit-stack-form'),
+
+            input: {
+                name: document.getElementById('edit-stack-name')
+            },
+
+            button: {
+                save: document.getElementById('edit-stack-save-button'),
+                cancel: document.getElementById('edit-stack-cancel-button'),
+                delete: document.getElementById('edit-stack-delete-button')
+            }
+        }; 
+
+        //--[ add stack view ]---------------------------------------------
+        
+        this.elements.editor.stacks.add = {
+
+            view: document.getElementById('add-stack'),
+            
+            form: document.getElementById('add-stack-form'),
+
+            input: {
+                name: document.getElementById('new-stack-name')
+            },   
+
+            button: {
+                save: document.getElementById('add-stack-save-button'),
+                cancel: document.getElementById('add-stack-cancel-button')
+            }
+        }; 
 
         //--[ edit deck view ]---------------------------------------------
         
@@ -1268,14 +1326,32 @@ var UI = (function(){
         this.elements.header.menu.option.logout.addEventListener('click', this.handlers.logout);
     }
 
+    UI.prototype.editorEditStack = function(){
+        console.log('[DEBUG] UI.editorEditStack');
+        // set the edit deck's stack and deck title
+        this.elements.editor.stacks.edit.input.name.value = this.dataInstance.current.editor.stack.name;
+
+        this.setInputDirty([
+            this.elements.editor.stacks.edit.input.name
+        ]);
+        
+        fn.setVisible('router-editor-view', 'disabled', this.elements.editor.stacks.edit.view.id);
+    }
+
+    UI.prototype.editorAddStack = function(){
+        console.log('[DEBUG] UI.editorAddStack');
+
+        fn.setVisible('router-editor-view', 'disabled', this.elements.editor.stacks.add.view.id);
+    }
+
     UI.prototype.editorEditDeck = function(){
         console.log('[DEBUG] UI.editorEditDeck');
         // set the edit deck's stack and deck title
-        this.elements.editor.decks.edit.input.stack.value = this.dataInstance.current.editor.stack.name;
+        //this.elements.editor.decks.edit.input.stack.value = this.dataInstance.current.editor.stack.name;
         this.elements.editor.decks.edit.input.title.value = this.dataInstance.current.editor.deck.title;
 
         this.setInputDirty([
-            this.elements.editor.decks.edit.input.stack, 
+            //this.elements.editor.decks.edit.input.stack, 
             this.elements.editor.decks.edit.input.title
         ]);
         
@@ -1285,11 +1361,11 @@ var UI = (function(){
     UI.prototype.editorAddDeck = function(){
         console.log('[DEBUG] UI.editorEditDeck');
         // set the edit deck's stack and deck title
-        this.elements.editor.decks.add.input.stack.value = this.dataInstance.current.editor.stack.name;
+        //this.elements.editor.decks.add.input.stack.value = this.dataInstance.current.editor.stack.name;
 
-        this.setInputDirty([
-            this.elements.editor.decks.add.input.stack        
-        ]);
+        // this.setInputDirty([
+        //     this.elements.editor.decks.add.input.stack        
+        // ]);
         
         fn.setVisible('router-editor-view', 'disabled', this.elements.editor.decks.add.view.id);
     }
@@ -1362,6 +1438,8 @@ var UI = (function(){
     UI.prototype.enableEditorButtons = function(){
         console.log('[DEBUG] UI.enableEditorButtons');
         // edit/add buttons
+        this.elements.editor.decks.show.button.edit.stack.addEventListener('click', this.handlers.editorEditStack);
+        this.elements.editor.decks.show.button.add.stack.addEventListener('click', this.handlers.editorAddStack);
         this.elements.editor.decks.show.button.edit.deck.addEventListener('click', this.handlers.editorEditDeck);
         this.elements.editor.decks.show.button.add.deck.addEventListener('click', this.handlers.editorAddDeck);
         this.elements.editor.decks.show.button.edit.card.addEventListener('click', this.handlers.editorEditCard);
@@ -1371,18 +1449,23 @@ var UI = (function(){
         this.elements.editor.decks.show.button.selectAll.addEventListener('click', this.handlers.editorCardSelectAll);
         
         // cancel buttons
+        this.elements.editor.stacks.edit.button.cancel.addEventListener('click', this.handlers.cancelEdit);
+        this.elements.editor.stacks.add.button.cancel.addEventListener('click', this.handlers.cancelEdit);
         this.elements.editor.decks.edit.button.cancel.addEventListener('click', this.handlers.cancelEdit);
         this.elements.editor.decks.add.button.cancel.addEventListener('click', this.handlers.cancelEdit);
         this.elements.editor.cards.edit.button.cancel.addEventListener('click', this.handlers.cancelEdit);
         this.elements.editor.cards.add.button.cancel.addEventListener('click', this.handlers.cancelEdit);
        
         // save buttons
+        this.elements.editor.stacks.edit.button.save.addEventListener('click', this.handlers.editorEditStackSave);
+        this.elements.editor.stacks.add.button.save.addEventListener('click', this.handlers.editorAddStackSave);
         this.elements.editor.decks.edit.button.save.addEventListener('click', this.handlers.editorEditDeckSave);
         this.elements.editor.decks.add.button.save.addEventListener('click', this.handlers.editorAddDeckSave);
         this.elements.editor.cards.edit.button.save.addEventListener('click', this.handlers.editorEditCardSave);
         this.elements.editor.cards.add.button.save.addEventListener('click', this.handlers.editorAddCardSave);
 
         // delete buttons
+        this.elements.editor.stacks.edit.button.delete.addEventListener('click', this.handlers.editorEditStackDelete);
         this.elements.editor.decks.edit.button.delete.addEventListener('click', this.handlers.editorEditDeckDelete);
         this.elements.editor.cards.edit.button.delete.addEventListener('click', this.handlers.editorEditCardDelete);
     }
@@ -1390,6 +1473,8 @@ var UI = (function(){
     UI.prototype.disableEditorButtons = function(){
         console.log('[DEBUG] UI.disableEditorButtons');
         // edit deck button
+        this.elements.editor.decks.show.button.edit.stack.removeEventListener('click', this.handlers.editorEditStack);
+        this.elements.editor.decks.show.button.add.stack.removeEventListener('click', this.handlers.editorAddStack);
         this.elements.editor.decks.show.button.edit.deck.removeEventListener('click', this.handlers.editorEditDeck);
         this.elements.editor.decks.show.button.add.deck.removeEventListener('click', this.handlers.editorAddDeck);
         this.elements.editor.decks.show.button.edit.card.removeEventListener('click', this.handlers.editorEditCard);
@@ -1399,18 +1484,23 @@ var UI = (function(){
         this.elements.editor.decks.show.button.selectAll.removeEventListener('click', this.handlers.editorCardSelectAll);
 
         // cancel buttons
+        this.elements.editor.stacks.edit.button.cancel.removeEventListener('click', this.handlers.cancelEdit);
+        this.elements.editor.stacks.add.button.cancel.removeEventListener('click', this.handlers.cancelEdit);
         this.elements.editor.decks.edit.button.cancel.removeEventListener('click', this.handlers.cancelEdit);
         this.elements.editor.decks.add.button.cancel.removeEventListener('click', this.handlers.cancelEdit);
         this.elements.editor.cards.edit.button.cancel.removeEventListener('click', this.handlers.cancelEdit);
         this.elements.editor.cards.add.button.cancel.removeEventListener('click', this.handlers.cancelEdit);
 
         // save buttons
+        this.elements.editor.stacks.edit.button.save.removeEventListener('click', this.handlers.editorEditStackSave);
+        this.elements.editor.stacks.add.button.save.removeEventListener('click', this.handlers.editorAddStackSave);
         this.elements.editor.decks.edit.button.save.removeEventListener('click', this.handlers.editorEditDeckSave);
         this.elements.editor.decks.add.button.save.removeEventListener('click', this.handlers.editorAddDeckSave);
         this.elements.editor.cards.edit.button.save.removeEventListener('click', this.handlers.editorEditCardSave);
         this.elements.editor.cards.add.button.save.removeEventListener('click', this.handlers.editorAddCardSave);
 
         // delete buttons
+        this.elements.editor.stacks.edit.button.delete.removeEventListener('click', this.handlers.editorEditStackDelete);
         this.elements.editor.decks.edit.button.delete.removeEventListener('click', this.handlers.editorEditDeckDelete);
         this.elements.editor.cards.edit.button.delete.removeEventListener('click', this.handlers.editorEditCardDelete);
     }

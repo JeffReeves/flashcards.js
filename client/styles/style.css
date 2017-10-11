@@ -385,6 +385,34 @@ textarea {
                     align-self: center;
                 }
 
+        #edit-stack {
+            grid-area: editor-router;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+            grid-template-areas:
+                " edit-stack-form ";
+            align-self: center;
+        }
+
+            #edit-stack-form {
+                grid-area: edit-stack-form;
+            }
+
+        #add-stack {
+            grid-area: editor-router;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+            grid-template-areas:
+                " add-stack-form ";
+            align-self: center;
+        }
+
+            #add-stack-form {
+                grid-area: add-stack-form;
+            }
+
         #edit-deck {
             grid-area: editor-router;
             display: grid;
