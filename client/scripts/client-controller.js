@@ -145,6 +145,7 @@ var Data = (function(){
         this.api.active.post.edit.card = this.api.active.url + 'edit/card/';
         
         // create
+        this.api.active.post.add.stack = this.api.active.url + 'create/stack/';
         this.api.active.post.add.deck = this.api.active.url + 'create/deck/';
         this.api.active.post.add.card = this.api.active.url + 'create/card/';
 
@@ -886,13 +887,14 @@ var UI = (function(){
             '<option>Loading Decks...</option>' +
             '</optgroup>';
 
-        this.elements.editor.decks.show.dropdown.select.innerHTML = '<optgroup label="Stack"> ' +
-            '<option>Loading Decks...</option>' +
-            '</optgroup>';
+        this.elements.editor.decks.show.dropdown.stackSelect.innerHTML = '<option>Loading Stacks...</option>';
+
+        this.elements.editor.decks.show.dropdown.deckSelect.innerHTML = '<option>Loading Decks...</option>';
 
         // set the stack name to default 
         this.elements.viewer.dropdown.label.innerHTML = 'Loading Stacks...';
-        this.elements.editor.decks.show.dropdown.label.innerHTML = 'Loading Stacks...';
+        this.elements.editor.decks.show.dropdown.stackLabel.innerHTML = 'Loading Stacks...';
+        this.elements.editor.decks.show.dropdown.deckLabel.innerHTML = 'Loading Decks...';
 
         // remove all the user's cards 
         this.dataInstance.user.stacks = [];
@@ -1544,6 +1546,54 @@ var UI = (function(){
         });
     }
 
+    UI.prototype.editorEditStackSave = function(){
+
+        console.log('[DEBUG] UI.editorEditStackSave');
+
+        var username = this.dataInstance.user.username;
+
+        // store the original value
+        var original = {
+            stack: this.dataInstance.current.editor.stack.name
+        };
+
+        console.log('[DEBUG] original: ', original.stack);
+        
+        // get new value
+        var stack = this.elements.editor.stacks.edit.input.name.value;
+
+        // trim whitespace
+        stack = stack.trim();
+
+        // put trimmed string back into input field
+        this.elements.editor.stacks.edit.input.name.value = stack;
+
+        console.log('[DEBUG] new value: ', stack);
+        
+        var self = this;
+
+        // make sure there is a stack name provided
+        if(stack){
+
+            // compare values to see if stack name has changed
+            if(original.stack !== stack){
+                console.log('[DEBUG] Stack name changed');
+                // post an update to the stack name
+                $.post(this.dataInstance.api.active.post.edit.stack, { 
+                    originalStack: original.stack,
+                    stack: stack, 
+                    username: username
+                })
+                .done(function(data){
+                    console.log('[DEBUG] Edited Stack Name', data);
+                    fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);                
+                    // refresh UI to show changes
+                    self.refresh();
+                });
+            }
+        }
+    }
+
     UI.prototype.editorEditDeckSave = function(){
 
         console.log('[DEBUG] UI.editorEditDeckSave');
@@ -1556,28 +1606,25 @@ var UI = (function(){
             title: this.dataInstance.current.editor.deck.title
         };
 
-        console.log('[DEBUG] originals: ', original.stack, original.title);
+        console.log('[DEBUG] original: ', original.title);
         
-        // get new values
-        var stack = this.elements.editor.decks.edit.input.stack.value;
+        // get new value
         var title = this.elements.editor.decks.edit.input.title.value;
 
-        // trim them of whitespace
-        stack = stack.trim();
+        // trim whitespace
         title = title.trim();
 
-        // put trimmed strings back into input fields
-        this.elements.editor.decks.edit.input.stack.value = stack;
+        // put trimmed string back into input field
         this.elements.editor.decks.edit.input.title.value = title;
 
-        console.log('[DEBUG] new values: ', stack, title);
+        console.log('[DEBUG] new value: ', title);
         
         var self = this;
 
-        // make sure there is a stack name and deck title provided
-        if(stack && title){
+        // make sure there is a deck title provided
+        if(original.stack && title){
 
-            // compare values to see if stack and/or title have changed
+            // compare values to see if the title has changed
             if(original.title !== title){
                 console.log('[DEBUG] Deck title changed');
                 
@@ -1591,22 +1638,6 @@ var UI = (function(){
                 .done(function(data){
                     console.log('[DEBUG] Edited Deck Title', data);
                     fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);
-                    // refresh UI to show changes
-                    self.refresh();
-                });
-            }
-
-            if(original.stack !== stack){
-                console.log('[DEBUG] Stack name changed');
-                // post an update to the stack name
-                $.post(this.dataInstance.api.active.post.edit.stack, { 
-                    originalStack: original.stack,
-                    stack: stack, 
-                    username: username
-                })
-                .done(function(data){
-                    console.log('[DEBUG] Edited Stack Name', data);
-                    fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);                
                     // refresh UI to show changes
                     self.refresh();
                 });
@@ -1672,22 +1703,63 @@ var UI = (function(){
         }
     }
 
+    UI.prototype.editorAddStackSave = function(){
+        
+        console.log('[DEBUG] UI.editorAddStackSave');
+
+        var username = this.dataInstance.user.username;
+
+        // get new value
+        var stack = this.elements.editor.stacks.add.input.name.value;
+
+        // trim whitespace
+        stack = stack.trim();
+
+        // put trimmed string back into input field
+        this.elements.editor.stacks.add.input.name.value = stack;
+
+        console.log('[DEBUG] new value: ', stack);
+
+        var self = this;
+
+        // make sure a stack name and deck title exists
+        if(stack){
+
+            // create a new deck 
+            $.post(this.dataInstance.api.active.post.add.stack, { 
+                stack: stack,
+                username: username
+            }) 
+            .done(function(data){
+                console.log('[DEBUG] Created new stack', data);
+                console.log('[New Stack]');
+                console.log('stack: ', stack);
+                fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);
+                
+                // refresh UI to show changes
+                self.refresh();
+            });
+        }
+    }
+
     UI.prototype.editorAddDeckSave = function(){
         
         console.log('[DEBUG] UI.editorAddDeckSave');
 
         var username = this.dataInstance.user.username;
 
-        // get new values
-        var stack = this.elements.editor.decks.add.input.stack.value;
+        // get original stack value
+        var original = {
+            stack: this.dataInstance.current.editor.stack.name
+        };
+
+        // get new value
         var title = this.elements.editor.decks.add.input.title.value;
 
-        // trim them of whitespace
-        stack = stack.trim();
+        // trim whitespace
         title = title.trim();
 
-        // put trimmed strings back into input fields
-        this.elements.editor.decks.add.input.stack.value = stack;
+        // put trimmed string back into input field
         this.elements.editor.decks.add.input.title.value = title;
 
         console.log('[DEBUG] new values: ', stack, title);
@@ -1695,11 +1767,11 @@ var UI = (function(){
         var self = this;
 
         // make sure a stack name and deck title exists
-        if(stack && title){
+        if(original.stack && title){
 
             // create a new deck 
             $.post(this.dataInstance.api.active.post.add.deck, { 
-                stack: stack,
+                stack: original.stack,
                 title: title,
                 username: username
             }) 
@@ -1764,6 +1836,34 @@ var UI = (function(){
         }
     }
 
+    UI.prototype.editorEditStackDelete = function(){
+        console.log('[DEBUG] UI.editorEditStackDelete');
+
+        var username = this.dataInstance.user.username;
+        
+        // store the original values
+        var stack = this.dataInstance.current.editor.stack.name;
+        
+        var self = this;
+
+        // make sure there is a stack name and deck title provided
+        if(stack && title){
+
+            // post to delete the deck
+            $.post(this.dataInstance.api.active.post.delete.stack, { 
+                stack: stack,
+                username: username
+            })
+            .done(function(data){
+                console.log('[DEBUG] Deleted stack', data);
+                fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);
+                
+                // refresh UI to show changes
+                self.refresh();
+            });
+        }
+    }
+
     UI.prototype.editorEditDeckDelete = function(){
         console.log('[DEBUG] UI.editorEditDeckDelete');
 
@@ -1785,7 +1885,7 @@ var UI = (function(){
                 username: username
             })
             .done(function(data){
-                console.log('[DEBUG] Delete Deck', data);
+                console.log('[DEBUG] Deleted deck', data);
                 fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);
                 
                 // refresh UI to show changes
