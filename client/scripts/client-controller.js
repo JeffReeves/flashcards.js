@@ -3,7 +3,7 @@
 'use strict';
 
 // UPDATES NEEDED:
-// - update UI to have an edit/add/delete stack view/buttons, independent of decks
+// - update API calls to edit/add/delete stacks and decks
 // - update modal to create user if the input user does not exist
 // - update autocomplete so that it doesn't choke on double-quoted strings
 // - remove default user "jeff" from login modal

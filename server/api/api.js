@@ -337,18 +337,14 @@ router.post('/edit/card', function(req, res){
         });
     });
 });
+
+
+router.post('/create/stack', function(req, res){
     
-
-router.post('/create/deck', function(req, res){
-
     // create a new stack if the current stack doesn't exist
-    // create a new deck if the stack doesn't already have a deck of the same name
 
     var username = req.body.username;
     var stack = req.body.stack;
-    var title = req.body.title;
-
-    var ultimateResults = [];
 
     // create a new stack for the user
     var query = 'INSERT IGNORE INTO stacks (userid, name) ' + 
@@ -362,31 +358,36 @@ router.post('/create/deck', function(req, res){
             connection.release();
 
             if(results){
-                //res.send(results);
-                ultimateResults.push(results);
+                res.send(results);
+            }
 
-                // create a new deck for the user
-                var query = 'INSERT IGNORE INTO decks (stackid, title) ' + 
-                'SELECT id, "' + title + '" ' +
-                'FROM stacks WHERE name = "' + stack +'";'; 
+            if(error){
+                res.send(error);
+            }
+        });
+    });
+});
 
-                db.getConnection(function(err, connection){
+router.post('/create/deck', function(req, res){
 
-                    connection.query(query, function(error, results, fields) {
+    var username = req.body.username;
+    var stack = req.body.stack;
+    var title = req.body.title;
 
-                        connection.release();
+    // create a new deck for the user and stack
+    var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+    'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = "' + stack + '" AND userid = @userid); ' +
+    'INSERT IGNORE INTO decks (stackid, title) ' + 
+    'VALUES (@stackid, "' + title + '");';
 
-                        if(results){
-                            //res.send(results);
-                            ultimateResults.push(results);
-                            res.send(ultimateResults);
-                        }
+    db.getConnection(function(err, connection){
 
-                        if(error){
-                            res.send(error);
-                        }
-                    });
-                });
+        connection.query(query, function(error, results, fields) {
+
+            connection.release();
+
+            if(results){
+                res.send(results);
             }
 
             if(error){
@@ -427,6 +428,10 @@ router.post('/create/card', function(req, res){
         });
     });
 });
+
+// this.api.active.post.delete.stack = this.api.active.url + 'delete/stack/';
+// this.api.active.post.delete.deck = this.api.active.url + 'delete/deck/';
+// this.api.active.post.delete.card = this.api.active.url + 'delete/card/';
 
 router.post('/delete/stack', function(req, res){
     
