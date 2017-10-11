@@ -845,7 +845,8 @@ var UI = (function(){
 
         // set the stack name to default 
         this.elements.viewer.dropdown.label.innerHTML = 'No Stacks Found';
-        this.elements.editor.decks.show.dropdown.label.innerHTML = 'No Stacks Found';
+        this.elements.editor.decks.show.dropdown.stackLabel.innerHTML = 'No Stacks Found';
+        this.elements.editor.decks.show.dropdown.deckLabel.innerHTML = 'No Decks Found';
 
         // show the login menu item
         fn.removeClass(this.elements.header.menu.option.login, 'disabled');
@@ -1015,7 +1016,7 @@ var UI = (function(){
         console.log('[DEBUG] UI.disabledDropdownSelection');
         this.elements.viewer.dropdown.select.removeEventListener('change', this.handlers.setViewerDeck);
         this.elements.editor.decks.show.dropdown.stackSelect.removeEventListener('change', this.handlers.setEditorStack);
-        this.elements.editor.decks.show.dropdown.select.removeEventListener('change', this.handlers.setEditorDeck);
+        this.elements.editor.decks.show.dropdown.deckSelect.removeEventListener('change', this.handlers.setEditorDeck);
     }
 
     UI.prototype.addViewerOptions = function(){
