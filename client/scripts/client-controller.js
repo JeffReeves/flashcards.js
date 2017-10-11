@@ -3,7 +3,6 @@
 'use strict';
 
 // UPDATES NEEDED:
-// - update API calls to edit/add/delete stacks and decks
 // - update modal to create user if the input user does not exist
 // - update autocomplete so that it doesn't choke on double-quoted strings
 // - remove default user "jeff" from login modal
@@ -301,7 +300,13 @@ var Data = (function(){
                 this.current.editor.stack = JSON.parse(JSON.stringify(this.user.stacks[i]));
 
                 if(!deckId){
-                    deckId = this.user.stacks[i].decks[0].id;
+                    if(this.user.stacks[i].decks.length > 0){
+                        deckId = this.user.stacks[i].decks[0].id;
+                    }
+                    else {
+                        console.log('[DEBUG] No decks for this stack');
+                        return;
+                    }
                 }
                 
                 for(var j = 0; j < this.user.stacks[i].decks.length; j++){
@@ -888,7 +893,6 @@ var UI = (function(){
             '</optgroup>';
 
         this.elements.editor.decks.show.dropdown.stackSelect.innerHTML = '<option>Loading Stacks...</option>';
-
         this.elements.editor.decks.show.dropdown.deckSelect.innerHTML = '<option>Loading Decks...</option>';
 
         // set the stack name to default 
@@ -1063,6 +1067,8 @@ var UI = (function(){
             // append it to the editor view stack select dropdown
             this.elements.editor.decks.show.dropdown.stackSelect.appendChild(option);
         }
+
+        this.elements.editor.decks.show.dropdown.stackLabel.innerHTML = 'Stacks';
     }
 
     UI.prototype.addEditorDeckOptions = function(stackId){
@@ -1071,6 +1077,8 @@ var UI = (function(){
 
         // remove existing dropdown elements
         this.elements.editor.decks.show.dropdown.deckSelect.innerHTML = '';
+
+        this.elements.editor.decks.show.dropdown.deckLabel.innerHTML = 'Decks';
 
         // go through all stacks
         var stacks = this.dataInstance.user.stacks;
@@ -1762,7 +1770,7 @@ var UI = (function(){
         // put trimmed string back into input field
         this.elements.editor.decks.add.input.title.value = title;
 
-        console.log('[DEBUG] new values: ', stack, title);
+        console.log('[DEBUG] new values: ', original.stack, title);
 
         var self = this;
 
@@ -1778,7 +1786,7 @@ var UI = (function(){
             .done(function(data){
                 console.log('[DEBUG] Created new deck', data);
                 console.log('[New Deck]');
-                console.log('stack: ', stack);
+                console.log('stack: ', original.stack);
                 console.log('title: ', title);
                 fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);
                 
