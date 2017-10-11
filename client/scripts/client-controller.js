@@ -270,7 +270,7 @@ var Data = (function(){
     }
 
     // clones the stacks to the current property
-    Data.prototype.setCurrent = function(deckId){
+    Data.prototype.setViewerCurrent = function(deckId){
         for(var i = 0; i < this.user.stacks.length; i++){
             for(var j = 0; j < this.user.stacks[i].decks.length; j++){
                 if(this.user.stacks[i].decks[j].id === deckId){
@@ -293,20 +293,30 @@ var Data = (function(){
     }
 
     // updates the current deck/stack selected for the editor
-    Data.prototype.setEditorCurrent = function(deckId){
+    Data.prototype.setEditorCurrent = function(stackId, deckId){
         for(var i = 0; i < this.user.stacks.length; i++){
-            for(var j = 0; j < this.user.stacks[i].decks.length; j++){
-                if(this.user.stacks[i].decks[j].id === deckId){
-                    this.current.editor.stack = JSON.parse(JSON.stringify(this.user.stacks[i]));
-                    this.current.editor.deck = JSON.parse(JSON.stringify(this.user.stacks[i].decks[j]));
-                    this.current.editor.cards = JSON.parse(JSON.stringify(this.user.stacks[i].decks[j].cards));
-                    this.current.editor.card = {};
-                    this.current.editor.card.front = '';
-                    this.current.editor.card.back = '';
-                    delete this.current.editor.stack.decks;
-                    delete this.current.editor.deck.cards;
-                    return;
+            if(this.user.stacks[i].id === stackId){
+
+                this.current.editor.stack = JSON.parse(JSON.stringify(this.user.stacks[i]));
+
+                if(!deckId){
+                    deckId = this.user.stacks[i].decks[0].id;
                 }
+                
+                for(var j = 0; j < this.user.stacks[i].decks.length; j++){
+                    if(this.user.stacks[i].decks[j].id === deckId){
+                        this.current.editor.stack = JSON.parse(JSON.stringify(this.user.stacks[i]));
+                        this.current.editor.deck = JSON.parse(JSON.stringify(this.user.stacks[i].decks[j]));
+                        this.current.editor.cards = JSON.parse(JSON.stringify(this.user.stacks[i].decks[j].cards));
+                        this.current.editor.card = {};
+                        this.current.editor.card.front = '';
+                        this.current.editor.card.back = '';
+                        delete this.current.editor.stack.decks;
+                        delete this.current.editor.deck.cards;
+                        return;
+                    }
+                }
+
             }
         }
     }
@@ -468,6 +478,10 @@ var UI = (function(){
             this.setViewerDeck();
         }.bind(this);
 
+        this.handlers.setEditorStack = function(){
+            this.setEditorStack();
+        }.bind(this);
+
         this.handlers.setEditorDeck = function(){
             this.setEditorDeck();
         }.bind(this);
@@ -604,8 +618,10 @@ var UI = (function(){
             view: document.getElementById('show-decks'),
 
             dropdown: {
-                select: document.getElementById('editor-deck-select'),
-                label: document.getElementById('editor-stack-label')
+                stackSelect: document.getElementById('editor-stack-select'),
+                stackLabel: document.getElementById('editor-stack-label'),
+                deckSelect: document.getElementById('editor-deck-select'),
+                deckLabel: document.getElementById('editor-deck-label')
             },
 
             input: {
@@ -614,11 +630,13 @@ var UI = (function(){
 
             button: {
                 edit: {
+                    stack: document.getElementById('editor-stack-edit-button'),
                     deck: document.getElementById('editor-deck-edit-button'),
                     card: document.getElementById('editor-card-edit-button')
                 },
                 
                 add: {
+                    stack: document.getElementById('editor-stack-add-button'),
                     deck: document.getElementById('editor-deck-add-button'),
                     card: document.getElementById('editor-card-add-button')
                 },
@@ -718,10 +736,10 @@ var UI = (function(){
         fn.removeClass(this.elements.header.menu.option.logout, 'disabled');
 
         // initialize the deck selection dropdown and event handlers 
-        this.setupDeckSelection();
+        this.setupDropdownSelection();
 
         // enable onchange event for deck selection 
-        this.enableDeckSelection();
+        this.enableDropdownSelection();
 
         // enable card flipping
         this.enableCardFlipping();
@@ -777,7 +795,7 @@ var UI = (function(){
         fn.setVisible('router-view', 'disabled', this.elements.viewer.view.id);
 
         // removes event listeners for onchange to deck selection
-        this.disableDeckSelection();
+        this.disabledDropdownSelection();
 
         // removes event listeners for flipping cards
         this.disableCardFlipping();
@@ -830,7 +848,7 @@ var UI = (function(){
         .then(function(){
             
             // initialize the deck selection dropdown and event handlers 
-            this.setupDeckSelection();
+            this.setupDropdownSelection();
         
         }.bind(this));
     }
@@ -840,19 +858,29 @@ var UI = (function(){
         this.elements.viewer.dropdown.label.innerHTML = this.dataInstance.current.stack.name;
     }
 
-    UI.prototype.updateEditorSelectedDeck = function(){
-        console.log('[DEBUG] UI.updateEditorSelectedDeck');
-        var select = this.elements.editor.decks.show.dropdown.select;
-        var deckId = Number(select.value);
-        this.dataInstance.setEditorCurrent(deckId);
+    UI.prototype.updateEditorSelectedStack = function(){
+        console.log('[DEBUG] UI.updateEditorSelectedStack');
+        var select = this.elements.editor.decks.show.dropdown.stackSelect;
+        var stackId = Number(select.value);
+        this.dataInstance.setEditorCurrent(stackId);
+
+        // set the editor deck dropdown options
+        this.addEditorDeckOptions(stackId);
 
         // clear value in card edit input field 
         this.elements.editor.decks.show.input.card.value = '';
     }
 
-    UI.prototype.updateEditorStackLabel = function(deckId){
-        console.log('[DEBUG] UI.updateEditorStackLabel');
-        this.elements.editor.decks.show.dropdown.label.innerHTML = this.dataInstance.current.editor.stack.name;
+    UI.prototype.updateEditorSelectedDeck = function(){
+        console.log('[DEBUG] UI.updateEditorSelectedDeck');
+        var stackSelect = this.elements.editor.decks.show.dropdown.stackSelect;
+        var stackId = Number(stackSelect.value);
+        var deckSelect = this.elements.editor.decks.show.dropdown.deckSelect;
+        var deckId = Number(deckSelect.value);
+        this.dataInstance.setEditorCurrent(stackId, deckId);
+
+        // clear value in card edit input field 
+        this.elements.editor.decks.show.input.card.value = '';
     }
 
     UI.prototype.setViewerDeck = function(){
@@ -863,7 +891,7 @@ var UI = (function(){
         var deckId = Number(this.elements.viewer.dropdown.select.value);
 
         // set the current stack and deck
-        this.dataInstance.setCurrent(deckId);
+        this.dataInstance.setViewerCurrent(deckId);
 
         // update stack label 
         this.updateViewerStackLabel();
@@ -875,47 +903,60 @@ var UI = (function(){
         this.getNewCard(); 
     }
 
+    UI.prototype.setEditorStack = function(){
+
+        console.log('[DEBUG] UI.setEditorStack');
+
+        // get the active deck's ID
+        var stackId = Number(this.elements.editor.decks.show.dropdown.stackSelect.value);
+
+        // update current editor values
+        this.updateEditorSelectedStack();
+    }
+
     UI.prototype.setEditorDeck = function(){
 
         console.log('[DEBUG] UI.setEditorDeck');
 
         // get the active deck's ID
-        var deckId = Number(this.elements.editor.decks.show.dropdown.select.value);
+        var deckId = Number(this.elements.editor.decks.show.dropdown.deckSelect.value);
 
         // update current editor values
         this.updateEditorSelectedDeck();
-
-        // update stack label 
-        this.updateEditorStackLabel(deckId);
     }
 
-    UI.prototype.setupDeckSelection = function(){
+    UI.prototype.setupDropdownSelection = function(){
 
-        console.log('[DEBUG] UI.setupDeckSelection');
+        console.log('[DEBUG] UI.setupDropdownSelection');
         
         // add the options to the viewer and editor drop-downs
-        this.addOptions();
+        this.addViewerOptions();
+        this.addEditorStackOptions();
 
-        // set a default deck for the card view
+        // set a default deck for the viewer
         this.setViewerDeck();
-        this.setEditorDeck();
+
+        // set a default stack for the editor
+        this.setEditorStack()
     }
 
-    UI.prototype.enableDeckSelection = function(){
-        console.log('[DEBUG] UI.enableDeckSelection');
+    UI.prototype.enableDropdownSelection = function(){
+        console.log('[DEBUG] UI.enableDropdownSelection');
         this.elements.viewer.dropdown.select.addEventListener('change', this.handlers.setViewerDeck);
-        this.elements.editor.decks.show.dropdown.select.addEventListener('change', this.handlers.setEditorDeck);
+        this.elements.editor.decks.show.dropdown.stackSelect.addEventListener('change', this.handlers.setEditorStack);
+        this.elements.editor.decks.show.dropdown.deckSelect.addEventListener('change', this.handlers.setEditorDeck);
     }
 
-    UI.prototype.disableDeckSelection = function(){
-        console.log('[DEBUG] UI.disableDeckSelection');
+    UI.prototype.disabledDropdownSelection = function(){
+        console.log('[DEBUG] UI.disabledDropdownSelection');
         this.elements.viewer.dropdown.select.removeEventListener('change', this.handlers.setViewerDeck);
+        this.elements.editor.decks.show.dropdown.stackSelect.removeEventListener('change', this.handlers.setEditorStack);
         this.elements.editor.decks.show.dropdown.select.removeEventListener('change', this.handlers.setEditorDeck);
     }
 
-    UI.prototype.addOptions = function(){
+    UI.prototype.addViewerOptions = function(){
 
-        console.log('[DEBUG] UI.addOptions');
+        console.log('[DEBUG] UI.addViewerOptions');
 
         // remove existing dropdown elements
         this.elements.viewer.dropdown.select.innerHTML = '';
@@ -942,10 +983,57 @@ var UI = (function(){
             // append it to the card view select dropdown
             this.elements.viewer.dropdown.select.appendChild(optionGroup);
         }
+    }
 
-        // clone the same option to the editor deck select
-        var copyViewerSelect = this.elements.viewer.dropdown.select.innerHTML;
-        this.elements.editor.decks.show.dropdown.select.innerHTML = copyViewerSelect;   
+    UI.prototype.addEditorStackOptions = function(){
+        
+        console.log('[DEBUG] UI.addEditorStackOptions');
+
+        // remove existing dropdown elements
+        this.elements.editor.decks.show.dropdown.stackSelect.innerHTML = '';
+
+        // stacks
+        var stacks = this.dataInstance.user.stacks;
+        for(var i = 0; i < stacks.length; i++){
+
+            var option = document.createElement('option');
+            option.setAttribute('value', stacks[i].id);
+            option.text = stacks[i].name;
+
+            // append it to the editor view stack select dropdown
+            this.elements.editor.decks.show.dropdown.stackSelect.appendChild(option);
+        }
+    }
+
+    UI.prototype.addEditorDeckOptions = function(stackId){
+        
+        console.log('[DEBUG] UI.addEditorDeckOptions');
+
+        // remove existing dropdown elements
+        this.elements.editor.decks.show.dropdown.deckSelect.innerHTML = '';
+
+        // go through all stacks
+        var stacks = this.dataInstance.user.stacks;
+        for(var i = 0; i < stacks.length; i++){
+
+            // if the stack ID matches
+            if(stacks[i].id === stackId){
+
+                // go over each deck
+                for(var j = 0; j < stacks[i].decks.length; j++){
+                    
+                    // add option for each deck
+                    var option = document.createElement('option');
+                    option.setAttribute('value', stacks[i].decks[j].id);
+                    option.text = stacks[i].decks[j].title;
+    
+                    // append it to the select dropdown
+                    this.elements.editor.decks.show.dropdown.deckSelect.appendChild(option);
+                }
+
+                return;
+            }
+        }
     }
 
     UI.prototype.resetProgress = function(){

@@ -41,8 +41,8 @@
                     <button class="mui-btn mui-btn--menu" data-mui-toggle="dropdown"><i class="material-icons">menu</i></button>
                     <ul class="mui-dropdown__menu mui-dropdown__menu--right">
                         <li><a id="menu-login" class="">Login</a></li>
-                        <li><a id="menu-viewer" class="router-menu disabled">View Cards</a></li>
-                        <li><a id="menu-editor" class="router-menu disabled">Edit Decks</a></li>
+                        <li><a id="menu-viewer" class="router-menu disabled">Viewer</a></li>
+                        <li><a id="menu-editor" class="router-menu disabled">Editor</a></li>
                         <li><a id="menu-logout" class="disabled">Log Out</a></li>
                     </ul>
                 </div>    
@@ -92,18 +92,30 @@
 
             <!-- MAIN EDITOR VIEW -->
             <div id="show-decks" class="router-editor-view">
+                <div id="editor-stacks" class="mui-select">
+                    <select name="editor-stack-select" id="editor-stack-select">
+                        <option>No stack found, please create a new stack...</option>
+                    </select>
+                    <label id="editor-stack-label">Stack</label>
+                </div>
+                <div id="editor-stack-buttons">
+                    <button class="mui-btn mui-btn--raised mui-btn--editor" id="editor-stack-edit-button"><i class="material-icons editor-icon">edit</i></button>
+                    <button class="mui-btn mui-btn--raised mui-btn--editor" id="editor-stack-add-button"><i class="material-icons editor-icon">library_add</i></button>
+                </div>
+
                 <div id="editor-decks" class="mui-select">
                     <select name="editor-deck-select" id="editor-deck-select">
                         <optgroup label="Deck Group">
-                        <option>Please create a new Stack and Deck</option>
+                        <option>No deck found, please create a new deck...</option>
                         </optgroup>
                     </select>
-                    <label id="editor-stack-label">No Stacks Found</label>
+                    <label id="editor-deck-label">Deck</label>
                 </div>
                 <div id="editor-deck-buttons">
                     <button class="mui-btn mui-btn--raised mui-btn--editor" id="editor-deck-edit-button"><i class="material-icons editor-icon">edit</i></button>
                     <button class="mui-btn mui-btn--raised mui-btn--editor" id="editor-deck-add-button"><i class="material-icons editor-icon">library_add</i></button>
                 </div>
+
                 <div id="editor-card" class="mui-textfield mui-textfield--float-label">
                     <textarea id="editor-card-input" 
                         autocomplete="off" 
