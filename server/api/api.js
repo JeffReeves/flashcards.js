@@ -32,7 +32,7 @@ router.get('/userexists/:username', function(req, res) {
         // select all users by username
         var query = 'SELECT EXISTS(SELECT * ' +
         'FROM users ' +
-        'WHERE users.username = ' + connection.escape(username) + ' LIMIT 1) ' +
+        'WHERE users.username = "' + username + '" LIMIT 1) ' +
         'AS userexists';
 
         connection.query(query, function(error, results, fields) {
@@ -62,7 +62,7 @@ router.get('/user/:username', function(req, res) {
         // select all users by username
         var query = 'SELECT users.id, users.username ' +
         'FROM users ' +
-        'WHERE users.username = ' + connection.escape(username) + ' LIMIT 1 ';
+        'WHERE users.username = "' + username + '" LIMIT 1 ';
 
         connection.query(query, function(error, results, fields) {
 
@@ -91,7 +91,7 @@ router.get('/stacks/userid/:id', function(req, res) {
         'FROM stacks ' +
         'INNER JOIN users ' +
         'ON stacks.userid=users.id ' +
-        'WHERE users.id = ' + connection.escape(userId) + ' ' +
+        'WHERE users.id = "' + userId + '" ' +
         'ORDER BY stacks.id;';
 
         connection.query(query, function(error, results, fields) {
@@ -120,7 +120,7 @@ router.get('/decks/stackid/:id', function(req, res) {
         'FROM decks ' +
         'INNER JOIN stacks ' +
         'ON decks.stackid=stacks.id ' +
-        'WHERE stacks.id = ' + connection.escape(stackId) + ' ' +
+        'WHERE stacks.id = "' + stackId + '" ' +
         'ORDER BY decks.id;';
 
         connection.query(query, function(error, results, fields) {
@@ -150,7 +150,7 @@ router.get('/cards/deckid/:id', function(req, res) {
         'FROM cards ' +
         'INNER JOIN decks ' +
         'ON cards.deckid=decks.id ' +
-        'WHERE decks.id = ' + connection.escape(deckId) + ' ' +
+        'WHERE decks.id = "' + deckId + '" ' +
         'ORDER BY cards.id;';
 
         connection.query(query, function(error, results, fields) {
@@ -181,7 +181,7 @@ router.post('/create/user', function(req, res){
 
         // insert a new user
         var insertUser = 'INSERT INTO users (username, password) ' + 
-        'VALUES (' + connection.escape(username) + ', ' + connection.escape(password) + ') ';
+        'VALUES ("' + username + '", "' + password + '") ';
         
         connection.query(insertUser, function(error, results, fields) {
 
@@ -196,7 +196,7 @@ router.post('/create/user', function(req, res){
                 db.getConnection(function(err, connection){
 
                     // create a default stack and deck
-                    var insertStack = 'SET @userid = (SELECT id FROM users WHERE username  = ' + connection.escape(username) + '); ' +
+                    var insertStack = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
                     'INSERT INTO stacks (userid, name) ' +
                     'VALUES (@userid, "Demo Stack");';
                         
@@ -214,7 +214,7 @@ router.post('/create/user', function(req, res){
 
                                 // create a first card for the user
                                 var insertDeck = 
-                                'SET @userid = (SELECT id FROM users WHERE username  = ' + connection.escape(username) + '); ' +
+                                'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
                                 'SET @stackid = (SELECT id FROM stacks WHERE userid = @userid AND name = "Demo Stack"); ' +
                                 'INSERT INTO decks (stackid, title) ' +
                                 'VALUES (@stackid, "Demo Deck");';
@@ -233,7 +233,7 @@ router.post('/create/user', function(req, res){
 
                                             // create a first card for the user
                                             var insertCards = 
-                                            'SET @userid = (SELECT id FROM users WHERE username  = ' + connection.escape(username) + '); ' +
+                                            'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
                                             'SET @stackid = (SELECT id FROM stacks WHERE userid = @userid AND name = "Demo Stack"); ' +
                                             'SET @deckid = (SELECT id FROM decks WHERE stackid = @stackid AND title = "Demo Deck"); ' +
                                             'INSERT INTO cards (deckid, front, back) ' +
@@ -289,7 +289,7 @@ router.post('/create/userAlt', function(req, res){
 
         // insert a new user
         var query = 'INSERT INTO users (username, password) ' + 
-        'VALUES (' + connection.escape(username) + ', ' + connection.escape(password) + ') ';
+        'VALUES ("' + username + '", "' + password + '") ';
         
         connection.query(query, function(error, results, fields) {
                     
@@ -315,10 +315,10 @@ router.post('/edit/stack', function(req, res){
     db.getConnection(function(err, connection){
 
         // edit the name of the existing stack for the user
-        var query = 'SET @userid = (SELECT id FROM users WHERE username  = ' + connection.escape(username) + '); ' +
+        var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
         'UPDATE stacks ' +
-        'SET stacks.name = ' + connection.escape(stack) + ' ' +
-        'WHERE stacks.name = ' + connection.escape(originalStack) + ' ' +
+        'SET stacks.name = "' + stack + '" ' +
+        'WHERE stacks.name = "' + originalStack + '" ' +
         'AND stacks.userid = @userid;';    
 
         connection.query(query, function(error, results, fields) {
@@ -346,11 +346,11 @@ router.post('/edit/deck', function(req, res){
     db.getConnection(function(err, connection){
 
         // edit the name of the existing deck for the stack belonging to the user
-        var query = 'SET @userid = (SELECT id FROM users WHERE username  = ' + connection.escape(username) + '); ' +
-        'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = ' + connection.escape(originalStack) + ' AND userid = @userid); ' +
+        var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+        'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = "' + originalStack + '" AND userid = @userid); ' +
         'UPDATE decks ' + 
-        'SET decks.title = ' + connection.escape(title) + '' +
-        'WHERE decks.title = ' + connection.escape(originalTitle) + '' +
+        'SET decks.title = "' + title + '"' +
+        'WHERE decks.title = "' + originalTitle + '"' +
         'AND decks.stackid = @stackid;';
 
         connection.query(query, function(error, results, fields) {
@@ -381,12 +381,12 @@ router.post('/edit/card', function(req, res){
     db.getConnection(function(err, connection){
 
         // create a new card for the deck
-        var query = 'SET @userid = (SELECT id FROM users WHERE username  = ' + connection.escape(username) + '); ' +
-        'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = ' + connection.escape(stack) + ' AND userid = @userid); ' +
-        'SET @deckid = (SELECT id FROM decks WHERE decks.title = ' + connection.escape(deck) + ' AND stackid = @stackid); ' +
+        var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+        'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = "' + stack + '" AND userid = @userid); ' +
+        'SET @deckid = (SELECT id FROM decks WHERE decks.title = "' + deck + '" AND stackid = @stackid); ' +
         'UPDATE cards ' + 
-        'SET cards.front = ' + connection.escape(front) + ', cards.back = ' +  connection.escape(back) + ' ' +
-        'WHERE cards.front = ' + connection.escape(originalFront) + ' ' +
+        'SET cards.front = "' + front + '", cards.back = "' +  back + '" ' +
+        'WHERE cards.front = "' + originalFront + '" ' +
         'AND cards.deckid = @deckid;';
 
         connection.query(query, function(error, results, fields) {
@@ -416,8 +416,8 @@ router.post('/create/stack', function(req, res){
 
         // create a new stack for the user
         var query = 'INSERT IGNORE INTO stacks (userid, name) ' + 
-        'SELECT id, ' + connection.escape(stack) + ' ' +
-        'FROM users WHERE username = ' + connection.escape(username) +';'; 
+        'SELECT id, "' + stack + '" ' +
+        'FROM users WHERE username = "' + username +'";'; 
 
         connection.query(query, function(error, results, fields) {
 
@@ -443,10 +443,10 @@ router.post('/create/deck', function(req, res){
     db.getConnection(function(err, connection){
 
         // create a new deck for the user and stack
-        var query = 'SET @userid = (SELECT id FROM users WHERE username  = ' + connection.escape(username) + '); ' +
-        'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = ' + connection.escape(stack) + ' AND userid = @userid); ' +
+        var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+        'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = "' + stack + '" AND userid = @userid); ' +
         'INSERT IGNORE INTO decks (stackid, title) ' + 
-        'VALUES (@stackid, ' + connection.escape(title) + ');';
+        'VALUES (@stackid, "' + title + '");';
 
         connection.query(query, function(error, results, fields) {
 
@@ -474,11 +474,11 @@ router.post('/create/card', function(req, res){
     db.getConnection(function(err, connection){
 
         // create a new card for a deck -> stack -> user
-        var query = 'SET @userid = (SELECT id FROM users WHERE username  = ' + connection.escape(username) + '); ' +
-        'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = ' + connection.escape(stack) + ' AND userid = @userid); ' +
-        'SET @deckid = (SELECT id FROM decks WHERE decks.title = ' + connection.escape(deck) + ' AND stackid = @stackid); ' +
+        var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+        'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = "' + stack + '" AND userid = @userid); ' +
+        'SET @deckid = (SELECT id FROM decks WHERE decks.title = "' + deck + '" AND stackid = @stackid); ' +
         'INSERT IGNORE INTO cards (deckid, front, back) ' + 
-        'VALUES (@deckid, ' + connection.escape(front) + ', ' + connection.escape(back) + ');';
+        'VALUES (@deckid, "' + front + '", "' + back + '");';
 
         connection.query(query, function(error, results, fields) {
 
@@ -507,9 +507,9 @@ router.post('/delete/stack', function(req, res){
     db.getConnection(function(err, connection){
 
         // edit the name of the existing stack for the user
-        var query = 'SET @userid = (SELECT id FROM users WHERE username  = ' + connection.escape(username) + '); ' +
+        var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
         'DELETE FROM stacks ' +
-        'WHERE stacks.name = ' + connection.escape(stack) + ' ' +
+        'WHERE stacks.name = "' + stack + '" ' +
         'AND stacks.userid = @userid;';
 
         connection.query(query, function(error, results, fields) {
@@ -536,10 +536,10 @@ router.post('/delete/deck', function(req, res){
     db.getConnection(function(err, connection){
 
         // edit the name of the existing deck for the stack belonging to the user
-        var query = 'SET @userid = (SELECT id FROM users WHERE username  = ' + connection.escape(username) + '); ' +
-        'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = ' + connection.escape(stack) + ' AND userid = @userid); ' +
+        var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+        'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = "' + stack + '" AND userid = @userid); ' +
         'DELETE FROM decks ' + 
-        'WHERE decks.title = ' + connection.escape(title) + ' ' +
+        'WHERE decks.title = "' + title + '" ' +
         'AND decks.stackid = @stackid;';
 
         connection.query(query, function(error, results, fields) {
@@ -568,11 +568,11 @@ router.post('/delete/card', function(req, res){
     db.getConnection(function(err, connection){
 
         // create a new card for the deck
-        var query = 'SET @userid = (SELECT id FROM users WHERE username  = ' + connection.escape(username) + '); ' +
-        'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = ' + connection.escape(stack) + ' AND userid = @userid); ' +
-        'SET @deckid = (SELECT id FROM decks WHERE decks.title = ' + connection.escape(deck) + ' AND stackid = @stackid); ' +
+        var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+        'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = "' + stack + '" AND userid = @userid); ' +
+        'SET @deckid = (SELECT id FROM decks WHERE decks.title = "' + deck + '" AND stackid = @stackid); ' +
         'DELETE FROM cards ' + 
-        'WHERE cards.front = ' + connection.escape(front) + ' ' +
+        'WHERE cards.front = "' + front + '" ' +
         'AND cards.deckid = @deckid;';
 
         connection.query(query, function(error, results, fields) {
