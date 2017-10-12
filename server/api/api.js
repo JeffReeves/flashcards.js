@@ -507,9 +507,18 @@ router.post('/delete/stack', function(req, res){
     db.getConnection(function(err, connection){
 
         // edit the name of the existing stack for the user
+        // var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+        // 'DELETE FROM stacks ' +
+        // 'WHERE stacks.name = "' + stack + '" ' +
+        // 'AND stacks.userid = @userid;';
+
+        // delete this stack and all of its decks and cards
         var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
-        'DELETE FROM stacks ' +
-        'WHERE stacks.name = "' + stack + '" ' +
+        'DELETE stacks, decks, cards ' + 
+        'FROM stacks INNER JOIN decks INNER JOIN cards ' +
+        'WHERE stacks.id = decks.stackid ' +
+        'AND decks.id = cards.deckid ' +
+        'AND stacks.name = "' + stack + '" ' +
         'AND stacks.userid = @userid;';
 
         connection.query(query, function(error, results, fields) {
@@ -536,10 +545,19 @@ router.post('/delete/deck', function(req, res){
     db.getConnection(function(err, connection){
 
         // edit the name of the existing deck for the stack belonging to the user
+        // var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
+        // 'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = "' + stack + '" AND userid = @userid); ' +
+        // 'DELETE FROM decks ' + 
+        // 'WHERE decks.title = "' + title + '" ' +
+        // 'AND decks.stackid = @stackid;';
+
+        // delete this deck and all of its cards
         var query = 'SET @userid = (SELECT id FROM users WHERE username  = "' + username + '"); ' +
         'SET @stackid = (SELECT id FROM stacks WHERE stacks.name = "' + stack + '" AND userid = @userid); ' +
-        'DELETE FROM decks ' + 
-        'WHERE decks.title = "' + title + '" ' +
+        'DELETE decks, cards ' + 
+        'FROM decks INNER JOIN cards ' +
+        'WHERE decks.id = cards.deckid ' +
+        'AND decks.title = "' + title + '" ' +
         'AND decks.stackid = @stackid;';
 
         connection.query(query, function(error, results, fields) {

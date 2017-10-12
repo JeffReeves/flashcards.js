@@ -11,6 +11,7 @@
 // - saving a change to both the stack name and deck name simultaneously breaks the UI
 
 // FUTURE UPDATE IDEAS:
+// - reset AUTO_INCREMENT value after deleting records (ALTER TABLE <table> AUTO_INCREMENT = <last_value>;)
 // - update refresh to select the dropdown item last selected before the refresh
 // - update post calls to use the current stack/deck/card id for changes rather 
 //      than digging down to them via MySQL queries
