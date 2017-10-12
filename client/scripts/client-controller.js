@@ -3,9 +3,7 @@
 'use strict';
 
 // UPDATES NEEDED:
-// - update modal to create user if the input user does not exist
 // - update autocomplete so that it doesn't choke on double-quoted strings
-// - remove default user "jeff" from login modal
 // - get password field working so you cannot login unless the password is correct
 // - move API from /flashcards/ to /flashcards/api
 
@@ -13,11 +11,11 @@
 // - saving a change to both the stack name and deck name simultaneously breaks the UI
 
 // FUTURE UPDATE IDEAS:
+// - update refresh to select the dropdown item last selected before the refresh
 // - update post calls to use the current stack/deck/card id for changes rather 
 //      than digging down to them via MySQL queries
 // - updated functions.js to use fetch instead of XMLHttpRequest
 // - use better authentication / security methods for logging in
-// - update refresh to select the dropdown item last selected before the refresh
 
 
 /*==[ OBJECTS ]==============================================================*/
@@ -144,6 +142,7 @@ var Data = (function(){
         this.api.active.post.edit.card = this.api.active.url + 'edit/card/';
         
         // create
+        this.api.active.post.add.user = this.api.active.url + 'create/user/';
         this.api.active.post.add.stack = this.api.active.url + 'create/stack/';
         this.api.active.post.add.deck = this.api.active.url + 'create/deck/';
         this.api.active.post.add.card = this.api.active.url + 'create/card/';
@@ -405,6 +404,34 @@ var Modal = (function(){
                 }
                 else {
                     console.log('[DEBUG] User does not exist. Need to create user.');
+
+                    // make sure password is set 
+                    password = password || '';
+
+                    var self = this;
+
+                    // make an API call to create the user
+                    $.post(this.dataInstance.api.active.post.add.user, { 
+                        username: username,
+                        password: password
+                    }) 
+                    .done(function(data){
+                        console.log('[DEBUG] Created new user', data);
+                        console.log('[New User]');
+                        console.log('username: ', username);
+                        console.log('password: ', password);
+                        
+                        // instantiate a new user from the username entered
+                        self.dataInstance.user = new User(username);
+                    
+                        // get the user's cards
+                        self.dataInstance.getAllCards(username)
+                        .then(function(){
+                            // close the modal
+                            this.close();
+                            this.UI.login();
+                        }.bind(self));
+                    });
                 }
             }.bind(this));
         }

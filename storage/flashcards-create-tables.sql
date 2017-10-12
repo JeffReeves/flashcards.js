@@ -167,3 +167,33 @@ WHERE cards.id = "cardId"
 -- <script>
 --     var cards = JSON.parse(<%-JSON.stringify(cards) %>);
 -- </script>    
+
+
+
+/* DISABLE BACKSLASH ESCAPE MODE */
+
+/* vim /etc/my.cnf 
+[mysqld]
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+symbolic-links=0
+character-set-server = utf8
+collation-server = utf8_unicode_ci
+skip-character-set-client-handshake
+# disabled backslash escape
+sql-mode="NO_BACKSLASH_ESCAPES"
+
+systemctl restart mariadb
+*/
+
+/* CHECKING BACKSLASH ESCAPE MODE */
+
+SELECT @@SQL_MODE;
+
+-- MariaDB [(none)]> SELECT @@SQL_MODE;
+-- +----------------------+
+-- | @@SQL_MODE           |
+-- +----------------------+
+-- | NO_BACKSLASH_ESCAPES |
+-- +----------------------+
+-- 1 row in set (0.00 sec)
