@@ -3,16 +3,13 @@
 'use strict';
 
 // UPDATES NEEDED:
-// - update autocomplete so that it doesn't choke on double-quoted strings
 // - get password field working so you cannot login unless the password is correct
 // - move API from /flashcards/ to /flashcards/api
-
-// BUGS FOUND:
-// - saving a change to both the stack name and deck name simultaneously breaks the UI
+// - update autocomplete so that it doesn't choke on double-quoted strings
 
 // FUTURE UPDATE IDEAS:
-// - reset AUTO_INCREMENT value after deleting records (ALTER TABLE <table> AUTO_INCREMENT = <last_value>;)
-// - update refresh to select the dropdown item last selected before the refresh
+// - reset AUTO_INCREMENT value after deleting records 
+//      (ALTER TABLE <table> AUTO_INCREMENT = <last_value>;)
 // - update post calls to use the current stack/deck/card id for changes rather 
 //      than digging down to them via MySQL queries
 // - updated functions.js to use fetch instead of XMLHttpRequest
@@ -384,6 +381,14 @@ var Modal = (function(){
         // get the username and password
         var username = this.elements.input.username.value;
         var password = this.elements.input.password.value;
+
+        // trim whitespace and lowercase username
+        username = username.trim().toLowerCase();
+        password = password.trim();
+
+        // put values back into edit fields
+        this.elements.input.username.value = username;
+        this.elements.input.password.value = password;
 
         if(username){
             // check if user exists 
@@ -911,7 +916,14 @@ var UI = (function(){
         console.log('[DEBUG] UI.refresh');
 
         // LOGOUT
+
+        // store current dropdown values
+        var editorStackValue = Number(this.elements.editor.decks.show.dropdown.stackSelect.value);
+        var editorDeckValue = Number(this.elements.editor.decks.show.dropdown.deckSelect.value);
         
+        console.log('[TEST] editorStackValue', editorStackValue);
+        console.log('[TEST] editorDeckValue', editorDeckValue);
+
         // set the front and back of the cards
         this.setFront('Change detected. Refreshing cards...');
         this.setBack('');
@@ -942,7 +954,18 @@ var UI = (function(){
             
             // initialize the deck selection dropdown and event handlers 
             this.setupDropdownSelection();
-        
+
+            // set the dropdown value back to what it was before the refresh
+            if(editorStackValue){
+                this.elements.editor.decks.show.dropdown.stackSelect.value = editorStackValue;
+                this.updateEditorSelectedStack();
+            }
+
+            if(editorDeckValue){
+                this.elements.editor.decks.show.dropdown.deckSelect.value = editorDeckValue;
+                this.updateEditorSelectedDeck();
+            }
+            
         }.bind(this));
     }
 
@@ -1895,6 +1918,10 @@ var UI = (function(){
                 console.log('[DEBUG] Deleted stack', data);
                 fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);
                 
+                // reset editor stack and deck selection values
+                self.elements.editor.decks.show.dropdown.stackSelect.value = null;
+                self.elements.editor.decks.show.dropdown.deckSelect.value = null;
+
                 // refresh UI to show changes
                 self.refresh();
             });
@@ -1925,6 +1952,9 @@ var UI = (function(){
                 console.log('[DEBUG] Deleted deck', data);
                 fn.setVisible('router-editor-view', 'disabled', self.elements.editor.decks.show.view.id);
                 
+                // reset editor deck selection value
+                self.elements.editor.decks.show.dropdown.deckSelect.value = null;
+
                 // refresh UI to show changes
                 self.refresh();
             });
