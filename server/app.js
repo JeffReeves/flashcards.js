@@ -51,15 +51,10 @@ app.use('/images', express.static(path.join(__dirname + 'static/images')));
 
 //-- ROUTES -------------------------------------------------------------------
 
-app.use('/api', api);
-
-var cards;
-
-// home
-app.get('/', function(req, res) {
-    
-    res.render('index');
-});
+// only an API is active
+// the Nginx/Apache conf file should reverse proxy the root to: 
+// domain.tld/flashcards/api
+app.use('/', api);
 
 // 404 errors
 app.use(function(req, res, next) {
