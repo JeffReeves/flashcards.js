@@ -306,6 +306,37 @@ router.post('/create/userAlt', function(req, res){
     });
 });
 
+router.post('/check/password', function(req, res){
+    
+    var username = req.body.username;
+    var password = req.body.password;
+
+    db.getConnection(function(err, connection){
+
+        // check if a user exists with a particular password
+        var query = 'SELECT EXISTS(SELECT * ' +
+        'FROM users ' +
+        'WHERE users.username = "' + username + '" ' +
+        'AND users.password = "' + password + '" LIMIT 1) ' +
+        'AS validpassword';
+        
+        connection.query(query, function(error, results, fields) {
+                    
+            connection.release();
+
+            if(results){
+                // returns [{"validpassword":1}] if true
+                // returns [{"validpassword":0}] if false
+                res.send(results[0]);
+            }
+
+            if(error){
+                res.send(error);
+            }
+        });
+    });
+});
+
 router.post('/edit/stack', function(req, res){
     
     var username = req.body.username;

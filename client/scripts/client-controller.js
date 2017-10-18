@@ -3,11 +3,11 @@
 'use strict';
 
 // UPDATES NEEDED:
-// - get password field working so you cannot login unless the password is correct
-// - move API from /flashcards/ to /flashcards/api
 // - update autocomplete so that it doesn't choke on double-quoted strings
 
 // FUTURE UPDATE IDEAS:
+// - Enforce minimum password requirements and add a CAPTCHA
+// - show the stack/deck name that a deck/card is being added to on the Add view
 // - reset AUTO_INCREMENT value after deleting records 
 //      (ALTER TABLE <table> AUTO_INCREMENT = <last_value>;)
 // - update post calls to use the current stack/deck/card id for changes rather 
@@ -113,6 +113,7 @@ var Data = (function(){
         this.api.active = {};
         this.api.active.get = {};
         this.api.active.post = {};
+        this.api.active.post.check = {};
         this.api.active.post.edit = {};
         this.api.active.post.add = {};
         this.api.active.post.delete = {};
@@ -134,6 +135,9 @@ var Data = (function(){
         this.api.active.get.cards = this.api.active.url + 'cards/deckid/';
 
         // POST
+        // check
+        this.api.active.post.check.password = this.api.active.url + 'check/password/';
+
         // edit
         this.api.active.post.edit.stack = this.api.active.url + 'edit/stack/';
         this.api.active.post.edit.deck = this.api.active.url + 'edit/deck/';
@@ -391,53 +395,86 @@ var Modal = (function(){
         this.elements.input.password.value = password;
 
         if(username){
+
             // check if user exists 
             this.dataInstance.doesUserExist(username)
             .then(function(exists){
+
+                var self = this;
                 
                 // if the user exists
                 if(exists === true){
-                    // instantiate a new user from the username entered
-                    this.dataInstance.user = new User(username);
 
-                    // get the user's cards
-                    this.dataInstance.getAllCards(username)
-                    .then(function(){
-                        // close the modal
-                        this.close();
-                        this.UI.login();
-                    }.bind(this));
+                    if(password){
+
+                        // check if the entered password is correct for the user
+                        $.post(this.dataInstance.api.active.post.check.password, { 
+                            username: username,
+                            password: password
+                        }) 
+                        .done(function(data){
+                            console.log('[DEBUG] Checking password for user', data);
+                            console.log('[DEBUG] data.validpassword', data.validpassword);
+
+                            // if password is correct
+                            if(data.validpassword == true){
+
+                                // instantiate a new user from the username entered
+                                self.dataInstance.user = new User(username);
+                                
+                                // get the user's cards
+                                self.dataInstance.getAllCards(username)
+                                .then(function(){
+                                    // close the modal
+                                    this.close();
+                                    this.UI.login();
+                                }.bind(self));
+                            }
+                            else {
+                                // temporary alert, will replace with proper UI message later
+                                alert('Invalid password');
+                            }
+                        });
+                    }
+                    else {
+                        // temporary alert, will replace with proper UI message later
+                        alert('Enter a password');
+                    }
                 }
                 else {
                     console.log('[DEBUG] User does not exist. Need to create user.');
 
-                    // make sure password is set 
-                    password = password || '';
+                    // make sure a password is set
+                    if(password){
 
-                    var self = this;
-
-                    // make an API call to create the user
-                    $.post(this.dataInstance.api.active.post.add.user, { 
-                        username: username,
-                        password: password
-                    }) 
-                    .done(function(data){
-                        console.log('[DEBUG] Created new user', data);
-                        console.log('[New User]');
-                        console.log('username: ', username);
-                        console.log('password: ', password);
+                        // make an API call to create the user
+                        $.post(this.dataInstance.api.active.post.add.user, { 
+                            username: username,
+                            password: password
+                        }) 
+                        .done(function(data){
+                            console.log('[DEBUG] Created new user', data);
+                            console.log('[New User]');
+                            console.log('username: ', username);
+                            console.log('password: ', password);
+                            
+                            // instantiate a new user from the username entered
+                            self.dataInstance.user = new User(username);
                         
-                        // instantiate a new user from the username entered
-                        self.dataInstance.user = new User(username);
-                    
-                        // get the user's cards
-                        self.dataInstance.getAllCards(username)
-                        .then(function(){
-                            // close the modal
-                            this.close();
-                            this.UI.login();
-                        }.bind(self));
-                    });
+                            // get the user's cards
+                            self.dataInstance.getAllCards(username)
+                            .then(function(){
+                                // close the modal
+                                this.close();
+                                this.UI.login();
+                            }.bind(self));
+                        });
+                    }
+                    else {
+                        // temporary alert, will replace with proper UI message later
+                        // also, will ensure a criteria is met for password values
+                        alert('A password is required');
+                    }
                 }
             }.bind(this));
         }
